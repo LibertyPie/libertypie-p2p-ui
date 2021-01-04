@@ -1,0 +1,47 @@
+
+/**
+ * custom styling 
+ **/
+
+@import 'https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700';
+
+@import "./variables.custom.scss";
+
+@import './variables.bootstrap.scss';
+
+@import "./argon-design-system/assets/scss/argon-design-system.scss";
+
+@import "./hamburger.scss";
+
+.bg-primary-light-30p {
+  background-color: lighten($primary, 30%);
+  color: darken($primary, 20%);
+  &:hover{ background-color: $primary; color:lighten($primary, 50%); }
+}
+
+body, html{
+    height: 100% !important;
+}
+
+.navbar-toggler {
+    color: $navbar-light-color;
+    border: none;
+}
+ 
+.text-white-80{
+    color: #ffffff; 
+    color: rgba(255,255,255,0.8);
+}
+
+.text-white-60{
+    color: #ffffff; 
+    color: rgba(255,255,255,0.6);
+}
+
+.btn-inner--icon {
+    img{ width: 24px !important; }
+}
+
+#connect_wallet_btn{
+    max-width: 180px !important;
+}

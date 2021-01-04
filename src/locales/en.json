@@ -1,0 +1,23 @@
+{
+    "quick_search": "Quick Search",
+    "quick_search_desc": "Find top rated local offers  instantly",
+    "asset": "Asset",
+    "search_offers": "Search Offers",
+    "buy": "Buy",
+    "sell": "Sell",
+    "swap": "Swap",
+    "guardians": "Guardians",
+    "governance": "Governance",
+    "vault": "Vault",
+    "connect_wallet": "Connect Wallet",
+    "wallet_connect_failed": "Connection Failed: {0}",
+    "unsupported_chain": "Unsupported Chain <br /> Change the network & retry ..",
+    "unsupported_network": "Unsupported Network <br /> Change the network & retry ..",
+    "network_not_yet_supported": "Network not yet supported <br /> Change the network & retry ..",
+    "try_again": "Try Again",
+    "dashboard": "Dashboard",
+    "portis_connect_text": "Connect using your Portis wallet",
+    "walletconnect_connection_text": "Sync wallet with WalletConnect",
+    "-32002": "Kindly continue from Metamask",
+    "wallet_connected": "Wallet Connected"
+}
