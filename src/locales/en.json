@@ -11,7 +11,7 @@
     "vault": "Vault",
     "connect_wallet": "Connect Wallet",
     "wallet_connect_failed": "Connection Failed: {0}",
-    "unsupported_chain": "Unsupported Chain <br /> Change the network & retry ..",
+    "unsupported_chain": "Your wallet is connected to an unsupported chain (id: {0})",
     "unsupported_network": "Unsupported Network <br /> Change the network & retry ..",
     "network_not_yet_supported": "Network not yet supported <br /> Change the network & retry ..",
     "try_again": "Try Again",
@@ -19,5 +19,9 @@
     "portis_connect_text": "Connect using your Portis wallet",
     "walletconnect_connection_text": "Sync wallet with WalletConnect",
     "-32002": "Kindly continue from Metamask",
-    "wallet_connected": "Wallet Connected"
+    "wallet_connected": "Wallet Connected",
+    "chain_changed": "Chain Changed",
+    "account_changed": "Account Changed",
+    "chain_changed_notice": "Your wallet's chain was changed, page will reload..",
+    "accounts_changed_notice": "Your wallet's current account has changed, page will load"
 }

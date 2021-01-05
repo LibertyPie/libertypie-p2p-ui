@@ -45,3 +45,22 @@ body, html{
 #connect_wallet_btn{
     max-width: 180px !important;
 }
+
+.alert-notif {
+    width: 320px;
+    max-width: 98%;
+    position: fixed !important;
+    right: 5px;
+    top: 5px;
+    z-index: 200000;
+    padding: 0;
+
+    .content{padding: 15px; padding-top:20px; padding-bottom: 16px; }
+    .notif-progress{
+        width: 0%;
+        height: 4px;
+        background: rgba(0,0,0,0.3);
+        border-bottom-left-radius: 28px;
+        border-bottom-right-radius: 28px;
+    }
+}

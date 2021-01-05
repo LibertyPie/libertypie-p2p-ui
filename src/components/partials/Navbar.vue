@@ -89,7 +89,22 @@
 <script>
 export default {
 
+  data(){return {
+      
+  }},
+  mounted(){
+
+      /**
+       * listen to wallet connect success
+       */
+      window.addEventListener("on-wallet-connect",(e)=>{
+          let info = e.detail;
+          console.log(info)
+      })
+      
+  },
   methods: {
+    
       doConnectWallet(){
         window.dispatchEvent(new CustomEvent("connect_wallet"))
       }

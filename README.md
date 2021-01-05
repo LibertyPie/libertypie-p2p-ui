@@ -1,4 +1,4 @@
-# libertypie-app
+# libertypie-ui
 
 ## Project setup
 ```

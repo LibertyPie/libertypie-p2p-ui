@@ -3,25 +3,32 @@
  * @license MIT
  */
 const networkConfig = require("../config/network").default
-const defaultNetworkId = networkConfig.default_network;
+const defaultNetwork = networkConfig.default_network;
 import Status from "./Status"
 import WalletProvider from "../../../../WalletProvider/lib/src/index"
 import WalletConnect from "@walletconnect/web3-provider";
 import Portis from "@portis/web3"
 import WalletLink from 'walletlink'
+import { ethers } from "ethers";
 
-class WalletProviderCore  {
+
+export default class _WalletProviderCore  {
 
     isConnected = false;
     hasInit = false
-    provider = null;
+    _web3Provider = null;
     _walletProvider = null;
     _vue = null;
+
+    constructor(_vue){
+        this._vue = _vue;
+        this.initialize();
+    }
 
     //initiate web3
     async initialize(){
 
-         this._vue = window._vue_app;
+         let defaultChainName = (networkConfig.networks || {})[defaultNetwork].name;
 
         if(this.hasInit){
 
@@ -36,7 +43,7 @@ class WalletProviderCore  {
                 connect_text: this._vue.$t("portis_connect_text"),
                 options: {
                     dappId: networkConfig.portis_id,
-                    network: defaultNetworkId
+                    network: defaultChainName
                 }
             },
 
@@ -66,7 +73,7 @@ class WalletProviderCore  {
                     },
                     network: {
                         rpc: `https://kovan.infura.io/v3/${infuraId}`,
-                        chainId: 0x2a
+                        //chainId: 0x2a
                     }
                 }
             },
@@ -74,22 +81,47 @@ class WalletProviderCore  {
 
         this._walletProvider = new WalletProvider({
             debug: true,
-            cacheProvider: false,
+            cacheProvider: true,
             showLoader: true,
             providers: providerOpts
         })
 
         //lets check if there is  cache, lets connect with the cache 
         //but fail silently
-        //if(this._walletProvider.isProviderCached()){
-           //this.connectWallet(true)
-        //}
+        if(this._walletProvider.isProviderCached()){
+           this.connectWallet(true)
+        }
 
         /**
          * lets listen to wallet connection events
          */
         window.addEventListener("connect_wallet",()=>{
             this.connectWallet(false)
+        })
+
+        //lets rebroadcast some neccessary events
+        this._walletProvider.on("chainChanged",(chainId)=>{
+
+            this._vue._dispatchEvent("on-wallet-chain-changed",chainId)
+
+            Swal.fire(
+                this._vue.$t("chain_changed"),
+                this._vue.$t("chain_changed_notice"),
+                'question'
+            )
+            window.setTimeout(()=> window.location.reload(),3000)
+        })
+
+        this._walletProvider.on("accountsChanged",(newAccounts)=>{
+
+            this._vue._dispatchEvent("on-wallet-accounts-changed",newAccounts)
+
+            Swal.fire(
+                this._vue.$t("account_change"),
+                this._vue.$t("accounts_change_notice"),
+                'question'
+            )
+            window.setTimeout(()=> window.location.reload(),3000)
         })
     } //ebd fun 
     
@@ -122,18 +154,44 @@ class WalletProviderCore  {
      */
     async processOnConnect(info,isSilentMode){
 
-        window.swal("Booommm Helllooo")
         //lets check if the chainId we needed  is same as returned
-        if(this.isChainSupported(info.chainId)){
+        if(!this.isChainSupported(info.chainId)){
             if(!isSilentMode){ 
-               
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: this._vue.$t('unsupported_chain',[info.chainId]),
+                    footer: '<a href>Why do I have this issue?</a>'
+                })
             }
 
             return false;
         }
-
-        if(!isSilentMode){ this._vue.successNotif(this._vue.$t("wallet_connected")) }
         
+      
+        if(!isSilentMode){ 
+            Swal.fire({
+                icon: 'success',
+                title: this._vue.$t("wallet_connected"),
+                showConfirmButton: false,
+                timer: 2000
+            })
+         }
+        
+         window._walletInfo = info;
+        
+         //lets initiated ethers
+         window._web3Core = new ethers.providers.Web3Provider(info.provider)
+        
+         this._web3Provider = this.provider;
+         this.isConnected = true;
+
+
+         info.web3Core = window._web3Core;
+
+        //lets broadcast wallet success
+        this._vue._dispatchEvent("on-wallet-connect",info)
+
     } //end 
 
     /**
@@ -144,18 +202,21 @@ class WalletProviderCore  {
     isChainSupported(chainId){
 
         if(chainId == null){
-            return  Status.error("unsupported_chain"); 
+            return false;
         }
 
         //web3 networks 
         let web3Networks = networkConfig.networks || {};
 
-        console.log(web3Networks)
+        let defaultChainInfo = web3Networks[defaultNetwork] || {}
 
-        return Status.success()
+        if(chainId != defaultChainInfo.chain_id){
+            return false;
+        }
+
+        return true;
     } //end fun
 
 
 }
 
-export default WalletProviderCore;
