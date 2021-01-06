@@ -23,6 +23,8 @@ body, html{
     height: 100% !important;
 }
 
+a, a:hover, a:active, a:visited{  text-decoration: none !important;}
+
 .navbar-toggler {
     color: $navbar-light-color;
     border: none;
@@ -74,3 +76,4 @@ body, html{
         border-bottom-right-radius: 28px;
     }
 }
+

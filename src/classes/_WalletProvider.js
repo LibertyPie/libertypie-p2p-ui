@@ -16,7 +16,6 @@ export default class _WalletProviderCore  {
 
     isConnected = false;
     hasInit = false
-    _web3Provider = null;
     _walletProvider = null;
     _vue = null;
 
@@ -30,8 +29,10 @@ export default class _WalletProviderCore  {
 
          let defaultChainName = (networkConfig.networks || {})[defaultNetwork].name;
 
-        if(this.hasInit){
-
+         console.log(window._walletInfo)
+         
+        if(window._walletInfo){
+            return;
         }
 
         let infuraId = networkConfig.infura_id;
@@ -177,17 +178,16 @@ export default class _WalletProviderCore  {
                 timer: 2000
             })
          }
-        
-         window._walletInfo = info;
+         
         
          //lets initiated ethers
-         window._web3Core = new ethers.providers.Web3Provider(info.provider)
+         let web3Core = new ethers.providers.Web3Provider(info.provider)
         
-         this._web3Provider = this.provider;
          this.isConnected = true;
 
+         info.web3 = web3Core;
 
-         info.web3Core = window._web3Core;
+         window._walletInfo = info;
 
         //lets broadcast wallet success
         this._vue._dispatchEvent("on-wallet-connect",info)

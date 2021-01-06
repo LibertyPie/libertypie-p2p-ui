@@ -1,8 +1,8 @@
 <template>
     <nav class="navbar navbar-horizontal navbar-expand-lg navbar-light flex-row align-items-md-center bg-white">
-        <a class="navbar-brand" href="#"> 
+        <router-link class="navbar-brand" to="/"> 
             <img src="/assets/images/_libertypie.png" height="120" />
-        </a>
+        </router-link>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar-default" aria-controls="navbar-default" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
@@ -104,8 +104,14 @@ export default {
       isWalletConnected: false,
       walletInfo: null,
   }},
+  
   mounted(){
       
+      if(window._walletInfo){
+          this.walletInfo = window._walletInfo;
+          this.isWalletConnected = true;
+      }
+
       /**
        * listen to wallet connect success
        */
@@ -118,7 +124,11 @@ export default {
   methods: {
     
       doConnectWallet(){
-        window.dispatchEvent(new CustomEvent("connect_wallet"))
+        if(this.isWalletConnected){
+            this.$router.push({ name: 'account', params: { address: this.walletInfo.account } })
+        } else {
+            window.dispatchEvent(new CustomEvent("connect_wallet"))
+        }
       },
 
       getShortenedAddr(){

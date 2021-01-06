@@ -23,5 +23,6 @@
     "chain_changed": "Chain Changed",
     "account_changed": "Account Changed",
     "chain_changed_notice": "Your wallet's chain was changed, page will reload..",
-    "accounts_changed_notice": "Your wallet's current account has changed, page will load"
+    "accounts_changed_notice": "Your wallet's current account has changed, page will load",
+    "payment_methods": "Payment Methods"
 }
