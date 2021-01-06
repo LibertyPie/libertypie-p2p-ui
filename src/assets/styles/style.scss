@@ -16,7 +16,7 @@
 .bg-primary-light-30p {
   background-color: lighten($primary, 30%);
   color: darken($primary, 20%);
-  &:hover{ background-color: $primary; color:lighten($primary, 50%); }
+  &:not(.no-hover):hover{ background-color: $primary; color:lighten($primary, 50%); }
 }
 
 body, html{
@@ -42,8 +42,18 @@ body, html{
     img{ width: 24px !important; }
 }
 
-#connect_wallet_btn{
+#connect_wallet_btn, #address_info_area{
     max-width: 180px !important;
+}
+
+#address_info_area{
+    display: inline-block !important;
+    padding: 8px !important;
+    font-size: 14px !important;
+    .disconnect{
+        font-size: 12px !important; 
+        text-align: right !important;
+    }
 }
 
 .alert-notif {

@@ -10,6 +10,7 @@ module.exports = {
          //   jQuesry:          'jquery-slim',
          //   'window.jQuery':  "jquery-slim",
             Swal:             "sweetalert2"
+        
         })]
       },
 

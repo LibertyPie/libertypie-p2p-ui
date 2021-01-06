@@ -77,7 +77,15 @@
                         role="button" 
                         @click="doConnectWallet"
                     >
-                        {{ $t("connect_wallet") }}
+                        <div v-if="isWalletConnected">
+                            <div class="d-flex">
+                                <div> <img :src="getIcon()" class="rounded" alt=""></div>
+                                <div>{{getShortenedAddr()}}</div>
+                            </div>
+                        </div>
+                        <div v-else>   
+                            {{ $t("connect_wallet") }}
+                        </div>
                     </a>
                 </li>
             </ul>
@@ -87,19 +95,23 @@
 
 
 <script>
+
 export default {
 
   data(){return {
-      
+      isWalletConnected: false,
+      walletInfo: null,
   }},
   mounted(){
-
+      
       /**
        * listen to wallet connect success
        */
-      window.addEventListener("on-wallet-connect",(e)=>{
-          let info = e.detail;
-          console.log(info)
+      this._on("on-wallet-connect",(e)=>{
+          this.walletInfo = e.detail;
+          this.isWalletConnected = true;
+
+          console.log(this.getIcon())
       })
       
   },
@@ -107,8 +119,25 @@ export default {
     
       doConnectWallet(){
         window.dispatchEvent(new CustomEvent("connect_wallet"))
-      }
-  }
+      },
+
+      getShortenedAddr(){
+          let addr = this.walletInfo.account;
+          let formatted = `${addr.substr(0,6)}..${addr.substr(-4)}`
+          return formatted;
+      },
+
+      /**
+       * getGravatarUrl
+       */
+        getIcon(){
+          let seedStr = (this.isWalletConnected) ? this.walletInfo.account : null;
+            return blockies.create({ 
+                seed: seedStr
+            }).toDataURL();
+        }
+    }
+
 }
 </script>
 

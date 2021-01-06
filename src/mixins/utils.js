@@ -65,6 +65,10 @@ export default {
             window.dispatchEvent(new CustomEvent(name, {detail: data}));
         },
 
+        _on(eventName,callback){
+            window.addEventListener(eventName,callback)
+        },
+
         errorNotif(msg){ this.notif("error",msg) },
 
         infoNotif(msg){ this.notif("info",msg) },
