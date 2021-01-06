@@ -79,7 +79,7 @@
                     >
                         <div v-if="isWalletConnected">
                             <div class="d-flex">
-                                <div> <img :src="getIcon()" class="rounded" alt=""></div>
+                                <div v-html="getIcon()"></div>
                                 <div>{{getShortenedAddr()}}</div>
                             </div>
                         </div>
@@ -96,6 +96,8 @@
 
 <script>
 
+import { toSvg } from "jdenticon";
+
 export default {
 
   data(){return {
@@ -110,8 +112,6 @@ export default {
       this._on("on-wallet-connect",(e)=>{
           this.walletInfo = e.detail;
           this.isWalletConnected = true;
-
-          console.log(this.getIcon())
       })
       
   },
@@ -132,9 +132,8 @@ export default {
        */
         getIcon(){
           let seedStr = (this.isWalletConnected) ? this.walletInfo.account : null;
-            return blockies.create({ 
-                seed: seedStr
-            }).toDataURL();
+          let svg = toSvg(seedStr,24)
+          return `<span class='pr-1'>${svg}</span`;
         }
     }
 
