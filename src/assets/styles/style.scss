@@ -13,6 +13,8 @@
 
 @import "./hamburger.scss";
 
+@import "./select2-bootstrap4/src/layout.scss";
+
 .bg-primary-light-30p {
   background-color: lighten($primary, 30%);
   color: darken($primary, 20%);
@@ -75,5 +77,13 @@ a, a:hover, a:active, a:visited{  text-decoration: none !important;}
         border-bottom-left-radius: 28px;
         border-bottom-right-radius: 28px;
     }
+}
+
+.select2-selection--single{
+    width: 10px !important;
+}
+
+.select2-container, .select2-selection {
+    width: 100% !important;
 }
 

@@ -1,17 +1,47 @@
 const fs = require('fs')
 const webpack = require("webpack")
+const CopyPlugin = require('copy-webpack-plugin');
+
+let webpackPlugins = []
+
+if(process.env.NODE_ENV == "production"){
+
+  const copyPlugin =  new CopyPlugin([
+    { 
+      test: /\.(json)$/,
+      from: 'src/locales/', 
+      to: 'locales/',
+      force: true
+    },
+    { 
+      test: /\.(json)$/,
+      from: 'src/config/', 
+      to: 'config/',
+      force: true
+    },
+     { 
+        test: /\.(json)$/,
+        from: 'src/data/', 
+        to: 'data/',
+        force: true
+    }
+  ])
+
+  //add plugins
+  webpackPlugins.push(copyPlugin)
+}
+
+webpackPlugins.push(
+    new webpack.ProvidePlugin({ 
+           Swal:   "sweetalert2"
+       })
+)
 
 module.exports = {
     lintOnSave: false,
 
     configureWebpack: {
-        plugins: [new webpack.ProvidePlugin({ 
-         //   $:                'jquery-slim',
-         //   jQuesry:          'jquery-slim',
-         //   'window.jQuery':  "jquery-slim",
-            Swal:             "sweetalert2"
-        
-        })]
+        plugins: webpackPlugins
       },
 
     devServer: {

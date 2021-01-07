@@ -34,20 +34,19 @@
                             </a>
                         </div>
                         <div class="col col-12  col-md-4 col-lg-4">
-                            <div class="input-group pr-2">
+                            <div class="d-flex">
                                 <div class="input-group-prepend">
                                     <span class="input-group-text">
                                         <img src="/assets/images/pin.svg" width="18" />
                                     </span>
                                 </div>
-                                <select class="form-control form-control-lg">
-                                    <option value="" selected disabled class="">{{$t("location")}}</option>
-                                    <option value=""></option>
-                                    <option value="btc">Bitcoin</option>
-                                    <option value="eth">Ethereum</option>
-                                    <option value="xmr">Monero</option>
-                                    <option value="bnb">Binance Coin</option>
-                                </select>
+                                <div class="flex-grow-1">
+                                    <CountrySelect 
+                                        cssClass="form-control-lg" 
+                                        :placeholder="$t('location')"
+                                        :defaultOptionText="$t('location')"
+                                    />
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -58,11 +57,15 @@
 </template>
 
 <script>
+
+import CountrySelect from "../CountrySelect"
 export default {
+    components: {CountrySelect},
     mounted(){
-      
+     
     }
 }
+
 </script>
 
 <style lang="scss">
@@ -89,10 +92,17 @@ export default {
         }
 
         
-        input, select, .payment-method { 
-            border:none; height: 65px; font-size:14px; text-align: center; 
+        input, select, .payment-method,  .select2-selection--single  { 
+            border:none !important; height: 65px !important; font-size:14px !important; text-align: left !important; 
         }
         
+        .select2-selection--single { 
+            margin:0 !important;
+            
+            .select2-selection__rendered{
+                 line-height: 65px !important;
+            }
+        }
 
         .input-group-prepend, .input-group-text {background:none;border:none;}
 

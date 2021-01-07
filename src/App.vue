@@ -6,13 +6,6 @@
 <script>
 require("./assets/styles/style.scss")
 import _WalletProvider from './classes/_WalletProvider'
-import LogRocket from 'logrocket';
-
-
-//init logging 
-//declarations first before initialization
-LogRocket.init('wtpj8t/libertypie');
-
 
 export default {
   data(){
@@ -22,6 +15,7 @@ export default {
     }
   },
   mounted(){
+     
     this.walletPorivider = new _WalletProvider(this);
   }
 }
