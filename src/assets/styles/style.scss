@@ -80,10 +80,16 @@ a, a:hover, a:active, a:visited{  text-decoration: none !important;}
 }
 
 .select2-selection--single{
-    width: 10px !important;
+    width: 100%;
 }
 
 .select2-container, .select2-selection {
     width: 100% !important;
 }
 
+.select2-selection__rendered{
+    width: calc(99%) !important;
+    white-space: nowrap  !important; 
+    overflow-x: hidden !important; 
+    text-overflow: ellipsis !important;
+}

@@ -1,6 +1,6 @@
 <template>
   <div>
-      <select  :class="['form-control country-select',cssClasses]" style="width:100%"></select>
+      <select  :class="['form-control country-select',cssClasses]"></select>
   </div>
 </template>
 
@@ -65,11 +65,12 @@ export default {
                 $(function(){
                     _this.select2 = $(".country-select").select2({
                         placeholder: splaceholder,
-                        allowClear: true,
+                        allowClear: false,
                         width: 'resolve',
                         theme: 'bootstrap4',
                         data: processedData,
-                        width: 'element'
+                        width: 'element',
+                        templateResult: _templateResult
                     });
                 })
 
@@ -77,8 +78,24 @@ export default {
         }
     }
 }
+
+function _templateResult (state) {
+  if (!state.id) {
+    return state.text;
+  }
+  var baseUrl = "/assets/images/countries/png/";
+  var $state = $(
+    '<span><img src="' + baseUrl + '/' + state.element.value.toUpperCase() + '.png" class="img-flag" /> ' + state.text + '</span>'
+  );
+  return $state;
+};
+
 </script>
 
 <style>
-    .country-select{ width: 100% !important;}
+    .country-select{ 
+        white-space: nowrap  !important; 
+        overflow: hidden; 
+        text-overflow: ellipsis !important;
+    }
 </style>

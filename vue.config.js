@@ -1,34 +1,46 @@
 const fs = require('fs')
 const webpack = require("webpack")
-const CopyPlugin = require('copy-webpack-plugin');
+//const CopyPlugin = require('copy-webpack-plugin');
+//const MiniCssExtractPlugin = require('mini-css-extract-plugin')
+//const PurgecssPlugin = require('purgecss-webpack-plugin')
+//const glob = require("glob")
+//const path = require("path")
+
+//const PATHS = {
+//    src: path.join(__dirname, 'src')
+//}
 
 let webpackPlugins = []
 
 if(process.env.NODE_ENV == "production"){
 
-  const copyPlugin =  new CopyPlugin([
-    { 
-      test: /\.(json)$/,
-      from: 'src/locales/', 
-      to: 'locales/',
-      force: true
-    },
-    { 
-      test: /\.(json)$/,
-      from: 'src/config/', 
-      to: 'config/',
-      force: true
-    },
-     { 
-        test: /\.(json)$/,
-        from: 'src/data/', 
-        to: 'data/',
-        force: true
-    }
-  ])
+  /*const copyPlugin =  new CopyPlugin({
+        patterns: [
+            { 
+                from: 'src/locales/*.json', 
+                to: 'locales/',
+                force: true
+            },
+            { 
+                from: 'src/config/*.json', 
+                to: 'config/',
+                force: true
+            },
+            { 
+                from: 'src/data/*.json', 
+                to: 'data/',
+                force: true
+            }
+        ]
+    })
+    */
 
   //add plugins
-  webpackPlugins.push(copyPlugin)
+
+  webpackPlugins.push(new PurgecssPlugin({
+    paths: glob.sync(`${PATHS.src}/**/*`,  { nodir: true }),
+  }))
+
 }
 
 webpackPlugins.push(

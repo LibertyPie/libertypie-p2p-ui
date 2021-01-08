@@ -126,5 +126,10 @@ export default {
                 overflow: hidden;
             }
         }
+
+        .select2-selection__rendered{
+            max-width: 200px;
+        }
     }
+    
 </style>
