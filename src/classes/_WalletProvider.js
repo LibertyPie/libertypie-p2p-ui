@@ -1,5 +1,5 @@
 /**
- * LibertyPie 
+ * LibertyPie (https://libertypie.com)
  * @license MIT
  */
 const networkConfig = require("../config/network").default
@@ -217,6 +217,13 @@ export default class _WalletProviderCore  {
         return true;
     } //end fun
 
-
+    /**
+     * fetch public data which does not need authentication, but if user is authenticated or connected to a wallet, then use it
+     * @param method  the method to connect to 
+     * @
+     */
+    async requestPublicData(method, params){
+        
+    }
 }
 

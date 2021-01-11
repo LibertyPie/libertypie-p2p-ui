@@ -25,6 +25,7 @@ export default {
             chain_id: 0x2a,
             supported: true,
             enabled: true,
+            contractAddress: "0x21fE2Fdc1CDE8FEA31338E75562Ab8678cece8cB",
             rpc: [
                 "https://kovan.infura.io/v3/b5ef34114e4747759f1cce670f02b2b7"
             ]

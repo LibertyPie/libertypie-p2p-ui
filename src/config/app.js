@@ -1,4 +1,4 @@
 export default {
-    app_name: "LibertyPie",
+    appName: "LibertyPie",
     url: "https://libertypie-dev.com"
 }

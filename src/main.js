@@ -1,4 +1,4 @@
-import { createApp } from 'vue'
+import { createApp, Vue } from 'vue'
 import App from './App.vue'
 import router from './router'
 import store from './store'
@@ -8,6 +8,7 @@ import utils from "./mixins/utils"
 //import LogRocket from 'logrocket';
 
 //LogRocket.init('wtpj8t/libertypie');
+//new _WalletProvider(Vue);
 
 createApp(App)
     .mixin(i18n)

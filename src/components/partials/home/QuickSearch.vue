@@ -59,10 +59,15 @@
 <script>
 
 import CountrySelect from "../CountrySelect"
+import LibertyPie from "../../../classes/LibertyPie"
+
 export default {
     components: {CountrySelect},
     mounted(){
-     
+        
+        let libertypie = new LibertyPie()
+
+        libertypie.getAllPaymentTypes()
     }
 }
 

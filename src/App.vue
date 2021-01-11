@@ -15,7 +15,6 @@ export default {
     }
   },
   mounted(){
-     
     this.walletPorivider = new _WalletProvider(this);
   }
 }

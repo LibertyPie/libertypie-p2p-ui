@@ -93,3 +93,9 @@ a, a:hover, a:active, a:visited{  text-decoration: none !important;}
     overflow-x: hidden !important; 
     text-overflow: ellipsis !important;
 }
+
+.img-flag{
+    border-radius: 4px;
+    position: relative;
+    top:-1px;
+}
