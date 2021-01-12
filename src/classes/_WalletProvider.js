@@ -11,8 +11,13 @@ import Portis from "@portis/web3"
 import WalletLink from 'walletlink'
 import { ethers } from "ethers";
 
-
-export default class _WalletProviderCore  {
+/**
+ * _WalletProvider Class
+ * @typedef _WalletProvider
+ * @class
+ * @exports
+ */
+export default class _WalletProvider  {
 
     isConnected = false;
     hasInit = false
@@ -24,7 +29,9 @@ export default class _WalletProviderCore  {
         this.initialize();
     }
 
-    //initiate web3
+    /**
+     * initializes the class 
+     */
     async initialize(){
 
          let defaultChainName = (networkConfig.networks || {})[defaultNetwork].name;
@@ -128,6 +135,7 @@ export default class _WalletProviderCore  {
     
     /**
      * connectWallet
+     * @param {boolean} [silentMode=true] should the connection be made silently
      */
     async connectWallet(silentMode = true){
         try {
@@ -196,8 +204,8 @@ export default class _WalletProviderCore  {
 
     /**
      * isChainSupported
-     * @param chainId int
-     * @param networkId int
+     * @param {number} chainId - the chainId to validate
+     * @returns {boolean} - wether chainId is valid or not
      */
     isChainSupported(chainId){
 
@@ -217,13 +225,5 @@ export default class _WalletProviderCore  {
         return true;
     } //end fun
 
-    /**
-     * fetch public data which does not need authentication, but if user is authenticated or connected to a wallet, then use it
-     * @param method  the method to connect to 
-     * @
-     */
-    async requestPublicData(method, params){
-        
-    }
 }
 

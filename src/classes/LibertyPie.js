@@ -11,6 +11,11 @@ const libertyPieAbi = require("../abi/libertypie.json")
 const chainNets = NetConfig.networks;
 const defaultNetName = NetConfig.default_network;
 
+/**
+ * Custom methods for LibertyPie contract's methods
+ * @class
+ * @typedef {object} LibertyPie 
+ */
 export default class LibertyPie {
 
     _web3Net = null;
@@ -21,9 +26,11 @@ export default class LibertyPie {
         this._web3Net = new Web3Net(defaultNetConfig.contractAddress,libertyPieAbi)
     }
 
-    /**
-     * getPaymentTypes
-     */
+   /**
+    * getAllPaymentTypes
+    * @param {boolean} [cache=true] wether the results should be cached or not
+    * @returns {Object} {paymentsType,categories}
+    */
     async getAllPaymentTypes(cache=true){
         try {
 
