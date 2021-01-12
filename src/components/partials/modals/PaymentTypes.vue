@@ -11,7 +11,10 @@
         }"
     >
         <div>
-            
+            <Loader v-if="isLoading" :isLoading="isLoading" />
+            <div v-else>
+                Helloo
+            </div>
         </div>
     </Modal>
 </template>
@@ -36,6 +39,9 @@ export default {
          * fetchPaymentTypes
          */
         async fetchPaymentTypes(){
+            
+            this.isLoading = true 
+
             try{
 
                 let paymentTypesStatus = await this.$libertypie.getAllPaymentTypes(true)
