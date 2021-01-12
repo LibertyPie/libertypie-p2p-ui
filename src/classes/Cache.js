@@ -41,10 +41,17 @@
      * @returns {*} - cached value
      */
     static get(key){
-        let cachedData = localStorage.getItem(this.formatKey(key))
-        if(typeof cachedData != 'object'){ return null; }
-        return cachedData.d;
-    }
+
+        let data = localStorage.getItem(this.formatKey(key)) || ""
+        
+        if(data.trim().length == 0) return null; 
+
+        let dataObj = JSON.parse(data)
+
+        if(typeof dataObj != 'object' || Date.now() > dataObj.e) return null;
+
+        return dataObj.v;
+    } //end fun
 
     /**
      * store cache
@@ -54,7 +61,9 @@
      * @returns {boolean}
      */
     store(key,value,expiry=0){
-
+        if(expiry>0){ expiry = (Date.now() + expiry)}
+        let data = {v: value, e: expiry}
+        localStorage.setItem(key,data)
     }//end fun 
-    
+
 }
