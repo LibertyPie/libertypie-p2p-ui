@@ -26,7 +26,7 @@
                             </div>
                         </div>
                         <div class="col col-12  col-md-4 col-lg-4 vdivider payment-method">
-                            <a href="#">
+                            <a href="#" @click.prevent="isPTModalVisible=true">
                                 <div class="d-flex  align-items-center">
                                     <div class="pr-5 pl-5"><img src="/assets/images/s_menu.svg" width="18" /></div>
                                     <div class="text-md pr-5 text-gray-700 text-ellipsis text">{{$t("payment_methods")}}</div>
@@ -53,21 +53,28 @@
                 </div>
             </div>
         </div>
+        <PaymentTypesModal 
+            :visible="isPTModalVisible"
+            @on-hide="isPTModalVisible=false"
+            @on-show="isPTModalVisible=true"
+        />
    </div>
 </template>
 
 <script>
 
 import CountrySelect from "../CountrySelect"
-import LibertyPie from "../../../classes/LibertyPie"
+import PaymentTypesModal from "../modals/PaymentTypes"
 
 export default {
-    components: {CountrySelect},
+    components: {CountrySelect,PaymentTypesModal},
+    data(){
+        return {
+            isPTModalVisible: false
+        }
+    },
     mounted(){
         
-        let libertypie = new LibertyPie()
-
-        libertypie.getAllPaymentTypes()
     }
 }
 
