@@ -29,6 +29,7 @@
     /**
      * cache has data
      * @param {string} key - cache key
+     * @returns {boolean}
      */
     static has(key){
       return (this.get(key) != null)   
@@ -48,5 +49,12 @@
     /**
      * store cache
      * @param {string} key - cache key
+     * @param {*} value - the data to be cached
+     * @param {number} [expiry=0] - the expiry in milliseconds, 0 means no expiry 
+     * @returns {boolean}
      */
+    store(key,value,expiry=0){
+
+    }//end fun 
+    
 }
