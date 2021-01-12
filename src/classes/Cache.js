@@ -45,7 +45,6 @@
 
         let data = localStorage.getItem(this.formatKey(key)) || ""
         
-        console.log(data)
         if(data.trim().length == 0) return null; 
 
         let dataObj = JSON.parse(data)
@@ -69,12 +68,12 @@
      */
     static set(key,value,expiry=0){
         if(expiry>0){ expiry = (Date.now() + expiry)}
-        let data = {v: value, e: expiry}
+        let data = JSON.stringify({v: value, e: expiry})
         localStorage.setItem(this.formatKey(key),data)
         return true;
     }//end fun 
-
-
+ 
+    
     /**
      * remove Cache
      * @param {*} value - the data to be cached

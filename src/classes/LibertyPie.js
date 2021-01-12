@@ -35,7 +35,7 @@ export default class LibertyPie {
     async getAllPaymentTypes(cache=true){
         try {
 
-            let cacheKey = "__paymentTypes"
+            let cacheKey = "_payment_types"
 
             if(cache){
                 let cacheData = Cache.get(cacheKey)
@@ -60,10 +60,10 @@ export default class LibertyPie {
 
             for(let data of paymentTypesArray){
                 
-                let id   = data.id || null 
+                let idNum   = data.id || null 
                
-                if(id == null || id == ""){continue; }
-                
+                if(idNum == null || idNum == ""){continue; }
+                let id = idNum.toNumber()
                 let name = data.name
                 let catId = data.categoryId.toNumber()
 
@@ -81,7 +81,7 @@ export default class LibertyPie {
 
             if(cache){
                 //cache for 3 minute
-                Cache.set(cacheKey,finalData,(60 * 3 * 1000))
+                Cache.set(cacheKey,finalData,(60 * 5 * 1000))
             }
 
             return Status.successPromise(null, finalData)
