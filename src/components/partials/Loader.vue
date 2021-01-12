@@ -1,11 +1,8 @@
 <template>
-    <Modal>
-
-    </Modal>
+  <
 </template>
 
 <script>
-
 export default {
 
 }

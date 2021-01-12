@@ -1,6 +1,6 @@
 <template>
    <div id="quick_search" class="row"> 
-        <div  class="col-12 col-md-10 col-xl-6 col-xl-4">
+        <div  class="col-12 col-md-10 col-xl-8">
             <div class="px-15 py-10">
                 <div class="title_wrapper">  
                     <h1 class="text-white-80">{{ $t("search_offers") }}</h1>
