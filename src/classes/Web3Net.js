@@ -4,6 +4,7 @@
  */
 import NetConfig from "../config/network"
 import Status from './Status';
+import _WalletProviderCore from './_WalletProvider';
 const chainNets = NetConfig.networks;
 const defaultNetName = NetConfig.default_network;
 const ethers = require('ethers');
@@ -63,23 +64,17 @@ export default class Web3Net {
         try{
 
             if(window._walletInfo){
-                return this.request(method,params)
+                return this.requestContract(method,params)
             }
 
             if(this.publicProvider == null){
                 this.getPublicProvider()
             }
 
-            let contract = new ethers.Contract(this.contractAddress, this.abi, this.publicProvider);
-
-            console.log(contract)
-            
-            let result = await contract[method](params);
-
-            return Status.successPromise(null,result)
+            return await this.execRequest(this.publicProvider,method, params);
         } catch(e){
             console.log(e,e.stack)
-            return Status.errorPromise("request_failed",e)
+            throw e;
         }
    } //end 
 
@@ -88,9 +83,46 @@ export default class Web3Net {
     * @param {*} method 
     * @param {*} params 
     */
-   static async requestContract(method,params){
+    async requestContract(method,params){
+        try{ 
 
+            if(!window._walletInfo || Object.keys(window._walletInfo).length == 0){
+               
+                //lets force wallet connection
+               let _walletProvider = new _WalletProviderCore(window._vue)
+                              
+               let connectStatus = await _walletProvider.connectWallet(false);
+               
+               console.log(connectStatus)
+               if(connectStatus.isError()){
+                   return connectStatus;
+               } 
+            }
+
+            return await this.execRequest(window._walletInfo.provider,method, params);
+
+        } catch(e){
+            console.log(e,e.stack)
+            return Promise.reject(e);
+        }
    } //end fun 
 
+   /**
+    * execRequest
+    */
+    async execRequest(provider, method, data){
+        try{
 
+            let contract = new ethers.Contract(this.contractAddress, this.abi, provider);
+
+            console.log(contract)
+
+            let result = await contract[method](params);
+
+            return Status.successPromise(null,result)
+        } catch (e){
+            console.log(e,e.stack)
+            return Promise.reject(e);
+        }
+    }   
 }

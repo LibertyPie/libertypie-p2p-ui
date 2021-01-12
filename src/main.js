@@ -10,9 +10,11 @@ import utils from "./mixins/utils"
 //LogRocket.init('wtpj8t/libertypie');
 //new _WalletProvider(Vue);
 
-createApp(App)
+let vueInstance = createApp(App)
     .mixin(i18n)
     .mixin(utils)
     .use(store)
     .use(router)
     .mount('#app');
+
+window._vue = vueInstance;

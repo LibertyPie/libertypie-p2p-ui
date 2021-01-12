@@ -27,7 +27,21 @@ export default class LibertyPie {
 
             let resultStatus = await this._web3Net.requestContractPublicData("getPaymentTypesAndCats")
 
-            console.log(resultStatus)
+            if(resultStatus.isError()){
+                return resultStatus;
+            }
+
+            let resultData = resultStatus.getData() || [];
+
+            let categoriesArray = resultData[0] || [];
+
+            let paymentTypesArray = resultData[1] || [];
+
+            let processedData = [];
+
+            for(let data of paymentTypesArray){
+                console.log(data)
+            }
         } catch(e){
             console.log(e,e.stack)
         }

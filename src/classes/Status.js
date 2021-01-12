@@ -29,6 +29,8 @@ export default class Status {
         return this.type;
     }
 
+    getData(){ return this.data; }
+
     getMessage(){
         return this.msg;
     }
