@@ -53,8 +53,10 @@ export default class Web3Net {
 
    /**
     * request public data from the chain using the provided in networks config
-    * @param {*} method 
-    * @param {*} params 
+    * @async
+    * @param {String} method 
+    * @param {Object} params 
+    * @returns Promise<Status>
     */
     async requestContractPublicData(
        method,
@@ -73,15 +75,17 @@ export default class Web3Net {
 
             return await this.execRequest(this.publicProvider,method, params);
         } catch(e){
-            console.log(e,e.stack)
-            throw e;
+            console.log("Web3Net::requestContractPublicData",e,e.stack)
+            return Promise.reject(e);
         }
    } //end 
 
    /**
     * make request to the chain
-    * @param {*} method 
-    * @param {*} params 
+    * @async
+    * @param {String} method 
+    * @param {Object} params
+    * @returns Promise<Status> 
     */
     async requestContract(method,params){
         try{ 
@@ -93,29 +97,33 @@ export default class Web3Net {
                               
                let connectStatus = await _walletProvider.connectWallet(false);
                
-               console.log(connectStatus)
                if(connectStatus.isError()){
                    return connectStatus;
                } 
             }
 
-            return await this.execRequest(window._walletInfo.provider,method, params);
+            let web3Provider = new ethers.providers.Web3Provider(window._walletInfo.provider);
+            
+            return await this.execRequest(web3Provider,method, params);
 
         } catch(e){
-            console.log(e,e.stack)
+            console.log("Web3Net::requestContract",e,e.stack)
             return Promise.reject(e);
         }
    } //end fun 
 
    /**
-    * execRequest
+    * execRequest, internally execute request providing the provider
+    * @async
+    * @param {*} provider
+    * @param {String} method 
+    * @param {Object} params 
+    * @returns Promise<Status>
     */
-    async execRequest(provider, method, data){
+    async execRequest(provider, method, params){
         try{
 
             let contract = new ethers.Contract(this.contractAddress, this.abi, provider);
-
-            console.log(contract)
 
             let result = await contract[method](params);
 
