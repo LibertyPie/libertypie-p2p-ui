@@ -7,6 +7,7 @@
 import NetConfig from "../config/network"
 import Status from './Status';
 import Web3Net from "./Web3Net"
+import Cache from './Cache';
 const libertyPieAbi = require("../abi/libertypie.json")
 const chainNets = NetConfig.networks;
 const defaultNetName = NetConfig.default_network;
@@ -35,6 +36,13 @@ export default class LibertyPie {
         try {
 
             let cacheKey = "__paymentTypes"
+
+            if(cache){
+                let cacheData = Cache.get(cacheKey)
+                if(cacheData != null){
+                    return Status.successPromise("",cacheData)
+                }
+            }
 
             let resultStatus = await this._web3Net.requestContractPublicData("getPaymentTypesAndCats")
 
@@ -66,10 +74,17 @@ export default class LibertyPie {
                 }
             }
 
-            return Status.successPromise(null, {
+            let finalData = {
                 paymentTypes: processedPaymentTypes,
                 categories: categoriesArray
-            })
+            };
+
+            if(cache){
+                //cache for 3 minute
+                Cache.set(cacheKey,finalData,(60 * 3 * 1000))
+            }
+
+            return Status.successPromise(null, finalData)
         } catch(e){
             console.log(e,e.stack)
         }

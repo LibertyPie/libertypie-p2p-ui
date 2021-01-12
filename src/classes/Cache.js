@@ -8,8 +8,9 @@
  * Cache class 
  * @class 
  * @typedef {Object} Cache 
+ * @exports
  */
- class Cache {
+ export default class Cache {
 
     /**
      * cache key prefix
@@ -44,11 +45,17 @@
 
         let data = localStorage.getItem(this.formatKey(key)) || ""
         
+        console.log(data)
         if(data.trim().length == 0) return null; 
 
         let dataObj = JSON.parse(data)
 
-        if(typeof dataObj != 'object' || Date.now() > dataObj.e) return null;
+        if(typeof dataObj != 'object') return null;
+
+        //if expired remove it
+        if( Date.now() > dataObj.e){
+            this.remove(key)
+        }
 
         return dataObj.v;
     } //end fun
@@ -60,10 +67,22 @@
      * @param {number} [expiry=0] - the expiry in milliseconds, 0 means no expiry 
      * @returns {boolean}
      */
-    store(key,value,expiry=0){
+    static set(key,value,expiry=0){
         if(expiry>0){ expiry = (Date.now() + expiry)}
         let data = {v: value, e: expiry}
-        localStorage.setItem(key,data)
+        localStorage.setItem(this.formatKey(key),data)
+        return true;
     }//end fun 
+
+
+    /**
+     * remove Cache
+     * @param {*} value - the data to be cached
+     * @returns {boolean}
+     */
+    static remove(key){
+        localStorage.removeItem(this.formatKey(key))
+        return true;
+    }
 
 }
