@@ -6,6 +6,9 @@ const CopyPlugin = require('copy-webpack-plugin');
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 const TerserPlugin = require('terser-webpack-plugin');
 const CompressionPlugin = require('compression-webpack-plugin');
+const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin');
+var ImageminPlugin = require('imagemin-webpack-plugin').default
+const zlib = require("zlib");
 const zopfli = require("@gfx/zopfli");
 
 let webpackPlugins = []
@@ -27,18 +30,20 @@ if(process.env.NODE_ENV == "production"){
         ]
     })
     
-    let typeToCompress = /\.(js|css|html|svg|json|png|jpe?g|woff(2?)|ttf|eot|map)$/
+    let typeToCompress = /\.(js|css|html|svg|json|png|jpe?g|woff(2?)|ttf|eot|map)$/;
 
-    webpackPlugins.push(new CompressionPlugin({
-        cache: true,
-        filename: '[path].br[query]',
-        algorithm: 'brotliCompress',
+     webpackPlugins.push(  new CompressionPlugin({
+        filename: "[path][base].br",
+        algorithm: "brotliCompress",
         test: typeToCompress,
-        compressionOptions: { level: 11 },
-        //threshold: 20480,
+        compressionOptions: {
+          params: {
+            [zlib.constants.BROTLI_PARAM_QUALITY]: 11,
+          },
+        },
+        threshold: 0,
         minRatio: 0.8,
-        deleteOriginalAssets: false
-     }))
+      }))
 
      webpackPlugins.push(new CompressionPlugin({
         filename: "[path][base].gz",
@@ -49,10 +54,11 @@ if(process.env.NODE_ENV == "production"){
         algorithm(input, compressionOptions, callback) {
           return zopfli.gzip(input, compressionOptions, callback);
         },
-         //threshold: 20480,
+         threshold: 0,
          minRatio: 0.8,
       }))
-
+    
+    webpackPlugins.push( new ImageminPlugin());
     webpackPlugins.push(_copyPlugin);
 
 } else {
@@ -73,11 +79,7 @@ module.exports = {
         plugins: webpackPlugins,
 
         optimization: {
-            mangleWasmImports: true,
-            removeAvailableModules: true,
-            removeEmptyChunks: true,
-            mergeDuplicateChunks: true,
-            flagIncludedChunks: true,
+   
             minimizer: [
                 new TerserPlugin({
                     test: /\.js(\?.*)?$/i,
@@ -90,8 +92,33 @@ module.exports = {
                         },
                         compress: true
                     }
-                })
+                }),
+                new OptimizeCSSAssetsPlugin({})
             ],
+
+            mangleWasmImports: true,
+            removeAvailableModules: true,
+            removeEmptyChunks: true,
+            mergeDuplicateChunks: true,
+            flagIncludedChunks: true,
+            runtimeChunk: true,
+
+            splitChunks: {
+              cacheGroups: {
+                styles: {
+                  name: 'styles',
+                  test: /\.css$/,
+                  chunks: 'all',
+                  enforce: true
+                },
+                scripts: {
+                  name: 'scripts',
+                  test: /\.js$/,
+                  chunks: 'all',
+                  enforce: true
+                }
+              }
+            }
         },
       },
       css: {
