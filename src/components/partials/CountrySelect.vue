@@ -70,7 +70,7 @@ export default {
                         theme: 'bootstrap4',
                         data: processedData,
                         width: 'element',
-                        templateResult: _templateResult
+                        //templateResult: _templateResult
                     });
                 })
 
@@ -78,7 +78,7 @@ export default {
         }
     }
 }
-
+/*
 function _templateResult (state) {
   if (!state.id) {
     return state.text;
@@ -89,7 +89,7 @@ function _templateResult (state) {
   );
   return $state;
 };
-
+*/
 </script>
 
 <style>

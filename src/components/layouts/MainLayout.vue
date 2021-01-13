@@ -17,7 +17,7 @@ export default {
 </script>
 
 <style lang="scss">
-    .connect-wrapper{
+    .connect-wrapper {
         height: 100vh;
          
         button {

@@ -6,10 +6,9 @@ const networkConfig = require("../config/network").default
 const defaultNetwork = networkConfig.default_network;
 import Status from "./Status"
 import WalletProvider from "../../../../WalletProvider/lib/src/index"
-import WalletConnect from "@walletconnect/web3-provider";
-import Portis from "@portis/web3"
-import WalletLink from 'walletlink'
-import { ethers } from "ethers";
+//import WalletConnect from "@walletconnect/web3-provider";
+//import Portis from "@portis/web3"
+//import WalletLink from 'walletlink'
 
 /**
  * _WalletProvider Class
@@ -46,7 +45,7 @@ export default class _WalletProvider  {
 
         let providerOpts = {
 
-            portis: {
+            /*portis: {
                 package: Portis,
                 connect_text: this._vue.$t("portis_connect_text"),
                 options: {
@@ -84,7 +83,7 @@ export default class _WalletProvider  {
                         //chainId: 0x2a
                     }
                 }
-            },
+            },*/
         }
 
         this._walletProvider = new WalletProvider({
@@ -187,13 +186,7 @@ export default class _WalletProvider  {
             })
          }
          
-        
-         //lets initiated ethers
-         let web3Core = new ethers.providers.Web3Provider(info.provider)
-        
          this.isConnected = true;
-
-         info.web3 = web3Core;
 
          window._walletInfo = info;
 

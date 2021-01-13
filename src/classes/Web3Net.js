@@ -7,7 +7,7 @@ import Status from './Status';
 import _WalletProviderCore from './_WalletProvider';
 const chainNets = NetConfig.networks;
 const defaultNetName = NetConfig.default_network;
-const ethers = require('ethers');
+const Eth = require('ethjs');
 
 
 export default class Web3Net {
@@ -42,9 +42,10 @@ export default class Web3Net {
         let rpc = (defaultNetConfig.rpc || [])[0]
         
         //lets get the rpc 
-        let currentProvider = new web3.providers.HttpProvider(rpc);
+        //let currentProvider = new web3.providers.HttpProvider(rpc);
 
-        let web3Provider = new ethers.providers.Web3Provider(currentProvider);
+        //let web3Provider = new ethers.providers.Web3Provider(currentProvider);
+        const web3Provider = new Eth(new Eth.HttpProvider(rpc));
 
         this.publicProvider = web3Provider;
 
@@ -102,7 +103,9 @@ export default class Web3Net {
                } 
             }
 
-            let web3Provider = new ethers.providers.Web3Provider(window._walletInfo.provider);
+            //let web3Provider = new ethers.providers.Web3Provider(window._walletInfo.provider);
+            
+            const web3Provider = new Eth(window._walletInfo.provider);
             
             return await this.execRequest(web3Provider,method, params);
 
