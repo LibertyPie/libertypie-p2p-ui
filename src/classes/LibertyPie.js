@@ -8,7 +8,7 @@ import NetConfig from "../config/network"
 import Status from './Status';
 import Web3Net from "./Web3Net"
 import Cache from './Cache';
-const libertyPieAbi = require("../abi/libertypie.json")
+const libertyPieAbi = require("../abi/libertypie")
 const chainNets = NetConfig.networks;
 const defaultNetName = NetConfig.default_network;
 
@@ -23,7 +23,6 @@ export default class LibertyPie {
 
     constructor(){
         let defaultNetConfig = chainNets[defaultNetName];
-        console.log(defaultNetConfig)
         this._web3Net = new Web3Net(defaultNetConfig.contractAddress,libertyPieAbi)
     }
 

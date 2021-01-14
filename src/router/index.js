@@ -13,6 +13,7 @@ const routes = [
     path: "/account/:address",
     name: "account",
     component: import(
+      /* webpackChunkName: "account" */
       /* webpackPrefetch: true */
       /* webpackPreload: true */  
       "@/views/Account.vue"

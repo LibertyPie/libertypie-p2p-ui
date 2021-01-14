@@ -1,4 +1,4 @@
-{
+export default  {
     "quick_search": "Quick Search",
     "quick_search_desc": "Find top rated local offers  instantly",
     "asset": "Asset",
@@ -25,5 +25,8 @@
     "chain_changed_notice": "Your wallet's chain was changed, page will reload..",
     "accounts_changed_notice": "Your wallet's current account has changed, page will load",
     "payment_methods": "Payment Methods",
-    "location": "Location"
-}
+    "location": "Location",
+    "search_here": "Search Here",
+    "Bank Transfers": "Bank Transfers",
+    "Online Wallets": "Online Wallets"
+} 

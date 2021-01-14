@@ -12,7 +12,6 @@ import WalletProvider from "../../../../WalletProvider/lib/src/index"
 
 /**
  * _WalletProvider Class
- * @typedef _WalletProvider
  * @class
  * @exports
  */
@@ -34,8 +33,6 @@ export default class _WalletProvider  {
     async initialize(){
 
          let defaultChainName = (networkConfig.networks || {})[defaultNetwork].name;
-
-         console.log(window._walletInfo)
          
         if(window._walletInfo){
             return;
@@ -188,7 +185,7 @@ export default class _WalletProvider  {
          
          this.isConnected = true;
 
-         window._walletInfo = info;
+         window["_walletInfo"] = info;
 
         //lets broadcast wallet success
         this._vue._dispatchEvent("on-wallet-connect",info)

@@ -10,18 +10,19 @@ const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin');
 var ImageminPlugin = require('imagemin-webpack-plugin').default
 const zlib = require("zlib");
 const zopfli = require("@gfx/zopfli");
+var DuplicatePackageCheckerPlugin = require("duplicate-package-checker-webpack-plugin");
 
 let webpackPlugins = []
 
 if(process.env.NODE_ENV == "production"){
-
+    
    const _copyPlugin =  new CopyPlugin({
         patterns: [
-            { 
+           /* { 
                 from: 'src/locales/*.json', 
                 to: 'locales/',
                 force: true
-            },
+            },*/
             { 
                 from: 'src/abi/*.json', 
                 to: 'abi/',
@@ -63,19 +64,23 @@ if(process.env.NODE_ENV == "production"){
 
 } else {
     webpackPlugins.push( new BundleAnalyzerPlugin())
+    webpackPlugins.push(new DuplicatePackageCheckerPlugin())
 }
 
 webpackPlugins.push(
     new webpack.ProvidePlugin({ 
-           //Swal:   "sweetalert2"
-       })
+           Swal:   "sweetalert2"
+    })
 )
 
 
 module.exports = {
     lintOnSave: false,
-
+    
     configureWebpack: {
+        
+        mode: process.env.NODE_ENV,
+
         plugins: webpackPlugins,
 
         optimization: {

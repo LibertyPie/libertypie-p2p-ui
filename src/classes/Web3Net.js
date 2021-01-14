@@ -7,8 +7,8 @@ import Status from './Status';
 import _WalletProviderCore from './_WalletProvider';
 const chainNets = NetConfig.networks;
 const defaultNetName = NetConfig.default_network;
-const Eth = require('ethjs');
-
+import { Contract, providers } from 'ethers';
+const ethProvider = require('eth-provider')
 
 export default class Web3Net {
 
@@ -42,10 +42,9 @@ export default class Web3Net {
         let rpc = (defaultNetConfig.rpc || [])[0]
         
         //lets get the rpc 
-        //let currentProvider = new web3.providers.HttpProvider(rpc);
+        let currentProvider = ethProvider([rpc]);
 
-        //let web3Provider = new ethers.providers.Web3Provider(currentProvider);
-        const web3Provider = new Eth(new Eth.HttpProvider(rpc));
+        let web3Provider = new providers.Web3Provider(currentProvider);
 
         this.publicProvider = web3Provider;
 
@@ -54,10 +53,8 @@ export default class Web3Net {
 
    /**
     * request public data from the chain using the provided in networks config
-    * @async
     * @param {String} method 
     * @param {Object} params 
-    * @returns Promise<Status>
     */
     async requestContractPublicData(
        method,
@@ -83,10 +80,10 @@ export default class Web3Net {
 
    /**
     * make request to the chain
-    * @async
+    * @asy
     * @param {String} method 
-    * @param {Object} params
-    * @returns Promise<Status> 
+    * @param {Object} params 
+    * @returns {Promise<Status>}
     */
     async requestContract(method,params){
         try{ 
@@ -103,9 +100,7 @@ export default class Web3Net {
                } 
             }
 
-            //let web3Provider = new ethers.providers.Web3Provider(window._walletInfo.provider);
-            
-            const web3Provider = new Eth(window._walletInfo.provider);
+            let web3Provider = new providers.Web3Provider(window._walletInfo.provider);
             
             return await this.execRequest(web3Provider,method, params);
 
@@ -121,12 +116,11 @@ export default class Web3Net {
     * @param {*} provider
     * @param {String} method 
     * @param {Object} params 
-    * @returns Promise<Status>
     */
     async execRequest(provider, method, params){
         try{
 
-            let contract = new ethers.Contract(this.contractAddress, this.abi, provider);
+            let contract = new Contract(this.contractAddress, this.abi, provider);
 
             let result = await contract[method](params);
 

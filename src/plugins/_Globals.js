@@ -13,5 +13,6 @@ export default {
 
         //register global component
         app.component("Loader",Loader)
+
     }
  }

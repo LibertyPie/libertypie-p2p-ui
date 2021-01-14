@@ -9,10 +9,15 @@
     "generate-docs": "node_modules/.bin/jsdoc --configure .jsdoc.json --verbose"
   },
   "dependencies": {
+    "@iconfu/svg-inject": "^1.2.3",
     "@ttskch/select2-bootstrap4-theme": "^1.3.4",
     "core-js": "^3.6.5",
-    "ethjs": "^0.4.0",
+    "eth-provider": "^0.5.3",
+    "ethers": "^5.0.25",
+    "fontawesome-svg-loader": "^0.4.0",
     "jdenticon": "^3.1.0",
+    "simplebar": "^6.0.0-beta.9",
+    "sweetalert2": "^10.13.0",
     "vue": "^3.0.0",
     "vue-router": "^4.0.0-0",
     "vuex": "^4.0.0-0"
@@ -36,6 +41,7 @@
     "cssnano": "^4.1.10",
     "cssnano-preset-advanced": "^4.0.7",
     "dart-sass": "^1.25.0",
+    "duplicate-package-checker-webpack-plugin": "^3.0.0",
     "eslint": "^6.7.2",
     "eslint-plugin-vue": "^7.0.0-0",
     "extract-text-webpack-plugin": "^4.0.0-beta.0",

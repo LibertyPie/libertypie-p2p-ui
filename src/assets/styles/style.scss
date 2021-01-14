@@ -101,3 +101,48 @@ a, a:hover, a:active, a:visited{  text-decoration: none !important;}
     position: relative;
     top:-1px;
 }
+
+.error_msg{color: $danger; }
+
+#paymentTypesModal {
+    .modal-header{
+        padding: 0;
+        margin: 0;
+        justify-content: center;
+        align-items: center;
+     }
+    .form-group,input, input:focus {
+      border: none;
+      outline: none;
+      padding: 0px 10px 0px 10px;
+      flex-grow: 1;
+    }
+
+  .fa-search{fill: $gray-500;}
+
+  .form-group{padding: 0;}
+
+  .pt-categories{
+    
+    overflow-x: scroll;
+    display: flex;
+    min-height: 110px;
+    flex-direction: row;
+    flex-wrap: nowrap;
+
+    .cat-item{
+        flex-grow: 0;
+        flex-shrink: 0;
+        margin:5px;
+        
+        a {
+            height: 120px !important;
+            width: 120px !important;
+            text-overflow: ellipsis;
+            font-size: 14px;
+            padding: 10px;
+            text-align: center;
+        }
+    }
+  }  
+}  

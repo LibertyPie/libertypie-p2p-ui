@@ -8,8 +8,8 @@ export default {
         }
     }, 
 
-    created(){
-        let userLang = this.getLang()
+    async created(){
+        let userLang = await this.getLang()
         this.set(userLang)
     }, 
  
@@ -20,8 +20,7 @@ export default {
             let langData = this.langData || {}
 
             if(!langData.hasOwnProperty(key)){
-                console.log(langData)
-
+                //console.log(langData)
                 return key
             }
 
@@ -43,7 +42,7 @@ export default {
             return str
         },
         
-        set(lang){
+        async set(lang){
             
             //if in format en-US or en-GB
             if(lang.indexOf("-") !== -1){
@@ -54,9 +53,10 @@ export default {
                 lang = this.defaultLang
             }
                      
-            this.langData = require("@/locales/"+lang+".json")
-            
-            //this.$emit("locale-change",{lang: lang})
+            import("@/locales/"+lang+".js")
+            .then((result)=>{
+                this.langData = result.default;
+            })
         },
 
         getLang(){
