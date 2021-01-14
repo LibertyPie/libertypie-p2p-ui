@@ -38,12 +38,26 @@
                 <div v-else>
                     <div data-simplebar>
                         <div class="pt-categories pl-1 pr-1">
+                            <div class="cat-item">
+                                <a href="#" 
+                                    :class="[
+                                        'd-flex flex-column justify-content-center',
+                                        'align-items-center shadow rounded selected'
+                                    ]"
+                                >   
+                                    <div>HI</div>
+                                    <div>{{$t("all_payment_methods")}}</div>
+                                </a>
+                            </div>
                             <div  class="cat-item" 
                                 v-for="(catName,catId) in categories" 
                                 :key="catId"
                             >
                                 <a href="#" 
-                                    class="d-flex flex-column justify-content-center align-items-center shadow rounded"
+                                    :class="[
+                                        'd-flex flex-column justify-content-center',
+                                        'align-items-center shadow rounded selected'
+                                    ]"
                                 >   
                                     <div>HI</div>
                                     <div>{{$t(catName)}}</div>

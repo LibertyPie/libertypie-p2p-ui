@@ -28,5 +28,6 @@ export default  {
     "location": "Location",
     "search_here": "Search Here",
     "Bank Transfers": "Bank Transfers",
-    "Online Wallets": "Online Wallets"
+    "Online Wallets": "Online Wallets",
+    "all_payment_methods": "All Payment Methods"
 } 
