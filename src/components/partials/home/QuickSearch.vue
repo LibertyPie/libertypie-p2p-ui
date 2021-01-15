@@ -15,7 +15,7 @@
                                         <img src="/assets/images/rec.svg" width="18" />
                                     </span>
                                 </div>
-                                <select class="form-control form-control-lg">
+                                <select class="select2 form-control form-control-lg">
                                     <option value="" selected disabled class="">{{$t("asset")}}</option>
                                      <option value=""></option>
                                     <option value="btc">Bitcoin</option>

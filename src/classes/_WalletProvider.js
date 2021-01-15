@@ -108,11 +108,11 @@ export default class _WalletProvider  {
 
             this._vue._dispatchEvent("on-wallet-chain-changed",chainId)
 
-            Swal.fire(
+            /*Swal.fire(
                 this._vue.$t("chain_changed"),
                 this._vue.$t("chain_changed_notice"),
                 'question'
-            )
+            )*/
             window.setTimeout(()=> window.location.reload(),3000)
         })
 
@@ -120,11 +120,12 @@ export default class _WalletProvider  {
 
             this._vue._dispatchEvent("on-wallet-accounts-changed",newAccounts)
 
+            /*
             Swal.fire(
                 this._vue.$t("account_change"),
                 this._vue.$t("accounts_change_notice"),
                 'question'
-            )
+            )*/
             window.setTimeout(()=> window.location.reload(),3000)
         })
     } //ebd fun 
@@ -162,12 +163,12 @@ export default class _WalletProvider  {
         //lets check if the chainId we needed  is same as returned
         if(!this.isChainSupported(info.chainId)){
             if(!isSilentMode){ 
-                Swal.fire({
+               /* Swal.fire({
                     icon: 'error',
                     title: 'Oops...',
                     text: this._vue.$t('unsupported_chain',[info.chainId]),
                     footer: '<a href>Why do I have this issue?</a>'
-                })
+                })*/
             }
 
             return false;
@@ -175,12 +176,12 @@ export default class _WalletProvider  {
         
       
         if(!isSilentMode){ 
-            Swal.fire({
+            /*Swal.fire({
                 icon: 'success',
                 title: this._vue.$t("wallet_connected"),
                 showConfirmButton: false,
                 timer: 2000
-            })
+            })*/
          }
          
          this.isConnected = true;

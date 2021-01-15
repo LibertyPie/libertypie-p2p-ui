@@ -6,12 +6,6 @@ import i18n from './mixins/i18n'
 import utils from "./mixins/utils"
 import _Globals from "./plugins/_Globals"
 
-//import LogRocket from 'logrocket';
-
-//LogRocket.init('wtpj8t/libertypie');
-//new _WalletProvider(Vue);
-
-
 let vueInstance = createApp(App)
     .mixin(i18n)
     .mixin(utils)

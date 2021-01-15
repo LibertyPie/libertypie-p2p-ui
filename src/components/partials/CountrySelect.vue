@@ -67,10 +67,8 @@ export default {
                         placeholder: splaceholder,
                         allowClear: false,
                         width: 'resolve',
-                        theme: 'bootstrap4',
+                        //theme: 'bootstrap4',
                         data: processedData,
-                        width: 'element',
-                        //templateResult: _templateResult
                     });
                 })
 
@@ -78,18 +76,7 @@ export default {
         }
     }
 }
-/*
-function _templateResult (state) {
-  if (!state.id) {
-    return state.text;
-  }
-  var baseUrl = "/assets/images/countries/png/";
-  var $state = $(
-    '<span><img src="' + baseUrl + '/' + state.element.value.toUpperCase() + '.png" class="img-flag" /> ' + state.text + '</span>'
-  );
-  return $state;
-};
-*/
+
 </script>
 
 <style>

@@ -4,7 +4,7 @@
         :aria-labelledby="id+'Label'" 
         aria-hidden="true"
     >
-        <div :class="['modal-dialog', `modal-lg`]" role="document">
+        <div :class="['modal-dialog', 'modal-'+size]" role="document">
             <div class="modal-content">
                 <div class="modal-header">
                     <slot name="header">
@@ -55,7 +55,8 @@ export default {
     data(){
         return {
             _modal: null,
-            _libertyPie: null        
+            _libertyPie: null,
+            modalSize: `modal-${this.size}`       
         }
     },
     watch: {

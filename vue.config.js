@@ -67,11 +67,11 @@ if(process.env.NODE_ENV == "production"){
     webpackPlugins.push(new DuplicatePackageCheckerPlugin())
 }
 
-webpackPlugins.push(
-    new webpack.ProvidePlugin({ 
-           Swal:   "sweetalert2"
-    })
-)
+//webpackPlugins.push(
+    //new webpack.ProvidePlugin({ 
+           //Swal:   "sweetalert2"
+    //})
+//)
 
 
 module.exports = {
@@ -82,6 +82,12 @@ module.exports = {
         mode: process.env.NODE_ENV,
 
         plugins: webpackPlugins,
+
+        externals: {
+          // require("jquery") is external and available
+          //  on the global var jQuery
+          "jquery": "jQuery"
+        },
 
         optimization: {
    
@@ -137,7 +143,7 @@ module.exports = {
                         content: [
                           "./src/**/*.vue"
                         ],
-                        whitelist: ["html", "body"],
+                        whitelist: ["html", "body",".select2"],
                     }),
                     require('cssnano'),
                 ],
