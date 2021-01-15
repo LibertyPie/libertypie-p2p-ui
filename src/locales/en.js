@@ -29,5 +29,7 @@ export default  {
     "search_here": "Search Here",
     "Bank Transfers": "Bank Transfers",
     "Online Wallets": "Online Wallets",
-    "all_payment_methods": "All Payment Methods"
+    "all_payment_methods": "All Payment Methods",
+    "total": "Total",
+    "no_results_found": "No results found for keyword: '{0}'"
 } 

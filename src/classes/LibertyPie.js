@@ -39,7 +39,7 @@ export default class LibertyPie {
             if(cache){
                 let cacheData = Cache.get(cacheKey)
                 if(cacheData != null){
-                    return Status.successPromise("",cacheData)
+                    //return Status.successPromise("",cacheData)
                 }
             }
 
@@ -60,8 +60,9 @@ export default class LibertyPie {
             for(let data of paymentTypesArray){
                 
                 let idNum   = data.id || null 
-               
+
                 if(idNum == null || idNum == ""){continue; }
+                
                 let id = idNum.toNumber()
                 let name = data.name
                 let catId = data.categoryId.toNumber()

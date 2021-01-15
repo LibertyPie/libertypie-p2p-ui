@@ -5,7 +5,7 @@
             ...{
                 id: 'paymentTypesModal', 
                 title: $t('payment_methods'),
-                size: 'modal-full-screen', 
+                size: 'modal-lg', 
                 showFooter: false
             }
         }"
@@ -22,6 +22,8 @@
                     <input class="form-control" 
                         :placeholder="$t('search_here')" 
                         type="text"
+                        v-model="filterKeyword"
+                        @keydown="handlerFilter"
                     />
                 </div>
             </div>
@@ -36,7 +38,12 @@
                     {{errorMsg}}
                 </div>
                 <div v-else>
-                    <div data-simplebar>
+                    
+                    <div v-if="infoMsg != ''">
+                        <div class="p-5 text-info text-center">{{infoMsg}}</div>
+                    </div>
+
+                    <div v-else>
                         <div class="pt-categories pl-1 pr-1">
                             <div class="cat-item">
                                 <a href="#" 
@@ -45,25 +52,50 @@
                                         'align-items-center shadow rounded selected'
                                     ]"
                                 >   
-                                    <div>HI</div>
                                     <div>{{$t("all_payment_methods")}}</div>
+                                    <div class="text-xs pt10">{{$t("total")}}: {{categories.length + 1}}</div>
                                 </a>
                             </div>
                             <div  class="cat-item" 
                                 v-for="(catName,catId) in categories" 
                                 :key="catId"
+                                :data-cat-id="catId"
                             >
                                 <a href="#" 
                                     :class="[
                                         'd-flex flex-column justify-content-center',
-                                        'align-items-center shadow rounded selected'
+                                        'align-items-center shadow rounded'
                                     ]"
                                     :title="`${catName} ${catId}`"
                                 >   
                                     <div>
-                                        <img :src="`/assets/images/pt/${catId}.svg`" class='icon' alt="" />
+                                        <img 
+                                            :src="`/assets/images/pt/${slugify(catName)}.svg`" 
+                                            class='icon' alt="" 
+                                        />
                                     </div>
-                                    <div>{{$t(catName)}}</div>
+                                    <div class="text-capitalize">{{$t(catName)}}</div>
+                                    <div class="text-xs pt10">{{$t("total")}}: {{totalCatsArray[catId] || 0}}</div>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="container">
+                        <div class="row mt20 payment_types_list" ref="payment_types_list">
+                            <div 
+                                v-for="(itemObj,index) in paymentTypes" :key="index"
+                                class="col-12 col-sm-6 col-md-4 col-xl-3 pt_item"
+                                :data-id="itemObj.id"
+                                :data-cat-id="itemObj.catId"
+                            >
+                                <a href="#" 
+                                    class="display-block shadow card rounded p-2 m-1  d-flex flex-row align-items-center"
+                                >
+                                    <img 
+                                        :src="`/assets/images/pt/${slugify(categories[itemObj.catId])}.svg`" 
+                                        class='icon' alt="" 
+                                    />
+                                    <div class="text-truncate text-capitalize">{{itemObj.name}}</div>
                                 </a>
                             </div>
                         </div>
@@ -86,8 +118,12 @@ export default {
         return {
             isLoading: false,
             errorMsg: "",
+            infoMsg: "",
             categories: [],
-            paymentTypes: []
+            paymentTypes: [],
+            totalCatsArray: [],
+            filterKeyword: "",
+            currentSelectedCat: null
         }
     },
     mounted(){
@@ -119,14 +155,58 @@ export default {
                 this.categories = resultData.categories || [];
                 this.paymentTypes = resultData.paymentTypes || [];
 
+                this.countTotalCats(this.paymentTypes)
             } catch (e){
                 this.isLoading = false;
                 console.log(e,e.stack)
             }  
         },
 
-        async handleSearchFilter(){
+        async handlerFilter(){
 
+            this.infoMsg = "";
+
+            let paymentTypesListDom = this.$refs.payment_types_list;
+
+            //lets do filtering
+            let keyword = this.filterKeyword.trim().toLowerCase()
+
+            if((keyword.length + 1) <= 1){
+                paymentTypesListDom.querySelectorAll('.pt_item').forEach((el)=>{
+                    el.classList.remove("hide")
+                })
+
+                return;
+            }
+
+            let totalResults = this.paymentTypes.length;
+            
+            //lets now loop payment 
+            for(let i in this.paymentTypes){
+                
+                let itemObj = this.paymentTypes[i]
+                
+                if(!itemObj.name.toLowerCase().startsWith(keyword)){
+                   
+                   let itemDom = paymentTypesListDom.querySelector(`.pt_item[data-id='${itemObj.id}']`)
+                   if(itemDom){ itemDom.classList.add('hide') }
+
+                   totalResults--;
+                }
+
+            } //end for loop
+
+            //if no results 
+            if(totalResults == 0){
+                this.infoMsg = this.$t("no_results_found",[this.filterKeyword])
+            }
+        },
+
+        countTotalCats(paymentTypes){
+            for(let i in paymentTypes){
+                let catId = paymentTypes[i].catId;
+                this.totalCatsArray[catId] = (this.totalCatsArray[catId] || 0) + 1;
+            }
         }
     }
 }

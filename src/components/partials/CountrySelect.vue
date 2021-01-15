@@ -67,7 +67,7 @@ export default {
                         placeholder: splaceholder,
                         allowClear: false,
                         width: 'resolve',
-                        //theme: 'bootstrap4',
+                        theme: 'bootstrap4',
                         data: processedData,
                     });
                 })

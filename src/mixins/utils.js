@@ -16,7 +16,7 @@ export default {
         logError(msg,error){
             console.log(msg, error, error.stack || "")
         },
-
+        
         notif(type,msg, timeout=3000){
 
             type = (type == "error") ? "danger" : type;
@@ -79,6 +79,16 @@ export default {
 
         statusNotif(statusInfo){ this.notif(statusInfo.getType(),statusInfo.getMessage())  },
 
+        /**
+         * slugify
+         */
+        slugify(text){
+            return text.trim()
+                        .toLowerCase()
+                        .replace(/\s+/g, '-')           
+                        .replace(/[^\w\-]+/g, '')
+                        .replace(/\-\-+/g, '-') 
+        }
     },  
 
 }
