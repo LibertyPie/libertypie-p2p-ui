@@ -17,7 +17,7 @@
                                 </div>
                                 <select class="select2 form-control form-control-lg">
                                     <option value="" selected disabled class="">{{$t("asset")}}</option>
-                                     <option value=""></option>
+                                    <option value=""></option>
                                     <option value="btc">Bitcoin</option>
                                     <option value="eth">Ethereum</option>
                                     <option value="xmr">Monero</option>

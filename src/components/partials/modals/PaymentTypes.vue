@@ -23,7 +23,7 @@
                         :placeholder="$t('search_here')" 
                         type="text"
                         v-model="filterKeyword"
-                        @keydown="handlerFilter"
+                        @keyup="handlerFilter"
                     />
                 </div>
             </div>
@@ -44,13 +44,15 @@
                     </div>
 
                     <div v-else>
-                        <div class="pt-categories pl-1 pr-1">
+                        <div class="pt-categories pl-1 pr-1" ref="pt_categories">
                             <div class="cat-item">
                                 <a href="#" 
                                     :class="[
                                         'd-flex flex-column justify-content-center',
-                                        'align-items-center shadow rounded selected'
+                                        'align-items-center shadow rounded selected',
+                                        'all_payment_methods'
                                     ]"
+                                    @click.prevent="currentSelectedCatId = null"
                                 >   
                                     <div>{{$t("all_payment_methods")}}</div>
                                     <div class="text-xs pt10">{{$t("total")}}: {{categories.length + 1}}</div>
@@ -66,7 +68,8 @@
                                         'd-flex flex-column justify-content-center',
                                         'align-items-center shadow rounded'
                                     ]"
-                                    :title="`${catName} ${catId}`"
+                                    :title="`${catName}`"
+                                    @click.prevent="currentSelectedCatId = catId"
                                 >   
                                     <div>
                                         <img 
@@ -123,8 +126,15 @@ export default {
             paymentTypes: [],
             totalCatsArray: [],
             filterKeyword: "",
-            currentSelectedCat: null
+            currentSelectedCatId: null
         }
+    },
+    watch: {
+
+        currentSelectedCatId(){
+            this.handleCategoryChange()
+        }
+
     },
     mounted(){
         this.fetchPaymentTypes()
@@ -166,13 +176,15 @@ export default {
 
             this.infoMsg = "";
 
+            if(this.currentSelectedCatId != null){ this.currentSelectedCatId = null; }
+
             let paymentTypesListDom = this.$refs.payment_types_list;
 
             //lets do filtering
             let keyword = this.filterKeyword.trim().toLowerCase()
 
             if((keyword.length + 1) <= 1){
-                paymentTypesListDom.querySelectorAll('.pt_item').forEach((el)=>{
+                Array.from(paymentTypesListDom.querySelectorAll('.pt_item')).forEach((el)=>{
                     el.classList.remove("hide")
                 })
 
@@ -202,12 +214,69 @@ export default {
             }
         },
 
+        //count payment types by their categories
         countTotalCats(paymentTypes){
             for(let i in paymentTypes){
                 let catId = paymentTypes[i].catId;
                 this.totalCatsArray[catId] = (this.totalCatsArray[catId] || 0) + 1;
             }
+        },
+
+        //handle category change 
+        handleCategoryChange(){
+            
+            //lets get all catItems 
+            Array.from(this.$refs.pt_categories.querySelectorAll(".cat-item")).forEach((el)=>{
+
+                let catId = el.dataset.catId;
+                let catLink = el.querySelector("a")
+                
+                if(!catLink) return; 
+
+                 let catLinkClassList = catLink.classList;
+                
+                catLinkClassList.remove("selected") 
+
+                if(this.currentSelectedCatId == null && catLinkClassList.contains("all_payment_methods")){
+                    catLinkClassList.add("selected")
+                    return;
+                }
+                
+                (catId != this.currentSelectedCatId)    ?
+                    catLinkClassList.remove("selected") :
+                    catLinkClassList.add("selected")
+
+            })
+
+            this.filterPaymentTypesByCatId(this.currentSelectedCatId)
+        },
+
+        //filter payment types by cat
+        filterPaymentTypesByCatId(catId){
+
+            //lets get all payment types 
+            let paymentTypesListDom = this.$refs.payment_types_list;
+
+            let ptItemsArray = $(paymentTypesListDom).find(".pt_item");
+
+            //show all items 
+            ptItemsArray.removeClass("hide")
+
+            if(catId == null){
+                return;
+            }
+
+            ptItemsArray.each((index,el)=>{
+                
+                let ptItemCatId = $(el).data("catId")
+                
+                if(ptItemCatId != catId){
+                    $(el).addClass("hide")
+                }
+                
+            })
         }
+
     }
 }
 </script>

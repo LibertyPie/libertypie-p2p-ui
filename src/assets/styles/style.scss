@@ -108,8 +108,8 @@ a, a:hover, a:active, a:visited{  text-decoration: none !important;}
 #paymentTypesModal {
     
     .modal-dialog {
-        position: relative;
-       width: 1000px;
+       position: relative;
+       width: 1100px;
        max-width: 95% !important;
     }
 
@@ -151,10 +151,15 @@ a, a:hover, a:active, a:visited{  text-decoration: none !important;}
             padding: 10px;
             text-align: center;
 
+            -webkit-transition: 0.3s all ease;
+            transition: 0.3s all ease;
+
             .icon{ height: 32px; margin-bottom: 5px;}
 
+            border:2px solid transparent;
+
             &.selected {
-                border:2px solid darken($primary,10%);
+                border-color:  darken($primary,10%);
             }
         }
     }

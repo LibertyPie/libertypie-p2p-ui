@@ -31,5 +31,5 @@ export default  {
     "Online Wallets": "Online Wallets",
     "all_payment_methods": "All Payment Methods",
     "total": "Total",
-    "no_results_found": "No results found for keyword: '{0}'"
+    "no_results_found": "No results found for keyword: {0}"
 } 
