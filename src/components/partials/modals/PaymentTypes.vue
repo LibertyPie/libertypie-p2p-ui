@@ -5,7 +5,7 @@
             ...{
                 id: 'paymentTypesModal', 
                 title: $t('payment_methods'),
-                size: 'lg', 
+                size: 'modal-full-screen', 
                 showFooter: false
             }
         }"
@@ -58,8 +58,11 @@
                                         'd-flex flex-column justify-content-center',
                                         'align-items-center shadow rounded selected'
                                     ]"
+                                    :title="`${catName} ${catId}`"
                                 >   
-                                    <div>HI</div>
+                                    <div>
+                                        <img :src="`/assets/images/pt/${catId}.svg`" class='icon' alt="" />
+                                    </div>
                                     <div>{{$t(catName)}}</div>
                                 </a>
                             </div>

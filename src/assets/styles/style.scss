@@ -144,12 +144,16 @@ a, a:hover, a:active, a:visited{  text-decoration: none !important;}
             font-size: 14px;
             padding: 10px;
             text-align: center;
+
+            .icon{ height: 32px; margin-bottom: 5px;}
         }
     }
   }  
 }  
 
-
+.modal-full-screen{
+    width: 95% !important;
+}
 
 
 
