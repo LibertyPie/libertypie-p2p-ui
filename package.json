@@ -18,7 +18,8 @@
     "simple-scrollbar": "git+https://github.com/buzinas/simple-scrollbar.git",
     "vue": "^3.0.0",
     "vue-router": "^4.0.0-0",
-    "vuex": "^4.0.0-0"
+    "vuex": "^4.0.0-0",
+    "whatwg-fetch": "^3.5.0"
   },
   "devDependencies": {
     "@babel/plugin-syntax-import-assertions": "^7.12.1",
