@@ -4,14 +4,16 @@
  * @license MIT
  */
 
+ import Status from "./Status"
+ import Logger from "./Logger"
 
- export default class HTTP {
+ export default class Http {
 
     static async loadPolyfill(){
         return new Promise((resolve,reject)=>{
             if(!window.fetch){
                
-                import("../../node_modules/whatwg-fetch").then((result)=>{
+                import("whatwg-fetch").then((result)=>{
                     
                     window["fetch"] = result.fetch;
 
@@ -35,6 +37,32 @@
         return this.request(url,{headers})
     } //end fun
 
+    /**
+     * getJson
+     * @param {*} url 
+     * @param {*} data 
+     * @param {*} headers 
+     */
+    static async getJson(url, data = {}, headers = {}){
+        try {
+
+            let reqStatus = await this.get(url,data,headers)
+
+            if(reqStatus.isError()) return reqStatus
+
+            let responseObj = reqStatus.getData()
+
+            let respBody =  (await responseObj.text()).trim();
+
+            let respJson = (respBody.length ==  0) ? {} : JSON.parse(respBody)
+
+            return Status.successPromise(null, respJson)
+
+        } catch (e) {
+            Logger.error(`getJson Error: ${url}`,e)
+            return Status.successPromise("request_failed",e)
+        }
+    } //end fun
  
     /**
      * http post
@@ -44,6 +72,13 @@
      */
     static async post(url,data = {}, headers = {}){
 
+        let formData = new FormData()
+        for(let key in data){ formData.append(key,data[key])}
+
+        return this.request(url,{
+            body: formData,
+            headers
+        })
     } //end fun 
 
     /**
@@ -77,13 +112,14 @@
             let response = await fetch(url,rparams);
 
             if (response.status >= 200 && response.status < 300) {
-                return Promise.resolve(response);
+                return Status.successPromise(null,response)
             }
 
-            return Promise.reject(new Error(response.statusText))
+            return Status.successPromise("request_failed",new Error(response.statusText))
 
         } catch(e){
-            return Promise.reject(e)
+            Logger.error(`request Error: ${url}`,e)
+            return Status.successPromise("request_failed",e)
         }
     } //end 
 

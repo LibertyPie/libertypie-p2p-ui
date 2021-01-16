@@ -73,6 +73,7 @@
 
 import CountrySelect from "../CountrySelect"
 import PaymentTypesModal from "../modals/PaymentTypes"
+import Geo from '../../../classes/Geo'
 
 export default {
     components: {CountrySelect,PaymentTypesModal},
@@ -83,7 +84,7 @@ export default {
         }
     },
     mounted(){
-        
+        Geo.getCountry()
     },
 
     methods: {
