@@ -19,6 +19,10 @@ export default {
         defaultOptionText: {
             type: String,
             default: ''
+        },
+        defaultOptionValue:{
+            type: String,
+            default: ''
         }
     },
 
@@ -36,16 +40,24 @@ export default {
     methods: {
         async _init(){
             
-            let placeholder =  this.$t("placeholder")
-
             import("../../data/countries.js").then((result)=>{
 
                 let data  = result.default;
 
+                console.log(this.$t("location"))
+
+                let splaceholder = (this.placeholder.trim() == "") ? 
+                                    this.$t("select_country") : this.$t(this.placeholder);
+
                 let processedData = [
                     {
                         id: "",
-                        text: this.defaultOptionText
+                        text: splaceholder,
+                        disabled: true
+                    },
+                    {
+                        id: this.defaultOptionValue,
+                        text: this.$t(this.defaultOptionText)
                     }
                 ]
 
@@ -59,16 +71,14 @@ export default {
                 this.countriesData = processedData
 
                 let _this = this;
-                let splaceholder = (this.placeholder.trim() == "") ? 
-                                    this.$t("select_country") : this.placeholder;
 
                 $(function(){
                     _this.select2 = $(".country-select").select2({
-                        placeholder: splaceholder,
                         allowClear: false,
                         width: 'resolve',
                         theme: 'bootstrap4',
                         data: processedData,
+                        placeholder: splaceholder
                     });
                 })
 

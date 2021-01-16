@@ -29,7 +29,13 @@
                             <a href="#" @click.prevent="isPTModalVisible=true">
                                 <div class="d-flex  align-items-center">
                                     <div class="pr-5 pl-5"><img src="/assets/images/s_menu.svg" width="18" /></div>
-                                    <div class="text-md pr-5 text-gray-700 text-ellipsis text">{{$t("payment_methods")}}</div>
+                                    <div class="text-md pr-5 text-gray-700 text-ellipsis text">
+                                        {{
+                                            (Object.keys(paymentMethodInfo).length == 0) ? 
+                                             $t("payment_method") :
+                                            paymentMethodInfo.name
+                                        }}
+                                    </div>
                                 </div>
                             </a>
                         </div>
@@ -43,12 +49,13 @@
                                 <div class="flex-grow-1">
                                     <CountrySelect 
                                         cssClass="form-control-lg" 
-                                        :placeholder="$t('location')"
-                                        :defaultOptionText="$t('location')"
+                                        :placeholder="countryPlaceHolder"
+                                        :defaultOptionText="defaultOptionText"
+                                        defaultOptionValue="worldwide"
                                     />
                                 </div>
                             </div>
-                        </div>
+                        </div> 
                     </div>
                 </div>
             </div>
@@ -57,6 +64,7 @@
             :visible="isPTModalVisible"
             @on-hide="isPTModalVisible=false"
             @on-show="isPTModalVisible=true"
+            @on-select="handleOnPaymenMethodSelect"
         />
    </div>
 </template>
@@ -70,11 +78,21 @@ export default {
     components: {CountrySelect,PaymentTypesModal},
     data(){
         return {
-            isPTModalVisible: false
+            isPTModalVisible: false,
+            defaultOptionText: this.$t("worldwide"),
+            countryPlaceHolder: this.$t("location"),
+            paymentMethodInfo: {}
         }
     },
     mounted(){
         
+    },
+
+    methods: {
+
+        async handleOnPaymenMethodSelect(info){
+            this.paymentMethodInfo = info
+        }
     }
 }
 

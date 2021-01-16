@@ -66,7 +66,7 @@ export default {
     },
 
     beforeMount(){
-        //console.log(this.$props)
+        
         this.init();
     },
 

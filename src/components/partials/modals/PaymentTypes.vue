@@ -1,14 +1,6 @@
 <template>
     <Modal 
-        v-bind="{
-            ...$props,
-            ...{
-                id: 'paymentTypesModal', 
-                title: $t('payment_methods'),
-                size: 'modal-lg', 
-                showFooter: false
-            }
-        }"
+        v-bind="modalProps"
     >   
         <template v-slot:header>
             
@@ -38,13 +30,9 @@
                     {{errorMsg}}
                 </div>
                 <div v-else>
-                    
-                    <div v-if="infoMsg != ''">
-                        <div class="p-5 text-info text-center">{{infoMsg}}</div>
-                    </div>
-
-                    <div v-else>
-                        <div class="pt-categories pl-1 pr-1" ref="pt_categories">
+                 
+                    <div>
+                        <div class="pt-categories pb-10 pl-1 pr-1 ss-container" ref="pt_categories">
                             <div class="cat-item">
                                 <a href="#" 
                                     :class="[
@@ -83,7 +71,13 @@
                             </div>
                         </div>
                     </div>
-                    <div class="container">
+
+                       
+                    <div v-if="infoMsg != ''">
+                        <div class="p-5 mt20 text-info text-center">{{infoMsg}}</div>
+                    </div>
+
+                    <div v-else class="container">
                         <div class="row mt20 payment_types_list" ref="payment_types_list">
                             <div 
                                 v-for="(itemObj,index) in paymentTypes" :key="index"
@@ -93,6 +87,7 @@
                             >
                                 <a href="#" 
                                     class="display-block shadow card rounded p-2 m-1  d-flex flex-row align-items-center"
+                                    @click.prevent="handleOnPTItemClick(itemObj)"
                                 >
                                     <img 
                                         :src="`/assets/images/pt/${slugify(categories[itemObj.catId])}.svg`" 
@@ -112,13 +107,13 @@
 
 <script>
 import Modal from  "./Modal.vue"
-import 'simplebar'; 
-import 'simplebar/dist/simplebar.css';
+
 
 export default {
     components: {Modal},
     data(){
         return {
+            modalProps: {},
             isLoading: false,
             errorMsg: "",
             infoMsg: "",
@@ -128,6 +123,17 @@ export default {
             filterKeyword: "",
             currentSelectedCatId: null
         }
+    },
+    beforeMount(){
+
+        this.modalProps = {...(this.$props), ...{
+            id: 'paymentTypesModal', 
+            title: this.$t('payment_methods'),
+            size: 'modal-lg', 
+            showFooter: false
+        }}
+
+        console.log( this.modalProps)
     },
     watch: {
 
@@ -140,6 +146,14 @@ export default {
         this.fetchPaymentTypes()
     },
     methods: {
+
+        /**
+         * handle payment type item click
+         */
+        handleOnPTItemClick(itemObj){
+           this.$emit("on-select",itemObj)
+           this.$emit("on-hide")
+        },
 
         /**
          * fetchPaymentTypes
@@ -254,6 +268,8 @@ export default {
         //filter payment types by cat
         filterPaymentTypesByCatId(catId){
 
+             this.infoMsg = "";
+
             //lets get all payment types 
             let paymentTypesListDom = this.$refs.payment_types_list;
 
@@ -265,6 +281,12 @@ export default {
             if(catId == null){
                 return;
             }
+            
+            if((this.totalCatsArray[catId]|| 0) == 0){
+                ptItemsArray.addClass("hide")
+                this.infoMsg = this.$t("no_payment_methods_in_cat")
+                return;
+            }
 
             ptItemsArray.each((index,el)=>{
                 
@@ -273,7 +295,7 @@ export default {
                 if(ptItemCatId != catId){
                     $(el).addClass("hide")
                 }
-                
+
             })
         }
 
