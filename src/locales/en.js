@@ -35,5 +35,5 @@ export default  {
     "no_payment_methods_in_cat": "No payment methods in this category",
     "payment_method": "Payment Method",
     "worldwide": "Worldwide",
-    "failed_to_fetch_payment_methods": "Failed to fetch payment methods: {0}"
+    "request_failed": "{0}: Request Failed ({1})"
 } 

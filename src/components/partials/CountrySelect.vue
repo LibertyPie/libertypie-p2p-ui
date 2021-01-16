@@ -44,10 +44,8 @@ export default {
 
                 let data  = result.default;
 
-                console.log(this.$t("location"))
-
                 let splaceholder = (this.placeholder.trim() == "") ? 
-                                    this.$t("select_country") : this.$t(this.placeholder);
+                                    this.$t("select_country") : this.placeholder;
 
                 let processedData = [
                     {
@@ -57,7 +55,7 @@ export default {
                     },
                     {
                         id: this.defaultOptionValue,
-                        text: this.$t(this.defaultOptionText)
+                        text: this.defaultOptionText
                     }
                 ]
 

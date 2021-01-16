@@ -89,7 +89,7 @@ export default class LibertyPie {
             return Status.successPromise(null, finalData)
         } catch(e){
             console.log(e,e.stack)
-            return Status.errorPromise(this._vue.$t("failed_to_fetch_payment_methods",[e]))
+            return Status.errorPromise(this._vue.$t("request_failed",["Payment Methods",e]))
         }
     }
 

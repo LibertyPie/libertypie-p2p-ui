@@ -15,7 +15,8 @@
 
 @import "./loader.scss";
 
-$primaryDeep: #181C7E;
+@import "./quick_search.scss";
+
 
 .bg-primary-light-30p {
   background-color: lighten($primary, 30%);

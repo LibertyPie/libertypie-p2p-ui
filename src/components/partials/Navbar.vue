@@ -1,7 +1,7 @@
 <template>
     <nav class="navbar navbar-horizontal navbar-expand-lg navbar-light flex-row align-items-md-center bg-white">
         <router-link class="navbar-brand" to="/"> 
-            <img src="/assets/images/_libertypie.png" height="120" />
+            <img src="/assets/images/logo.svg" height="120" />
         </router-link>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar-default" aria-controls="navbar-default" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
@@ -11,7 +11,7 @@
                 <div class="row">
                     <div class="col-6 collapse-brand">
                         <a href="/">
-                            <img src="/assets/images/_libertypie.png" height="120" />
+                            <img src="/assets/images/logo.svg" height="120" />
                         </a>
                     </div>
                     <div class="col-6 collapse-close">

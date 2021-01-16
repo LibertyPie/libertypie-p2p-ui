@@ -49,8 +49,8 @@
                                 <div class="flex-grow-1">
                                     <CountrySelect 
                                         cssClass="form-control-lg" 
-                                        :placeholder="countryPlaceHolder"
-                                        :defaultOptionText="defaultOptionText"
+                                        :placeholder="$t('location')"
+                                        :defaultOptionText="$t('worldwide')"
                                         defaultOptionValue="worldwide"
                                     />
                                 </div>
@@ -79,8 +79,6 @@ export default {
     data(){
         return {
             isPTModalVisible: false,
-            defaultOptionText: this.$t("worldwide"),
-            countryPlaceHolder: this.$t("location"),
             paymentMethodInfo: {}
         }
     },
@@ -99,67 +97,24 @@ export default {
 </script>
 
 <style lang="scss">
-    #quick_search{
+   #quick_search{
+      
+    input, select, .payment-method,  .select2-selection--single  { 
+        border:none !important; height: 65px !important; font-size:14px !important; text-align: left !important; 
+    }
+    
+    .input-group-prepend, .input-group-text {background:none;border:none;}
 
-        background-color: #181C7E;
-        padding-top:20px;
-        padding-bottom: 20px;
-        background-image: url("/assets/images/sb.jpg");
-        background-repeat: no-repeat;
-        background-position: top right;
-        background-size: contain;
 
-        a, a:hover, a:active, a:visited{ color: #3F4254 !important; text-decoration: none;}
-        
-        .title_wrapper{
-
-            display: flex;
-
-            .subtitle {
-                padding-left: 10px;
-                padding-top: 10px;
-            }
-        }
-
-        
-        input, select, .payment-method,  .select2-selection--single  { 
-            border:none !important; height: 65px !important; font-size:14px !important; text-align: left !important; 
-        }
-        
         .select2-selection--single { 
             margin:0 !important;
             
             .select2-selection__rendered{
-                 line-height: 65px !important;
+                line-height: 65px !important;
             }
         }
-
-        .input-group-prepend, .input-group-text {background:none;border:none;}
-
-        .vdivider:after {
-            background: #E3E6EF;
-            width: 2px;
-            position: absolute;
-            top: 0;
-            right: 0;
-            bottom:0;
-            content: "";
-            margin-top: 18px;
-            margin-bottom: 18px;
-        }
-
-        .payment-method { 
-            line-height:60px;
-            .text{
-                white-space: nowrap !important;
-                text-overflow: ellipsis !important;
-                overflow: hidden;
-            }
-        }
-
         .select2-selection__rendered{
             max-width: 200px;
         }
-    }
-    
+   }
 </style>
