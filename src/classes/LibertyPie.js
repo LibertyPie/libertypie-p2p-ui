@@ -20,10 +20,12 @@ const defaultNetName = NetConfig.default_network;
 export default class LibertyPie {
 
     _web3Net = null;
+    _vue = null;
 
     constructor(){
         let defaultNetConfig = chainNets[defaultNetName];
         this._web3Net = new Web3Net(defaultNetConfig.contractAddress,libertyPieAbi)
+        this._vue = window._vue;
     }
 
    /**
@@ -39,7 +41,7 @@ export default class LibertyPie {
             if(cache){
                 let cacheData = Cache.get(cacheKey)
                 if(cacheData != null){
-                    //return Status.successPromise("",cacheData)
+                    return Status.successPromise("",cacheData)
                 }
             }
 
@@ -87,6 +89,20 @@ export default class LibertyPie {
             return Status.successPromise(null, finalData)
         } catch(e){
             console.log(e,e.stack)
+            return Status.errorPromise(this._vue.$t("failed_to_fetch_payment_methods",[e]))
         }
     }
+
+    /**
+     * fetchAssets
+     */
+    async fetchAssets(cache = true){
+
+        try{
+
+        } catch (e){
+
+        }
+    }
+
 }

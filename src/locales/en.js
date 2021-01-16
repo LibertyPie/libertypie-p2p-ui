@@ -34,5 +34,6 @@ export default  {
     "no_results_found": "No results found for keyword: {0}",
     "no_payment_methods_in_cat": "No payment methods in this category",
     "payment_method": "Payment Method",
-    "worldwide": "Worldwide"
+    "worldwide": "Worldwide",
+    "failed_to_fetch_payment_methods": "Failed to fetch payment methods: {0}"
 } 
