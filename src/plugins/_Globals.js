@@ -6,6 +6,7 @@
 import LibertyPie from '../classes/LibertyPie';
 import Loader from "../components/partials/Loader.vue";
 import HTTP from '../classes/Http';
+import Geo from "../classes/Geo"
 
 export default { 
     install(app, options) {
@@ -17,8 +18,16 @@ export default {
 
         app.config.globalProperties.$httpGet = HTTP.get;
         app.config.globalProperties.$httpPost = HTTP.post;
+        app.config.globalProperties.$getJson = HTTP.getJson;
 
         //register global component
         app.component("Loader",Loader)
+
+        //lets set user country
+        Geo.getCountry().then((resultStatus)=>{
+            if(resultStatus.isError()) return;
+            console.log(options)
+        }) //end 
+
     }
  }

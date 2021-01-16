@@ -11,6 +11,8 @@ import Http from './Http';
 
 export default class Geo {
 
+    static  cacheKey = "_geoInfo_"
+
     /**
      * getCountry
      */
@@ -18,7 +20,11 @@ export default class Geo {
 
         try{
 
-             //lets start with cloudflare strategy
+            let cachedData = Cache.get(this.cacheKey)
+
+            if(cachedData != null) return Status.successPromise(null,cachedData)
+
+            //lets start with cloudflare strategy
             let fetchCloudflareStatus = await this.getCountryByCloudflare()
 
             if(fetchCloudflareStatus.isSuccess()) return fetchCloudflareStatus;
@@ -31,17 +37,7 @@ export default class Geo {
             });
 
             if(ipdbStrategyStatus.isSuccess()) return ipdbStrategyStatus;
-            
-
-            let ipApiStrategy = await this.httpJsonStrategy({
-                "url": "http://ip-api.com/json",
-                "countryCodeKey": "countryCode",
-                "ipKey": "query"
-            });
-
-            if(ipApiStrategy.isSuccess()) return ipApiStrategy
-
-
+           
             return Status.errorPromise("country_detect_failed")
         } catch (e){
             Logger.error("getCountry Error:",e)
@@ -55,7 +51,7 @@ export default class Geo {
     static async getCountryByCloudflare(){
         try {
 
-            let requestStatus = await  HTTP.get("https://www.cloudflare.com/cdn-cgi/trace")
+            let requestStatus = await  Http.get("https://www.cloudflare.com/cdn-cgi/trace")
 
             if(requestStatus.isError()){
                 return requestStatus;
@@ -87,6 +83,8 @@ export default class Geo {
             
             processedData["countryCode"] = processedData["loc"]
 
+            Cache.set(this.cacheKey, processedData)
+
             return Status.successPromise(null, processedData);
         } catch (e) {
             Logger.error(e,e.stack)
@@ -111,7 +109,6 @@ export default class Geo {
 
             let respJson = reqStatus.getData()
 
-
             let ip = respJson[ipKey] || null
             let countryCode = respJson[countryCodeKey] || null
 
@@ -119,10 +116,12 @@ export default class Geo {
                 return Status.errorPromise("empty_data")
             }
 
-            return Status.successPromise(null, {
-                ip,
-                countryCode
-            })
+            let geoDataObj = { ip, countryCode }
+            
+            Cache.set(this.cacheKey, geoDataObj)
+
+            return Status.successPromise(null, geoDataObj)
+
         } catch (e){
             Logger.error("ipdbStrategy Error:", e)
             return Status.errorPromise("request_failed",e)

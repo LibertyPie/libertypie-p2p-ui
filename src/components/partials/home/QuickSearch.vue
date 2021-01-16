@@ -80,11 +80,12 @@ export default {
     data(){
         return {
             isPTModalVisible: false,
-            paymentMethodInfo: {}
+            paymentMethodInfo: {},
+            userCountry: ""
         }
     },
-    mounted(){
-        Geo.getCountry()
+    async mounted(){
+        
     },
 
     methods: {
