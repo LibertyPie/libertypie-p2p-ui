@@ -105,13 +105,21 @@ export default class LibertyPie {
         if(cache){
             let cacheData = Cache.get(cacheKey)
             if(cacheData != null){
-                return Status.successPromise("",cacheData)
+              //  return Status.successPromise("",cacheData)
             }
         }
 
         try{
 
             let resultStatus = await this._web3Net.requestContractPublicData("getAllAssets")
+
+            if(resultStatus.isError()) return Promise.resolve(resultStatus);
+
+            let data = resultStatus.getData() || [];
+
+            if(data.length == 0) return Promise.resolve(resultStatus);
+
+            Cache.set(cacheKey,data,(60 * 10))
 
             return Promise.resolve(resultStatus)
             

@@ -60,7 +60,7 @@
                                     @click.prevent="currentSelectedCatId = catId"
                                 >   
                                     <div>
-                                        <Image 
+                                        <img 
                                             :src="`/assets/images/pt/${slugify(catName)}.svg`" 
                                             class='icon' alt="" 
                                         />
@@ -89,7 +89,7 @@
                                     class="display-block shadow card rounded p-2 m-1  d-flex flex-row align-items-center"
                                     @click.prevent="handleOnPTItemClick(itemObj)"
                                 >
-                                    <Image 
+                                    <img 
                                         :src="`/assets/images/pt/${slugify(categories[itemObj.catId])}.svg`" 
                                         class='icon' alt="" 
                                     />

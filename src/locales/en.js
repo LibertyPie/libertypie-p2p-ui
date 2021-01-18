@@ -35,5 +35,7 @@ export default  {
     "no_payment_methods_in_cat": "No payment methods in this category",
     "payment_method": "Payment Method",
     "worldwide": "Worldwide",
-    "request_failed": "{0}: Request Failed ({1})"
+    "request_failed": "{0}: Request Failed ({1})",
+    "_sell_asset_": "Sell {0}",
+    "_buy_asset_": "Buy {0}"
 } 

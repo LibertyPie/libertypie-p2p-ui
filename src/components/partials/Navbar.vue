@@ -26,25 +26,25 @@
             <ul class="navbar-nav mr-auto">
             
                 <li class="nav-item dropdown py-2 py-lg-0">
-                    <a class="dropdown-toggle btn shadow-none btn-outline-primary btn-block" 
+                    <a class="btn shadow-none btn-outline-primary btn-block" 
                         href="#" id="buyNavbarDropdown" 
-                        role="button" data-toggle="dropdown" 
+                        role="button" 
+                        data-toggle="dropdown" 
                         aria-haspopup="true" 
                         aria-expanded="false"
                     >
-                    <span class="btn-inner--text text-capitalize">{{ $t("buy") }}</span>
+                        <span class="btn-inner--text text-capitalize">{{ $t("buy") }}</span>
                     </a>
                     <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                        <a class="dropdown-item" href="#">Action</a>
-                        <a class="dropdown-item" href="#">Another action</a>
-                        <div class="dropdown-divider"></div>
-                        <a class="dropdown-item" href="#">Something else here</a>
+                        <a class="dropdown-item" v-for="(asset,index) in cryptoAssets" :key="index">
+                            {{$t("_buy_asset_",[`${asset["originalName"]} (${asset["originalSymbol"]}) `])}}
+                        </a>
                     </div>
                 </li>
 
                 <li class="nav-item dropdown">
                     <a  href="#" 
-                        class="dropdown-toggle btn btn-secondary shadow-none btn-block" 
+                        class="btn btn-secondary shadow-none btn-block" 
                         id="sellNavbarDropdown" 
                         role="button" 
                         data-toggle="dropdown" 
@@ -54,11 +54,10 @@
                         <span class="btn-inner--text text-capitalize">{{ $t("sell") }}</span>
                     </a>
                         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                        <a class="dropdown-item" href="#">Action</a>
-                        <a class="dropdown-item" href="#">Another action</a>
-                        <div class="dropdown-divider"></div>
-                        <a class="dropdown-item" href="#">Something else here</a>
-                    </div>
+                            <a class="dropdown-item" v-for="(asset,index) in cryptoAssets" :key="index">
+                                {{$t("_sell_asset_",[`${asset["originalName"]} (${asset["originalSymbol"]}) `])}}
+                            </a>
+                        </div>
                 </li>
 
                 <li class="nav-item"><a class="nav-link" href="#"> {{ $t("swap") }} </a></li>
@@ -103,7 +102,14 @@ export default {
   data(){return {
       isWalletConnected: false,
       walletInfo: null,
+      cryptoAssets: []
   }},
+
+  async beforeMount() {         
+      //lets fetch assets
+      this.cryptoAssets =  (await this.$libertypie.fetchAssets()).getData() || []
+      console.log(this.cryptoAssets)
+  },
   
   mounted(){
       
@@ -119,7 +125,6 @@ export default {
           this.walletInfo = e.detail;
           this.isWalletConnected = true;
       })
-      
   },
   methods: {
     

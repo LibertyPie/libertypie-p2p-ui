@@ -3,6 +3,8 @@
  * custom styling 
  **/
 
+ //@import "./bootstrap/scss/bootstrap.scss";
+
 @import 'https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700';
 
 @import "./variables.custom.scss";
@@ -18,6 +20,10 @@
 @import "./quick_search.scss";
 
 @import "./shimmer.scss";
+
+/* purgecss start ignore */
+@import "./select2-bs4/layout.scss";
+/* purgecss end ignore */
 
 .bg-primary-light-30p {
   background-color: lighten($primary, 30%);
@@ -190,3 +196,34 @@ a, a:hover, a:active, a:visited{  text-decoration: none !important;}
 .pt10{padding-top: 10px !important;}
 
 .hide { display: none;}
+
+.text-gray-600 {
+    color: $gray-600;
+}
+
+.select2-container--bootstrap4.select2-container--focus .select2-selection {
+    border: none !important;
+    outline: none !important;
+    box-shadow: none !important;
+    -webkit-box-shadow: none !important;
+}
+
+.select2-container {
+  width: auto !important;
+}
+
+.asset_select_item {
+    .asset_name{
+        opacity: 0.8;
+        font-style: italic;
+    }
+}
+  
+
+.s2_icon {
+    position:relative; 
+    top:-1px;
+    width: 18px;
+    border-radius: 2px;
+    margin-right: 2px;
+}

@@ -15,6 +15,7 @@
     "ethers": "^5.0.25",
     "fontawesome-svg-loader": "^0.4.0",
     "jdenticon": "^3.1.0",
+    "lozad": "^1.16.0",
     "simple-scrollbar": "git+https://github.com/buzinas/simple-scrollbar.git",
     "vue": "^3.0.0",
     "vue-router": "^4.0.0-0",

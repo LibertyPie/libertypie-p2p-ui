@@ -1,14 +1,18 @@
 #quick_search{
 
-    background-color: darken($primary,46%);
-    padding-top:20px;
-    padding-bottom: 20px;
+    background-color: darken($primary,40%);
     background-image: url("/assets/images/quick_search_bg.png");
     background-repeat: no-repeat;
     background-position: top right;
     background-size: contain;
 
-    @include media-breakpoint-down(sm) { background-image: none; }
+    padding: 60px 80px 60px 80px;
+
+    @include media-breakpoint-down(sm) { 
+        background-image: none; 
+        padding: 40px 25px 40px 25px;
+    }
+
 
     a, a:hover, a:active, a:visited{ color: #3F4254 !important; text-decoration: none;}
     

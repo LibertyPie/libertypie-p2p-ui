@@ -8,6 +8,7 @@ import _I18n from "./plugins/_I18n"
 
 import 'simple-scrollbar'
 import 'simple-scrollbar/simple-scrollbar.css';
+import lozad from 'lozad'
 
 
 let vueInstance = createApp(App)
@@ -19,3 +20,4 @@ let vueInstance = createApp(App)
     .mount('#app');
 
 window._vue = vueInstance;
+

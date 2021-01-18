@@ -139,13 +139,13 @@ module.exports = {
                     require('postcss-preset-env')({
                         browsers: 'last 2 versions',
                     }),
-                    purgecss({
+                    /*purgecss({
                         content: [
-                          "./src/**/*.vue"
+                        
                         ],
                         whitelist: ["html", "body",".select2"],
                     }),
-                    require('cssnano'),
+                    require('cssnano'),*/
                 ],
             },
         },

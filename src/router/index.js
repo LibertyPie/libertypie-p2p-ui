@@ -18,6 +18,17 @@ const routes = [
       /* webpackPreload: true */  
       "@/views/Account.vue"
     )
+  },
+
+  {
+    path: "/dashboard",
+    name: "account",
+    component: import(
+      /* webpackChunkName: "account" */
+      /* webpackPrefetch: true */
+      /* webpackPreload: true */  
+      "@/views/Dashboard.vue"
+    )
   }
 ]
 

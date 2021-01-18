@@ -28,11 +28,24 @@ export default {
             select2: null
         }
     },
+    
+    //load flags css
+    async beforeCreate(){
+        if(window.countryFlagsLoaded) return;
+        
+        let s = document.createElement("link")
+        s.rel = "stylesheet";
+        s.href="/assets/css/freakflags/freakflags.css";
+        document.head.appendChild(s);
+        window.countryFlagsLoaded = true;
 
-    beforeMount() {
-        this._init();
     },
 
+    beforeMount() {
+      
+        this._init();
+    },
+   
     methods: {
         async _init(){
             
@@ -59,7 +72,7 @@ export default {
                     processedData.push({
                         id: key.toLowerCase(),
                         text: data[key]
-                    })
+                    });
                 }
 
                 this.countriesData = processedData
@@ -68,31 +81,32 @@ export default {
 
                 let countrySelect = $(".country-select")
 
-                $(function(){
-                    countrySelect.select2({
-                        allowClear: false,
-                        width: 'resolve',
-                        theme: 'bootstrap4',
-                        data: processedData,
-                        placeholder: splaceholder
-                    });
+                countrySelect.select2({
+                    allowClear: false,
+                    data: processedData,
+                    placeholder: splaceholder,
+                    templateResult: _this.formatItem,
+                    templateSelection: _this.formatItem,
+                    width: '100%'
+                });
 
-                    if(_this.selected != null || _this.selected != ""){
-                        countrySelect.val(_this.selected).trigger("change")
-                    }
-                })
+                if(_this.selected != null || _this.selected != ""){
+                    countrySelect.val(_this.selected).trigger("change")
+                }
 
             })
-        }
+        },
+
+   
+        formatItem(state){
+            if (!state.id) return state.text;
+            let  img = `<span class="fflag fflag-${state.id.toUpperCase()} ff-sm s2_icon shadow"></span>`; 
+            let text = `<span>${state.text}</span>`
+            return $(`<span>${img} ${text}</span>`);
+       }
+
     }
 }
 
 </script>
 
-<style>
-    .country-select{ 
-        white-space: nowrap  !important; 
-        overflow: hidden; 
-        text-overflow: ellipsis !important;
-    }
-</style>

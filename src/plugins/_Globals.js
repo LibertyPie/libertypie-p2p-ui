@@ -7,7 +7,6 @@ import LibertyPie from '../classes/LibertyPie';
 import Loader from "../components/partials/Loader.vue";
 import HTTP from '../classes/Http';
 import Geo from "../classes/Geo"
-import Image from "../components/partials/Image.vue";
 
 export default { 
     install(app, options) {
@@ -16,7 +15,8 @@ export default {
 
         //register global component
         app.component("Loader",Loader)
-        app.component("Image",Image)
+       
+
 
         let _globals = app.config.globalProperties;
 
