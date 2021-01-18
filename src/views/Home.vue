@@ -8,7 +8,7 @@
 
 <script>
 
-import MainLayout from "../components/layouts/MainLayout"
+import MainLayout from "../layouts/MainLayout"
 import QuickSearch from "../components/partials/home/QuickSearch"
 
 export default {
