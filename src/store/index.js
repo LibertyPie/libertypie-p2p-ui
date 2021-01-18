@@ -1,20 +1,19 @@
 import { createStore } from 'vuex'
+import Geo from '../classes/Geo';
 
 export default createStore({
   state: {
-    userCountryInfo: null
+    userCountryInfo: {}
   },
   mutations: {
 
-    setUserGeoInfo(state,countryInfo){
+    setUserCountryInfo(state,countryInfo){
       state.userCountryInfo = countryInfo;
     }
 
   },
 
-  actions: {
-
-  },
+  actions: {},
 
   modules: {}
 })

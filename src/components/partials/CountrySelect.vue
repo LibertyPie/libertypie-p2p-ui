@@ -16,11 +16,7 @@ export default {
             type: String,
             default: ""
         },
-        defaultOptionText: {
-            type: String,
-            default: ''
-        },
-        defaultOptionValue:{
+        selected: {
             type: String,
             default: ''
         }
@@ -54,8 +50,8 @@ export default {
                         disabled: true
                     },
                     {
-                        id: this.defaultOptionValue,
-                        text: this.defaultOptionText
+                        id: "worldwide",
+                        text: this.$t("worldwide")
                     }
                 ]
 
@@ -70,14 +66,20 @@ export default {
 
                 let _this = this;
 
+                let countrySelect = $(".country-select")
+
                 $(function(){
-                    _this.select2 = $(".country-select").select2({
+                    countrySelect.select2({
                         allowClear: false,
                         width: 'resolve',
                         theme: 'bootstrap4',
                         data: processedData,
                         placeholder: splaceholder
                     });
+
+                    if(_this.selected != null || _this.selected != ""){
+                        countrySelect.val(_this.selected).trigger("change")
+                    }
                 })
 
             })

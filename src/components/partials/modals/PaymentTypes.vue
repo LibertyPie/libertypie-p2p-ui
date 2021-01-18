@@ -60,7 +60,7 @@
                                     @click.prevent="currentSelectedCatId = catId"
                                 >   
                                     <div>
-                                        <img 
+                                        <Image 
                                             :src="`/assets/images/pt/${slugify(catName)}.svg`" 
                                             class='icon' alt="" 
                                         />
@@ -77,7 +77,7 @@
                         <div class="p-5 mt20 text-info text-center">{{infoMsg}}</div>
                     </div>
 
-                    <div v-else class="container">
+                    <div v-else>
                         <div class="row mt20 payment_types_list" ref="payment_types_list">
                             <div 
                                 v-for="(itemObj,index) in paymentTypes" :key="index"
@@ -89,7 +89,7 @@
                                     class="display-block shadow card rounded p-2 m-1  d-flex flex-row align-items-center"
                                     @click.prevent="handleOnPTItemClick(itemObj)"
                                 >
-                                    <img 
+                                    <Image 
                                         :src="`/assets/images/pt/${slugify(categories[itemObj.catId])}.svg`" 
                                         class='icon' alt="" 
                                     />

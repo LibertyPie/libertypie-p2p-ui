@@ -7,27 +7,36 @@ import LibertyPie from '../classes/LibertyPie';
 import Loader from "../components/partials/Loader.vue";
 import HTTP from '../classes/Http';
 import Geo from "../classes/Geo"
+import Image from "../components/partials/Image.vue";
 
 export default { 
     install(app, options) {
 
         HTTP.loadPolyfill();
 
-        //inject $libertypie in global space
-        app.config.globalProperties.$libertypie = (new LibertyPie(app))
-
-        app.config.globalProperties.$httpGet = HTTP.get;
-        app.config.globalProperties.$httpPost = HTTP.post;
-        app.config.globalProperties.$getJson = HTTP.getJson;
-
         //register global component
         app.component("Loader",Loader)
+        app.component("Image",Image)
 
-        //lets set user country
-        Geo.getCountry().then((resultStatus)=>{
-            if(resultStatus.isError()) return;
-            console.log(options)
-        }) //end 
+        let _globals = app.config.globalProperties;
 
-    }
+        //inject $libertypie in global space
+        _globals.$libertypie = (new LibertyPie(app))
+
+        _globals.$httpGet = HTTP.get;
+        _globals.$httpPost = HTTP.post;
+        _globals.$getJson = HTTP.getJson;
+
+
+        //attach user country
+        _globals.$userCountry = async () => {
+            
+            let countryInfoStatus = await Geo.getCountry();
+           
+            if(countryInfoStatus.isError()) return ""
+
+            return ((countryInfoStatus.getData() || {}).isoCode || "")
+        } //end 
+
+    }  // install
  }

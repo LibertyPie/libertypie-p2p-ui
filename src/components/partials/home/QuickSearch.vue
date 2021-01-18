@@ -9,26 +9,27 @@
                 <div class="bg-white form-wrapper rounded shadow">
                     <div class="row mt-2">
                         <div class="col col-12  col-md-4 col-lg-4 vdivider">
-                            <div class="input-group pr-2">
+                           
+                            <Loader v-show="isAssetLoading" :isLoading="isAssetLoading" />
+                            
+                            <div v-show="!isAssetLoading" class="input-group pr-2">
                                 <div class="input-group-prepend">
                                     <span class="input-group-text">
-                                        <img src="/assets/images/rec.svg" width="18" />
+                                        <Image src="/assets/images/rec.svg" width="18" />
                                     </span>
                                 </div>
-                                <select class="select2 form-control form-control-lg">
-                                    <option value="" selected disabled class="">{{$t("asset")}}</option>
-                                    <option value=""></option>
-                                    <option value="btc">Bitcoin</option>
-                                    <option value="eth">Ethereum</option>
-                                    <option value="xmr">Monero</option>
-                                    <option value="bnb">Binance Coin</option>
-                                </select>
+                                <AssetSelect
+                                    :showLoader="false"
+                                    @is-loading="isAssetLoading = true"
+                                    @has-loaded="isAssetLoading = false"
+                                />
                             </div>
+
                         </div>
-                        <div class="col col-12  col-md-4 col-lg-4 vdivider payment-method">
+                        <div class="col col-12 col-md-4 col-lg-4 vdivider payment-method">
                             <a href="#" @click.prevent="isPTModalVisible=true">
                                 <div class="d-flex  align-items-center">
-                                    <div class="pr-5 pl-5"><img src="/assets/images/s_menu.svg" width="18" /></div>
+                                    <div class="pr-5 pl-5"><Image src="/assets/images/s_menu.svg" width="18" /></div>
                                     <div class="text-md pr-5 text-gray-700 text-ellipsis text">
                                         {{
                                             (Object.keys(paymentMethodInfo).length == 0) ? 
@@ -39,19 +40,19 @@
                                 </div>
                             </a>
                         </div>
-                        <div class="col col-12  col-md-4 col-lg-4">
+                        <div class="col col-12 pr-5 col-md-4 col-lg-4">
                             <div class="d-flex">
                                 <div class="input-group-prepend">
                                     <span class="input-group-text">
-                                        <img src="/assets/images/pin.svg" width="18" />
+                                        <Image src="/assets/images/pin.svg" width="18" />
                                     </span>
                                 </div>
                                 <div class="flex-grow-1">
                                     <CountrySelect 
                                         cssClass="form-control-lg" 
                                         :placeholder="$t('location')"
-                                        :defaultOptionText="$t('worldwide')"
-                                        defaultOptionValue="worldwide"
+                                        :selected="userCountry || ''"
+                                        :key="userCountry"
                                     />
                                 </div>
                             </div>
@@ -74,18 +75,24 @@
 import CountrySelect from "../CountrySelect"
 import PaymentTypesModal from "../modals/PaymentTypes"
 import Geo from '../../../classes/Geo'
+import { mapState } from 'vuex'
+import AssetSelect from '../AssetSelect.vue'
 
 export default {
-    components: {CountrySelect,PaymentTypesModal},
+    components: {CountrySelect,PaymentTypesModal, AssetSelect},
     data(){
-        return {
+      
+          return {
             isPTModalVisible: false,
             paymentMethodInfo: {},
-            userCountry: ""
+            userCountry: "",
+            isAssetLoading: false,
+            cryptoAssets: []
         }
     },
-    async mounted(){
-        
+
+    async beforeMount()  {
+        this.$userCountry().then(c => this.userCountry = c);
     },
 
     methods: {

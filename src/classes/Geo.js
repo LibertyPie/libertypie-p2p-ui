@@ -12,31 +12,32 @@ import Http from './Http';
 export default class Geo {
 
     static  cacheKey = "_geoInfo_"
+    static cacheTTL  = (60 * 60 * 24 * 7) // cache for 7days
 
     /**
      * getCountry
      */
-    static async getCountry(){
+    static async getCountry(vueStore=null){
 
         try{
 
             let cachedData = Cache.get(this.cacheKey)
 
-            if(cachedData != null) return Status.successPromise(null,cachedData)
+            //if(cachedData != null) return Status.successPromise(null,cachedData)
 
             //lets start with cloudflare strategy
             let fetchCloudflareStatus = await this.getCountryByCloudflare()
 
-            if(fetchCloudflareStatus.isSuccess()) return fetchCloudflareStatus;
+            if(!fetchCloudflareStatus.isError()) return fetchCloudflareStatus;
             
             //lets try another strategy
             let ipdbStrategyStatus = await this.httpJsonStrategy({
-                    "url": "https://ipinfo.io/json",
-                    "countryCodeKey": "country",
-                    "ipKey": "ip"
+                "url": "https://ipinfo.io/json",
+                "countryCodeKey": "country",
+                "ipKey": "ip"
             });
 
-            if(ipdbStrategyStatus.isSuccess()) return ipdbStrategyStatus;
+            if(!ipdbStrategyStatus.isError()) return ipdbStrategyStatus;
            
             return Status.errorPromise("country_detect_failed")
         } catch (e){
@@ -81,9 +82,11 @@ export default class Geo {
                 processedData[lineDataSplit[0].toLowerCase()] = lineDataSplit[1].toLowerCase()
             } //end for loop
             
-            processedData["countryCode"] = processedData["loc"]
+            processedData["isoCode"] = processedData["loc"];
 
-            Cache.set(this.cacheKey, processedData)
+            delete processedData["loc"];
+
+            Cache.set(this.cacheKey, processedData, this.cacheTTL)
 
             return Status.successPromise(null, processedData);
         } catch (e) {
@@ -110,15 +113,15 @@ export default class Geo {
             let respJson = reqStatus.getData()
 
             let ip = respJson[ipKey] || null
-            let countryCode = respJson[countryCodeKey] || null
+            let isoCode = respJson[countryCodeKey] || null
 
             if(ip == null || countryCode == null){
                 return Status.errorPromise("empty_data")
             }
 
-            let geoDataObj = { ip, countryCode }
+            let geoDataObj = { ip, isoCode }
             
-            Cache.set(this.cacheKey, geoDataObj)
+            Cache.set(this.cacheKey, geoDataObj, this.cacheTTL)
 
             return Status.successPromise(null, geoDataObj)
 

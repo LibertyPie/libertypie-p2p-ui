@@ -63,11 +63,11 @@
      * store cache
      * @param {string} key - cache key
      * @param {*} value - the data to be cached
-     * @param {number} [expiry=0] - the expiry in milliseconds, 0 means no expiry 
+     * @param {number} [expiry=0] - the expiry in seconds, 0 means no expiry 
      * @returns {boolean}
      */
     static set(key,value,expiry=0){
-        if(expiry>0){ expiry = (Date.now() + expiry)}
+        if(expiry>0){ expiry = (Date.now() + (expiry * 1000))}
         let data = JSON.stringify({v: value, e: expiry})
         localStorage.setItem(this.formatKey(key),data)
         return true;

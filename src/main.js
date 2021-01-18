@@ -9,13 +9,13 @@ import _I18n from "./plugins/_I18n"
 import 'simple-scrollbar'
 import 'simple-scrollbar/simple-scrollbar.css';
 
+
 let vueInstance = createApp(App)
     .use(_I18n)
-    //.mixin(i18n)
     .mixin(utils)
     .use(store)
-    .use(_Globals)
     .use(router)
+    .use(_Globals)
     .mount('#app');
 
 window._vue = vueInstance;
