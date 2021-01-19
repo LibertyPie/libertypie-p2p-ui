@@ -37,5 +37,7 @@ export default  {
     "worldwide": "Worldwide",
     "request_failed": "{0}: Request Failed ({1})",
     "_sell_asset_": "Sell {0}",
-    "_buy_asset_": "Buy {0}"
+    "_buy_asset_": "Buy {0}",
+    "offers": "Offers",
+    "account": "Account"
 } 

@@ -9,7 +9,7 @@
 import DashboardLayout from '../../layouts/DashboardLayout.vue'
 
 export default {
-  name: 'Home',
+  name: 'dashboard-home',
   components: {DashboardLayout}
 }
 </script>

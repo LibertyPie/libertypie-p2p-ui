@@ -2,29 +2,38 @@
 
     <nav class="navbar-vertical navbar-light bg-white sidebar" id="sidenav" ref="sidebar">
         <div class="nav-item">
-            <a class="nav-link" href="#">
+            <router-link :to="{name: 'dashboard'}" class="nav-link">
                 <span class="icon">
-                    <svg-img src="/assets/images/dashboard.svg" width="24"  />
+                    <svg-img src="/assets/images/dashboard.svg"   />
                 </span>
                 <span class="text">{{$t("dashboard")}}</span>
-            </a>
+            </router-link>
         </div>
         <div class="nav-item">
-            <a class="nav-link" href="#">
+            <router-link :to="{name: 'dashboard_offers'}"  class="nav-link">
                 <span class="icon">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-bar-chart-2"><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg>
+                    <svg-img src="/assets/images/offer.svg"   />
                 </span>
                 <span class="text">{{$t("offers")}}</span>
-            </a>
+            </router-link>
         </div>
 
         <div class="nav-item">
-            <a class="nav-link" href="#">
+            <router-link :to="{name: 'dashboard_account'}"  class="nav-link">
                 <span class="icon">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-bar-chart-2"><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg>
+                    <svg-img src="/assets/images/user.svg"   />
                 </span>
                 <span class="text">{{$t("account")}}</span>
-            </a>
+            </router-link>
+        </div>
+
+        <div class="nav-item">
+            <router-link :to="{name: 'dashboard_account'}"  class="nav-link">
+                <span class="icon">
+                    <svg-img src="/assets/images/group.svg"   />
+                </span>
+                <span class="text">{{$t("guardians")}}</span>
+            </router-link>
         </div>
 
         <div class="nav-toggle bg-secondary">

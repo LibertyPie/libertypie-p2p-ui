@@ -5,7 +5,7 @@ import store from './store'
 import utils from "./mixins/utils"
 import _Globals from "./plugins/_Globals"
 import _I18n from "./plugins/_I18n"
-import SvgImg from "../../vue-svg-img/src/index"
+import SvgImg from "@libertypie/vue-svg-img"
 
 import 'simple-scrollbar'
 import 'simple-scrollbar/simple-scrollbar.css';
@@ -27,6 +27,5 @@ window._vue = vueInstance;
 //router globals 
 router.afterEach((to, from) => {
     awesomeLoader.init()
-    $(".select2").select2()
-    
+    $(".select2").select2() 
 })

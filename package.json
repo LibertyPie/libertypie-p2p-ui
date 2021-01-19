@@ -9,13 +9,12 @@
     "generate-docs": "node_modules/.bin/jsdoc --configure .jsdoc.json --verbose"
   },
   "dependencies": {
-    "@iconfu/svg-inject": "^1.2.3",
+    "@libertypie/vue-svg-img": "^1.0.3",
     "core-js": "^3.6.5",
     "eth-provider": "^0.5.3",
     "ethers": "^5.0.25",
     "fontawesome-svg-loader": "^0.4.0",
     "jdenticon": "^3.1.0",
-    "lozad": "^1.16.0",
     "simple-scrollbar": "git+https://github.com/buzinas/simple-scrollbar.git",
     "vue": "^3.0.0",
     "vue-router": "^4.0.0-0",

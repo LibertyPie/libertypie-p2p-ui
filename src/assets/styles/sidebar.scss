@@ -17,12 +17,54 @@
     padding-top: 20px;
 
     .nav-link {
-        padding: 20px 25px 20px 25px;
+
+        padding: 10px 25px 10px 25px !important;
+        
         display: flex;
         flex-direction: row;
+        align-items: center;
 
-        .icon svg {
-            fill: #b5c1d5;
+        color: $gray-600;
+
+        transition: border 0.2s ease;
+
+        border-right: 2px solid transparent;
+
+        &:hover {
+            background-color: rgba($secondary,0.25);
+        }
+
+        &.router-link-active {
+            border-right-color: darken($primary,10%);
+            color: darken($primary,10%);
+            svg { 
+                fill: darken($primary,10%); 
+                path {
+                    fill:  darken($primary,10%); 
+                }
+            }
+        }
+
+        .icon {
+            
+            display: flex;
+            align-items: center;
+            fill-opacity: 0.9;
+            stroke-opacity: 0.9;
+
+            svg {
+
+                width: 24px;
+                height: 24px;
+                fill: $gray-600;
+
+                path:nth-child(1) {
+                    fill-opacity: 0.5;
+                    stroke-opacity: 0.5;
+                }
+
+            }
+
         }
     }
 

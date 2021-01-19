@@ -10,8 +10,8 @@ const routes = [
   },
 
   {
-    path: "/account/:address",
-    name: "account",
+    path: "/dashboard/account",
+    name: "dashboard_account",
     component: import(
       /* webpackChunkName: "account" */
       /* webpackPrefetch: true */
@@ -29,7 +29,19 @@ const routes = [
       /* webpackPreload: true */  
       "@/views/dashboard/DashboardHome.vue"
     )
+  },
+
+  {
+    path: "/dashboard/offers",
+    name: "dashboard_offers",
+    component: import(
+      /* webpackChunkName: "dashboard_offers" */
+      /* webpackPrefetch: true */
+      /* webpackPreload: true */  
+      "@/views/dashboard/Offers.vue"
+    )
   }
+
 ]
 
 const router = createRouter({
