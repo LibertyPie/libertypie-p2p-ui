@@ -9,7 +9,7 @@
 
 <script>
 
-import Navbar  from "../partials/Navbar";
+import Navbar  from "../components/partials/Navbar.vue";
 
 export default {
     components: {Navbar}

@@ -25,6 +25,8 @@
 @import "./select2-bs4/layout.scss";
 /* purgecss end ignore */
 
+@import "./sidebar.scss";
+
 .bg-primary-light-30p {
   background-color: lighten($primary, 30%);
   color: darken($primary, 20%);

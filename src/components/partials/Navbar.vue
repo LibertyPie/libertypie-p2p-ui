@@ -67,7 +67,7 @@
 
             <ul class="navbar-nav">
                 <li class="nav-item">
-                    <a class="nav-link" href="#"> {{ $t("dashboard") }} </a>
+                    <router-link :to="{name: 'dashboard'}" class="nav-link" href="#"> {{ $t("dashboard") }} </router-link>
                 </li>
                 <li class="nav-item">
                     <a  href="#" 

@@ -1,7 +1,14 @@
 <template>
   <div class="dashboard">
     <MainLayout>
-      <slot></slot>
+      <div class="d-flex flex-row"> 
+          <div class="sidebar">
+              <Sidebar />
+          </div>
+          <div class="main-content flex-grow-1"> 
+            <slot></slot>
+          </div>
+      </div>
     </MainLayout>
   </div>
 </template>
@@ -9,9 +16,10 @@
 <script>
 
 import MainLayout from "./MainLayout"
+import Sidebar from '../components/partials/Sidebar';
 
 export default {
-  name: 'Home',
-  components: {MainLayout}
+  name: 'DashboardLayout',
+  components: {MainLayout, Sidebar}
 }
 </script>

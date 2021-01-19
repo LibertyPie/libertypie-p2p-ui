@@ -22,12 +22,12 @@ const routes = [
 
   {
     path: "/dashboard",
-    name: "account",
+    name: "dashboard",
     component: import(
-      /* webpackChunkName: "account" */
+      /* webpackChunkName: "dashboard_home" */
       /* webpackPrefetch: true */
       /* webpackPreload: true */  
-      "@/views/Dashboard.vue"
+      "@/views/dashboard/DashboardHome.vue"
     )
   }
 ]
