@@ -8,8 +8,8 @@
 
 <script>
 
-import MainLayout from "../components/layouts/MainLayout"
-import QuickSearch from "../components/partials/home/QuickSearch"
+import MainLayout from "../layouts/MainLayout.vue"
+import QuickSearch from "../components/partials/home/QuickSearch.vue"
 
 export default {
   name: 'Account',

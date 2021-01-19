@@ -20,6 +20,10 @@
         padding: 20px 25px 20px 25px;
         display: flex;
         flex-direction: row;
+
+        .icon svg {
+            fill: #b5c1d5;
+        }
     }
 
     &.nav-collapsed {
