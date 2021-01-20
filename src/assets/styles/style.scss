@@ -27,6 +27,15 @@
 
 @import "./sidebar.scss";
 
+@import "./xbreadcrumb.scss";
+
+
+.shadow-primary {
+    -webkit-box-shadow: 23px 0px 42px -15px  rgba($primary,.5);
+    -moz-box-shadow: 23px 0px 42px -15px  rgba($primary,.5);
+    box-shadow: 23px 0px 42px -15px  rgba($primary,.5);
+}
+
 .bg-primary-light-30p {
   background-color: lighten($primary, 30%);
   color: darken($primary, 20%);

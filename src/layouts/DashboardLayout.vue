@@ -2,14 +2,14 @@
   <div class="dashboard">
     <MainLayout>
       <div class="d-flex flex-row"> 
-          <div class="sidebar">
+          <div>
               <Sidebar />
           </div>
           <div class="main-content flex-grow-1"> 
             <div class='d-flex'>
               <div class="title flex-grow-1">{{title}}</div>
-              <div class="flex-grow-1" v-if="breadcrumb.lenght > 0">
-                <Breadcrumb :data="breadcrumb" />
+              <div class="flex-grow-1">
+                <Breadcrumb :data="breadcrumbData" />
               </div>  
             </div>
             <slot></slot>
@@ -21,8 +21,8 @@
 
 <script>
 
-import MainLayout from "./MainLayout"
-import Sidebar from '../components/partials/Sidebar';
+import MainLayout from "./MainLayout.vue"
+import Sidebar from '../components/partials/Sidebar.vue';
 import Breadcrumb from '../components/partials/Breadcrumb.vue';
 
 export default {
@@ -31,9 +31,26 @@ export default {
   props: {
     breadcrumb: {
       type: Array,
-      default: {}
+      default: []
     },
     title: {type: String, default: ''}
+  },
+    data() {
+    return {
+      breadcrumbData: this.breadcrumb
+    }
+  },
+  mounted(){
+    this.processBreadcrumb();
+  },
+  methods: {
+    processBreadcrumb(){
+      this.breadcrumbData.unshift({
+         title: this.$t("dashboard"),
+         name: "dashboard_home",
+         icon: "dashboard.svg"
+      })    
+    }
   }
 }
 </script>

@@ -1,0 +1,66 @@
+.xbreadcrumb{
+    background: $white;
+    
+    margin: 10px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+    align-items: center;
+    height: 60px;
+    border-radius: 30px;
+
+    -webkit-box-shadow: 11px 0px 42px -15px rgba($primary,.1);
+    -moz-box-shadow: 11px 0px 42px -15px rgba($primary,.1);
+    box-shadow: 11px 0px 42px -15px rgba($primary,.1);
+
+    overflow-x: hidden;
+    
+    div {
+        
+        
+        height: 100%;
+        width: 100%;
+
+        &.current {
+            background-color: darken($primary,10%);
+            a {
+                background-color: darken($primary,10%);
+                z-index: 1;
+                left:-22px;
+            }
+        }
+
+        &:nth-last-child(2){
+            a { 
+                background: linear-gradient($white, $white);
+                background-size: 40px 100%;
+                background-repeat: no-repeat;
+                background-position: right;    
+            }
+        }
+        
+    
+        a{
+
+            @extend .shadow-primary !optional;
+
+            height: 100% !important;
+            width:100% !important;
+            border-top-right-radius: 30px;
+            border-bottom-right-radius: 30px;
+            display: flex !important;
+            align-items: center;
+            justify-content: center;
+        
+            position:relative;
+
+            z-index: 100;
+
+            text-align: center;
+
+            white-space: nowrap;
+
+            text-overflow: ellipsis;
+        }
+    }
+}

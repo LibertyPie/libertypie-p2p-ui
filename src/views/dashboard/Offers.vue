@@ -1,5 +1,8 @@
 <template>
-    <DashboardLayout :breadcrumb="breadcrumbData">
+    <DashboardLayout 
+        :breadcrumb="breadcrumbData"
+        :title="$t('offers')"
+    >
      
     </DashboardLayout>
 </template>
@@ -19,7 +22,9 @@ export default {
     mounted(){
         this.breadcrumbData = [
             {
-                
+                title: this.$t("offers"),
+                url:  "#",
+                icon: "offers.svg"
             }
         ];
     }
