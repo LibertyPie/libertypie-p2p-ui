@@ -11,7 +11,7 @@
                     {name: item.name}
                 )"
             >   
-                <span class="icon" v-if='item.icon.length > 0'> 
+                <span class="icon" v-if='(item.icon || "").length > 0'> 
                     <svg-img :src="`/assets/images/${item.icon}`"   />
                 </span>
                 <span class="text">{{item.title}}</span>

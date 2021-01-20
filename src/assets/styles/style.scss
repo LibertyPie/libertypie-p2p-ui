@@ -44,6 +44,7 @@
 
 body, html{
     height: 100% !important;
+    background-color: #F2F4FA;
 }
 
 a, a:hover, a:active, a:visited{  text-decoration: none !important;}
@@ -237,4 +238,13 @@ a, a:hover, a:active, a:visited{  text-decoration: none !important;}
     width: 18px;
     border-radius: 2px;
     margin-right: 2px;
+}
+
+.float-right::after{
+    content: '';
+    clear: both;
+}
+
+div:not(.float-right) {
+    clear: both;
 }

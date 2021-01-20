@@ -40,6 +40,17 @@ const routes = [
       /* webpackPreload: true */  
       "@/views/dashboard/Offers.vue"
     )
+  },
+
+  {
+    path: "/dashboard/offers/new",
+    name: "new_offer",
+    component: import(
+      /* webpackChunkName: "dashboard_new_offer" */
+      /* webpackPrefetch: true */
+      /* webpackPreload: true */  
+      "@/views/dashboard/NewOffer.vue"
+    )
   }
 
 ]

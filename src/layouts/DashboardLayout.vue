@@ -1,21 +1,15 @@
 <template>
   <div class="dashboard">
     <MainLayout>
- 
+      
+      <div class="my-5 mx-2 flex flex-contents-center align-items-center">
+        <Breadcrumb :data="breadcrumbData" />
+      </div>
       <div class="d-flex flex-row mt-5"> 
           <div>
               <Sidebar />
           </div>
           <div class="main-content flex-grow-1"> 
-            <div class='d-flex flex-column flex-lg-row justify-content-center justify-content-lg-start my-5'>
-              <div class="flex-grow-1 px-5 py-0">
-                <h1 class="title-heading">{{title}}</h1>
-                <p class="subtitle muted" v-if="subTitle.length > 0">{{subTitle}}</p>
-              </div>
-              <div class="flex-grow-1 flex-nowrap">
-                <Breadcrumb :data="breadcrumbData" />
-              </div>  
-            </div>
             <slot></slot>
           </div>
       </div>

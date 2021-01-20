@@ -1,10 +1,27 @@
 <template>
     <DashboardLayout 
         :breadcrumb="breadcrumbData"
-        :title="$t('offers')"
-        :subTitle="$t('offer_subtitle')"
     >
-     
+        <div>      
+            <div class="card shadow my-0">
+                <div class="card-body">
+                    <div class="d-flex flex-row justify-content-between">
+                        <div>
+                            <h3 class="card-title py-0 my-0">{{$t("offers")}}</h3>
+                            <p class="subtitle muted">{{$t("offer_subtitle")}}</p>
+                        </div>
+                        <div>
+                            <router-link 
+                                :to="{name: 'new_offer'}" 
+                                class="btn btn-success float-right"
+                            >
+                                {{$t("new_offer")}}
+                            </router-link>
+                        </div>
+                    </div>   
+                </div>
+            </div>
+        </div>
     </DashboardLayout>
 </template>
  
@@ -24,7 +41,7 @@ export default {
         this.breadcrumbData = [
             {
                 title: this.$t("offers"),
-                url:  "#",
+                path:  "#",
                 icon: "offer.svg"
             }
         ];

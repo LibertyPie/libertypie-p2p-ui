@@ -43,5 +43,7 @@ export default  {
     "home": "Home",
     "orders": "Orders",
     "disputes": "Disputes",
-    "offer_subtitle": "Manage your buy & sell offers"
+    "offer_subtitle": "Manage your buy & sell offers",
+    "new_offer": "New Offer",
+    "new_offer_subtitle": "Create a buy or sell offer"
 } 
