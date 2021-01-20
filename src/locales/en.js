@@ -40,5 +40,8 @@ export default  {
     "_buy_asset_": "Buy {0}",
     "offers": "Offers",
     "account": "Account",
-    "home": "Home"
+    "home": "Home",
+    "orders": "Orders",
+    "disputes": "Disputes",
+    "offer_subtitle": "Manage your buy & sell offers"
 } 

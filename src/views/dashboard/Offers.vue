@@ -2,6 +2,7 @@
     <DashboardLayout 
         :breadcrumb="breadcrumbData"
         :title="$t('offers')"
+        :subTitle="$t('offer_subtitle')"
     >
      
     </DashboardLayout>
@@ -19,12 +20,12 @@ export default {
             breadcrumbData: []   
         }
     },
-    mounted(){
+    beforeMount(){
         this.breadcrumbData = [
             {
                 title: this.$t("offers"),
                 url:  "#",
-                icon: "offers.svg"
+                icon: "offer.svg"
             }
         ];
     }

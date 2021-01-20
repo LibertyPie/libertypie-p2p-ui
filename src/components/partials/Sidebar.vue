@@ -19,6 +19,24 @@
         </div>
 
         <div class="nav-item">
+            <router-link :to="{name: 'dashboard'}"  class="nav-link">
+                <span class="icon">
+                    <svg-img src="/assets/images/orders.svg"   />
+                </span>
+                <span class="text">{{$t("orders")}}</span>
+            </router-link>
+        </div>
+
+        <div class="nav-item">
+            <router-link :to="{name: 'dashboard'}"  class="nav-link">
+                <span class="icon">
+                    <svg-img src="/assets/images/dispute.svg"   />
+                </span>
+                <span class="text">{{$t("disputes")}}</span>
+            </router-link>
+        </div>
+
+        <div class="nav-item">
             <router-link :to="{name: 'dashboard_account'}"  class="nav-link">
                 <span class="icon">
                     <svg-img src="/assets/images/user.svg"   />
@@ -71,10 +89,10 @@ export default {
             let _this = this;
 
             $(function(){
-                let winHeight = $(window).height();
-                let sidebar = $(document).find("#sidenav");
+                //let winHeight = $(window).height();
+                //let sidebar = $(document).find("#sidenav");
 
-                sidebar.css({"height": (winHeight * 0.8)+"px" })
+                //sidebar.css({"height": (winHeight * 0.8)+"px" })
 
                 //lets check window width if its md and less, lets collapse navbar
                 if($(window).width() <= 800){

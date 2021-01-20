@@ -1,13 +1,8 @@
 .sidebar{
     border-radius: 10px;
     width: 280px;
-    height: 80%;
-    height: 72vh;
-    //position: fixed;
-    top: 100px;
-    bottom: 0px;
-    margin: 10px;
 
+    margin: 10px;
     margin-top:20px;
     
    // margin-right: 280px !important;
@@ -17,7 +12,7 @@
     
     transition: all 0.1s linear;
     padding-top: 20px;
-
+    padding-bottom: 20px;
 
     &.nav-collapsed {
         width: 80px;
@@ -89,11 +84,11 @@
     .nav-toggle{
      
         padding: 10px;
-        position: absolute;
+        bottom: 0px;
         width: 50px;
         display: flex;
         margin: 0 auto;
-        margin-bottom: 40px;
+        margin-bottom: 20px;
         margin-top: 20px;
         border-radius: 10px;
 
