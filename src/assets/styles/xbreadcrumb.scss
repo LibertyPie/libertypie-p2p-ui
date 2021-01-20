@@ -20,6 +20,7 @@
         
         height: 100%;
         width: 100%;
+        
 
         &.current {
             background-color: darken($primary,10%);
@@ -27,6 +28,8 @@
                 background-color: darken($primary,10%);
                 z-index: 1;
                 left:-22px;
+                color: rgba($white,0.8);
+                fill: rgba($white,0.8);
             }
         }
 
@@ -49,6 +52,7 @@
             border-top-right-radius: 30px;
             border-bottom-right-radius: 30px;
             display: flex !important;
+            flex-direction: row;
             align-items: center;
             justify-content: center;
         
@@ -61,6 +65,19 @@
             white-space: nowrap;
 
             text-overflow: ellipsis;
+
+            color: darken($secondary,10%);
+
+            .icon{
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                svg {
+                    fill: darken($secondary,5%);
+                    width: 18px;
+                    height: 18px;
+                }
+            }
         }
     }
 }

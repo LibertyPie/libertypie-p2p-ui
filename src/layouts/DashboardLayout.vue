@@ -40,14 +40,14 @@ export default {
       breadcrumbData: this.breadcrumb
     }
   },
-  mounted(){
+  beforeMount(){
     this.processBreadcrumb();
   },
   methods: {
     processBreadcrumb(){
       this.breadcrumbData.unshift({
          title: this.$t("dashboard"),
-         name: "dashboard_home",
+         name: "dashboard",
          icon: "dashboard.svg"
       })    
     }

@@ -39,5 +39,6 @@ export default  {
     "_sell_asset_": "Sell {0}",
     "_buy_asset_": "Buy {0}",
     "offers": "Offers",
-    "account": "Account"
+    "account": "Account",
+    "home": "Home"
 } 

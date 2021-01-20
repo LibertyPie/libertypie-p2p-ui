@@ -1,6 +1,6 @@
 <template>
 
-    <nav class="navbar-vertical navbar-light bg-white sidebar" id="sidenav" ref="sidebar">
+    <nav class="navbar-vertical navbar-light bg-white sidebar shadow" id="sidenav" ref="sidebar">
         <div class="nav-item">
             <router-link :to="{name: 'dashboard'}" class="nav-link">
                 <span class="icon">
