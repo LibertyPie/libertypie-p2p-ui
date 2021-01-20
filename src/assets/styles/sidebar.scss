@@ -88,7 +88,8 @@
         display: flex;
         margin: 0 auto;
         border-radius: 10px;
-        margin-bottom: 20px;
+        margin-bottom: 25px;
+        margin-top: 20px;
 
         &:hover{
             background: darken($secondary,2%); 

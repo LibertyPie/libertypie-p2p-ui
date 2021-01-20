@@ -95,7 +95,7 @@ export default {
                 //sidebar.css({"height": (winHeight * 0.8)+"px" })
 
                 //lets check window width if its md and less, lets collapse navbar
-                if($(window).width() <= 800){
+                if($(window).width() <= 990){
                      _this.isCollapsed = true;
                 } else {
                    _this.isCollapsed = false; 

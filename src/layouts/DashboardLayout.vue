@@ -9,7 +9,7 @@
           <div>
               <Sidebar />
           </div>
-          <div class="main-content flex-grow-1"> 
+          <div class="main-content flex-grow-1 mr-4"> 
             <slot></slot>
           </div>
       </div>

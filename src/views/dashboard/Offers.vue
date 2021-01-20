@@ -7,7 +7,7 @@
                 <div class="card-body">
                     <div class="d-flex flex-row justify-content-between">
                         <div>
-                            <h3 class="card-title py-0 my-0">{{$t("offers")}}</h3>
+                            <h2 class="card-title py-0 my-0">{{$t("offers")}}</h2>
                             <p class="subtitle muted">{{$t("offer_subtitle")}}</p>
                         </div>
                         <div>
