@@ -8,41 +8,46 @@
             <div class="card-body">
                 <div class="d-flex flex-row justify-content-between">
                     <div>
-                        <h2 class="card-title py-0 my-0">{{$t("create_a_new_offer")}}</h2>
+                        <h2 class="card-title py-0 my-0">{{$t("new_offer")}}</h2>
                     </div>
                 </div>
 
-                <div class="d-flex flex-row">
-                    <div class="flex-grow-1">
-                        <div id="smartwizard">
-                            <ul class="nav">
-                                <li class="nav-item">
-                                    <a class="nav-link" href="#step-1">
-                                        Step 1
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link" href="#step-2">
-                                        Step 2
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link" href="#step-3">
-                                        Step 3
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link" href="#step-4">
-                                        Step 4
-                                    </a>
-                                </li>
-                            </ul>
+                <div class="mb-3 step_wizard my-10" id="pills-tab" role="tablist">
+                    
+                    <a class="step active" id="pills-home-tab" data-toggle="pill" href="#pills-home" role="tab" aria-controls="pills-home" aria-selected="true">
+                       <div class="inner">
+                            <span class="dot"></span>
+                            <span class="text">Hello</span>
+                       </div>
+                    </a>
+        
+                    <a class="step" id="pills-profile-tab" data-toggle="pill" href="#pills-profile" role="tab" aria-controls="pills-profile" aria-selected="false">
+                       <div class="inner">
+                            <span class="dot"></span>
+                            <span class="text">Hello</span>
+                       </div>
+                    </a>
+
+                    <a class="step" id="pills-contact-tab" data-toggle="pill" href="#pills-contact" role="tab" aria-controls="pills-contact" aria-selected="false">
+                        <div class="inner">
+                            <span class="dot"></span>
                         </div>
-                    </div>
-                    <div> 
+                    </a>
 
+                </div>
+
+                 <div class="tab-content" id="pills-tabContent">
+                    <div class="tab-pane fade show active" id="pills-home" role="tabpanel" aria-labelledby="pills-home-tab">
+                        One ---
+                    </div>
+                    <div class="tab-pane fade" id="pills-profile" role="tabpanel" aria-labelledby="pills-profile-tab">
+                        Two ---
+                    </div>
+                    <div class="tab-pane fade" id="pills-contact" role="tabpanel" aria-labelledby="pills-contact-tab">
+                        Three ---
                     </div>
                 </div>
+              
             </div>
         </div>
 
@@ -79,9 +84,6 @@ export default {
 
     mounted(){
 
-        $('#smartwizard').smartWizard({
-            theme: 'default'
-        });
     }
 }
 </script>

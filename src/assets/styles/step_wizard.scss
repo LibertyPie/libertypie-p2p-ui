@@ -1,0 +1,63 @@
+
+.step_wizard {
+
+    $barColor: lighten($secondary,2%);
+    $activeColor: lighten($primary,26%);
+
+    display: flex;
+    flex-direction: row;
+    border-radius: 10px;
+    height: 4px;
+    
+    .step {
+        
+        flex-wrap: nowrap;
+        flex-grow: 1;
+        width: 100%;
+     
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+        background-color: $barColor;
+
+        .inner {
+            
+
+            .dot {
+                width: 25px;
+                height: 25px;
+                background-color: $barColor; 
+                border-radius: 12.5px;
+                display: inline-block;
+                padding: 0px;
+                position: relative;
+                top: 2px;
+                margin: 0px !important;
+
+                &::after {
+                    content: '';
+                    display: block;
+                    width: 15px;
+                    height: 15px;
+                    background-color: darken($secondary,25%);
+                    border-radius: 7.5px;
+                    position: relative;
+                    top: 5px;
+                    left: 5px;
+                    padding: 0px !important;
+                    margin: 0px !important;
+                }
+            }
+
+            .text {
+                position: relative;
+                top: 30px;
+                left: -30px;
+            }
+
+        } //end nav-link 
+
+    } //end nav-item
+    
+} //end

@@ -16,7 +16,6 @@
     "fontawesome-svg-loader": "^0.4.0",
     "jdenticon": "^3.1.0",
     "simple-scrollbar": "git+https://github.com/buzinas/simple-scrollbar.git",
-    "smartwizard": "^5.1.1",
     "vue": "^3.0.0",
     "vue-router": "^4.0.0-0",
     "vuex": "^4.0.0-0",
