@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@libertypie/vue-svg-img": "^1.0.3",
+    "@libertypie/wallet-provider": "^1.0.16",
     "core-js": "^3.6.5",
     "eth-provider": "^0.5.3",
     "ethers": "^5.0.25",
