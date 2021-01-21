@@ -63,7 +63,20 @@
 
                         <div class="tab-content" id="pills-tabContent">
                             <div class="tab-pane fade show active" id="asset_setup" role="tabpanel" aria-labelledby="pills_asset_setup">
-                                
+                                <div class="form-group">
+                                    <h5>{{$t("select_offer_type")}}</h5>
+                                    <div class="my-5">
+                                        <div class="radio_btn_group">
+
+                                            <input type="radio" name="offer_type" id="buy_offer">
+                                            <label  for="buy_offer">{{$t("buy_offer")}}</label>
+
+                                            <input type="radio" name="offer_type" id="sell_offer">
+                                            <label  for="sell_offer">{{$t("sell_offer")}}</label>
+                                            
+                                        </div>
+                                    </div>
+                                 </div>
                             </div>
                             <div class="tab-pane fade" id="payment_method_setup" role="tabpanel" aria-labelledby="pills_payment_method_setup">
                                 Two ---
