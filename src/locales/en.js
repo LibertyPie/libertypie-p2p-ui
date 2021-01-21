@@ -46,5 +46,6 @@ export default  {
     "offer_subtitle": "Manage your buy & sell offers",
     "new_offer": "New Offer",
     "new_offer_subtitle": "Create a buy or sell offer",
-    "create_a_new_offer": "Create an Offer"
+    "create_a_new_offer": "Create an Offer",
+    "asset_setup": "Asset Setup"
 } 

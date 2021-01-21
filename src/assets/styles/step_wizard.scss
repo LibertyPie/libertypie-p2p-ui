@@ -8,6 +8,7 @@
     flex-direction: row;
     border-radius: 10px;
     height: 4px;
+
     
     .step {
         
@@ -19,10 +20,24 @@
         justify-content: center;
         align-items: center;
 
+        position: relative;
+
         background-color: $barColor;
+
+        
+
+        &:last-child{
+            width: 50%;
+        }
+        
 
         .inner {
             
+            display: flex;
+            flex-direction: row;
+            position: absolute;
+            top: -13px;
+            width: 100%;
 
             .dot {
                 width: 25px;
@@ -32,7 +47,9 @@
                 display: inline-block;
                 padding: 0px;
                 position: relative;
+
                 top: 2px;
+               
                 margin: 0px !important;
 
                 &::after {
@@ -40,7 +57,7 @@
                     display: block;
                     width: 15px;
                     height: 15px;
-                    background-color: darken($secondary,25%);
+                    background-color: darken($secondary,20%);
                     border-radius: 7.5px;
                     position: relative;
                     top: 5px;
@@ -50,14 +67,64 @@
                 }
             }
 
-            .text {
+            .text{
+                background: $white;
+                padding: 2px 10px 0px 5px;
+                text-transform: uppercase;
+                font-weight: bold;
+                font-size: 14px;
                 position: relative;
-                top: 30px;
-                left: -30px;
+                top: 2px;
+                color: darken($secondary,20%);
+                
             }
+        } //end inner
 
-        } //end nav-link 
+        &.completed, &.active {
+           .text{
+                color: $primary;
+            }
+        }
 
-    } //end nav-item
+         &.completed {
+
+            background-color: lighten($primary,5%); 
+            
+            .inner .dot {
+                background-color: $activeColor; 
+                &::after { background-color: darken($primary,30%); }
+            }
+        } //end completed
+        
+        &.active {
+            .inner .dot {
+                background-color: $activeColor; 
+                box-shadow: 0 0 0 0 rgba($activeColor, 1);
+                transform: scale(1);
+                animation: pulse 2s infinite;
+                &::after { background-color: darken($primary,30%); }
+                z-index: 999;
+            }
+        }
+
+    } //end step
     
+
+    @keyframes pulse {
+        0% {
+            transform: scale(0.95);
+            box-shadow: 0 0 0 0 rgba($activeColor, 0.7);
+        }
+    
+        70% {
+            transform: scale(1);
+            box-shadow: 0 0 0 10px rgba($activeColor, 0);
+        }
+    
+        100% {
+            transform: scale(0.95);
+            box-shadow: 0 0 0 0 rgba($activeColor, 0);
+        }
+    }
+
 } //end

@@ -8,43 +8,73 @@
             <div class="card-body">
                 <div class="d-flex flex-row justify-content-between">
                     <div>
-                        <h2 class="card-title py-0 my-0">{{$t("new_offer")}}</h2>
+                        <h1 class="card-title py-0 my-0">{{$t("new_offer")}}</h1>
                     </div>
                 </div>
 
-                <div class="mb-3 step_wizard my-10" id="pills-tab" role="tablist">
-                    
-                    <a class="step active" id="pills-home-tab" data-toggle="pill" href="#pills-home" role="tab" aria-controls="pills-home" aria-selected="true">
-                       <div class="inner">
-                            <span class="dot"></span>
-                            <span class="text">Hello</span>
-                       </div>
-                    </a>
-        
-                    <a class="step" id="pills-profile-tab" data-toggle="pill" href="#pills-profile" role="tab" aria-controls="pills-profile" aria-selected="false">
-                       <div class="inner">
-                            <span class="dot"></span>
-                            <span class="text">Hello</span>
-                       </div>
-                    </a>
+                <div class="d-flex flex-row">
 
-                    <a class="step" id="pills-contact-tab" data-toggle="pill" href="#pills-contact" role="tab" aria-controls="pills-contact" aria-selected="false">
-                        <div class="inner">
-                            <span class="dot"></span>
+                    <div class="flex-grow-1">
+                        <div class="mb-3 step_wizard my-10" id="pills-tab" role="tablist">
+                            
+                            <a class="step completed" 
+                                id="asset_setup_tab" 
+                                data-toggle="pill"
+                                href="#asset_setup" 
+                                role="tab" 
+                                aria-controls="pills_asset_setup" 
+                                aria-selected="true"
+                            >
+                                <div class="inner">
+                                    <span class="dot"></span>
+                                    <span class="text">{{$t("asset_setup")}}</span>
+                                </div>
+                            </a>
+                
+                            <a class="step active" 
+                                id="payment_method_tab" 
+                                data-toggle="pill" 
+                                href="#payment_method_setup" 
+                                role="tab" 
+                                aria-controls="pills_payment_method_setup" 
+                                aria-selected="false"
+                            >
+                                <div class="inner">
+                                    <span class="dot"></span>
+                                    <span class="text">{{$t("payment_method")}}</span>
+                                </div>
+                            </a>
+
+                            <a class="step" 
+                                id="confirmation_tab" 
+                                data-toggle="pill" 
+                                href="#confirmation" 
+                                role="tab" 
+                                aria-controls="pills_confirmation" 
+                                aria-selected="false"
+                            >
+                                <div class="inner">
+                                    <span class="dot"></span>
+                                    <span class="text">{{$t("confirm")}}</span>
+                                </div>
+                            </a>
+
                         </div>
-                    </a>
 
-                </div>
-
-                 <div class="tab-content" id="pills-tabContent">
-                    <div class="tab-pane fade show active" id="pills-home" role="tabpanel" aria-labelledby="pills-home-tab">
-                        One ---
+                        <div class="tab-content" id="pills-tabContent">
+                            <div class="tab-pane fade show active" id="asset_setup" role="tabpanel" aria-labelledby="pills_asset_setup">
+                                
+                            </div>
+                            <div class="tab-pane fade" id="payment_method_setup" role="tabpanel" aria-labelledby="pills_payment_method_setup">
+                                Two ---
+                            </div>
+                            <div class="tab-pane fade" id="confirmation" role="tabpanel" aria-labelledby="confirmation_tab">
+                                Three ---
+                            </div>
+                        </div>
                     </div>
-                    <div class="tab-pane fade" id="pills-profile" role="tabpanel" aria-labelledby="pills-profile-tab">
-                        Two ---
-                    </div>
-                    <div class="tab-pane fade" id="pills-contact" role="tabpanel" aria-labelledby="pills-contact-tab">
-                        Three ---
+                    <div>
+                        <div style="width:400px;"></div>
                     </div>
                 </div>
               
@@ -57,8 +87,6 @@
 
 <script>
 import DashboardLayout from '../../layouts/DashboardLayout.vue';
-import "smartwizard";
-import "smartwizard/dist/css/smart_wizard_all.min.css";
 
 export default {
     name: "new_offer",
