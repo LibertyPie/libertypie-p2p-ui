@@ -64,7 +64,6 @@
 
 <script>
 
-require('sticksy')
 
 export default {
 
@@ -82,7 +81,7 @@ export default {
         $(window).on("orientationchange",this.fixViewPortHeight)
     },
     mounted(){
-        this.sticky =  new Sticksy('#sidenav');
+        
     },
     watch: {
         isCollapsed(){

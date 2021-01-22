@@ -113,13 +113,22 @@
                                     <h5 class='text-capitalize'>{{$t("payment_method")}}</h5>
                                     <div class="my-5">
                                         <div class="flex flex-column flex-md-row">
-                                            <a class="btn btn-outline-primary payment-type-wrapper font-weight-bold px-20">
+                                            <a  @click.prevent="isPTModalVisible=true"
+                                                class="btn btn-outline-primary payment-type-wrapper font-weight-bold px-20"
+                                            >
                                                 {{
-                                                    (offerPaymentTypes == null)     ? 
+                                                    (offerPaymentMethodInfo == null)     ? 
                                                         $t('select_payment_method') :
-                                                        offerPaymentMethod
+                                                        offerPaymentMethodInfo.name
                                                 }}
                                             </a>
+
+                                            <PaymentTypesModal 
+                                                :visible="isPTModalVisible"
+                                                @on-hide="isPTModalVisible=false"
+                                                @on-show="isPTModalVisible=true"
+                                                @on-select="handleOnPaymenMethodSelect"
+                                            />
                                         </div>
                                     </div>
                                 </div>
@@ -165,7 +174,8 @@ export default {
             offerType: '',
             offerTypeInfo: '',
             cryptoAssetsData: [],
-            offerPaymentMethod: ""
+            offerPaymentMethodInfo: null,
+            isPTModalVisible: false
         }
     },
     watch: {
@@ -194,6 +204,14 @@ export default {
     mounted(){
         //set default offer type to buy 
         this.offerType = "buy";
+    },
+
+    methods: {
+
+        async handleOnPaymenMethodSelect(info){
+            this.offerPaymentMethodInfo = info
+        }
+
     }
 }
 </script>
