@@ -114,7 +114,7 @@
                                     <div class="my-5">
                                         <div class="flex flex-column flex-md-row">
                                             <a  @click.prevent="isPTModalVisible=true"
-                                                class="btn btn-outline-primary payment-type-wrapper font-weight-bold px-20"
+                                                class="btn btn-outline-primary payment-type-wrapper font-weight-bold px-20 text-truncate"
                                             >
                                                 {{
                                                     (offerPaymentMethodInfo == null)     ? 
@@ -163,10 +163,11 @@
 <script>
 import AssetSelect from '../../components/partials/AssetSelect.vue';
 import DashboardLayout from '../../layouts/DashboardLayout.vue';
+import PaymentTypesModal from "../../components/partials/modals/PaymentTypes.vue"
 
 export default {
     name: "new_offer",
-    components: {DashboardLayout, AssetSelect},
+    components: {DashboardLayout, AssetSelect, PaymentTypesModal},
     data(){
       
        return {
@@ -222,7 +223,8 @@ export default {
         line-height: 30px;
         border-width: 2px;
         border-radius: 8px;
-       
+        width: 380px;
+        max-width: 98%;
 
         &:hover{
             background: none;
