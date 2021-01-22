@@ -4,7 +4,7 @@
         :title="$t('new_offer')"
         :subTitle="$t('new_offer_subtitle')"
     >
-        <div class="card shadow mb-10">
+        <div class="card shadow mb-10" id="new-offer">
             <div class="card-body">
                 <div class="d-flex flex-row justify-content-between">
                     <div>
@@ -65,21 +65,17 @@
 
                             <!-- Basic Setup -->
                             <div class="tab-pane fade show active" id="basic_setup" role="tabpanel" aria-labelledby="pills_basic_setup">
-                                <div class="form-group">
-                                    <h5>{{$t("select_offer_type")}}</h5>
-                                    <div class="my-5">
-                                        <div class="radio_btn_group">
+                                <div class="form-group my-5">
+                                       <h5 class="mb-5">{{$t("select_offer_type")}}</h5>
+                                    <div class="radio_btn_group d-flex flex-column flex-sm-row">
 
-                                            <input type="radio" v-model="offerType" value='buy' name="offer_type" id="buy_offer">
-                                            <label  for="buy_offer"  class="font-weight-bold">{{$t("buy_offer")}}</label>
+                                        <input type="radio" v-model="offerType" value='buy' name="offer_type" id="buy_offer">
+                                        <label  for="buy_offer"  class="text-center">{{$t("buy_offer")}}</label>
 
-                                            <input type="radio" v-model="offerType" value='sell'  name="offer_type" id="sell_offer">
-                                            <label  for="sell_offer" class="font-weight-bold">{{$t("sell_offer")}}</label>
-
-                                            <p class='my-2 text-mute'>{{offerTypeInfo}}</p>
-
-                                        </div>
+                                        <input type="radio" v-model="offerType" value='sell'  name="offer_type" id="sell_offer">
+                                        <label  for="sell_offer" class="text-center">{{$t("sell_offer")}}</label>
                                     </div>
+                                    <p class='my-2 text-mute'>{{offerTypeInfo}}</p>
                                  </div>
                                  <div class="form-group">
                                     <h5 class='text-capitalize'>{{$t("_i_want_to_{offer_type}",[this.offerType])}}</h5>
@@ -106,33 +102,53 @@
                                                 </div>
                                             </label>
                                         </div>
-                                    </div>    
+                                    </div>   
                                 </div>
-
                                 <div class="form-group">
                                     <h5 class='text-capitalize'>{{$t("payment_method")}}</h5>
                                     <div class="my-5">
-                                        <div class="flex flex-column flex-md-row">
-                                            <a  @click.prevent="isPTModalVisible=true"
-                                                class="btn btn-outline-primary payment-type-wrapper font-weight-bold px-20 text-truncate"
-                                            >
-                                                {{
-                                                    (offerPaymentMethodInfo == null)     ? 
-                                                        $t('select_payment_method') :
-                                                        offerPaymentMethodInfo.name
-                                                }}
-                                            </a>
-
-                                            <PaymentTypesModal 
-                                                :visible="isPTModalVisible"
-                                                @on-hide="isPTModalVisible=false"
-                                                @on-show="isPTModalVisible=true"
-                                                @on-select="handleOnPaymenMethodSelect"
-                                            />
-                                        </div>
+                                        <a  href="#"
+                                            @click.prevent="isPTModalVisible=true"
+                                            :class="[
+                                                'form-item-button',
+                                                `${(offerPaymentMethodInfo == null) ? '': 'selected'}`
+                                            ]"
+                                        >
+                                            {{
+                                                (offerPaymentMethodInfo == null)     ? 
+                                                    $t('select_one') :
+                                                    offerPaymentMethodInfo.name
+                                            }}
+                                        </a>
+                                        <PaymentTypesModal 
+                                            :visible="isPTModalVisible"
+                                            @on-hide="isPTModalVisible=false"
+                                            @on-show="isPTModalVisible=true"
+                                            @on-select="handleOnPaymenMethodSelect"
+                                        />
                                     </div>
                                 </div>
-
+                                <div class="form-group">
+                                    <h5 class='text-capitalize'>{{$t("territory")}}</h5>
+                                    <div class="my-5">
+                                        <span 
+                                            :class="[
+                                                'btn m-0 p-0',
+                                                'form-item-button',
+                                                `${(offerTerritoryInfo == null) ? '': 'selected'}`
+                                            ]"
+                                        >
+                                                <CountrySelect 
+                                                    cssClass="country_select" 
+                                                    :placeholder="$t('select_one')"
+                                                    :selected="userCountry || ''"
+                                                    :key="userCountry"
+                                                    :showWorldwide="false"
+                                                    @change="(data) => offerTerritoryInfo = data"
+                                                />
+                                        </span>
+                                    </div>
+                                </div>
 
                             </div>
                             <!-- Basic Setup Tab Content Ends -->
@@ -148,8 +164,13 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-12 col-md-12 col-lg-4">
-                        <div></div>
+                    <div class="col-12 col-md-12 col-lg-4 d-flex flex-row">
+                        <div class="vdivider">
+                            <div class="inner"></div>
+                        </div>
+                        <div class="flex-grow-1">
+                            LOLLLLLLL
+                        </div>
                     </div>
                 </div>
               
@@ -164,10 +185,11 @@
 import AssetSelect from '../../components/partials/AssetSelect.vue';
 import DashboardLayout from '../../layouts/DashboardLayout.vue';
 import PaymentTypesModal from "../../components/partials/modals/PaymentTypes.vue"
+import CountrySelect from '../../components/partials/CountrySelect.vue';
 
 export default {
     name: "new_offer",
-    components: {DashboardLayout, AssetSelect, PaymentTypesModal},
+    components: {DashboardLayout, AssetSelect, PaymentTypesModal, CountrySelect},
     data(){
       
        return {
@@ -176,6 +198,8 @@ export default {
             offerTypeInfo: '',
             cryptoAssetsData: [],
             offerPaymentMethodInfo: null,
+            offerTerritoryInfo: null,
+            userCountry: "",
             isPTModalVisible: false
         }
     },
@@ -200,6 +224,9 @@ export default {
 
         // fetch assets 
         this.cryptoAssetsData =  (await this.$libertypie.fetchAssets()).getData() || []
+
+        //fetch user current location
+        this.$userCountry().then(c => this.userCountry = c);
     },
 
     mounted(){
@@ -216,18 +243,3 @@ export default {
     }
 }
 </script>
-
-<style lang="scss">
-    .payment-type-wrapper {
-        height: 60px;
-        line-height: 30px;
-        border-width: 2px;
-        border-radius: 8px;
-        width: 380px;
-        max-width: 98%;
-
-        &:hover{
-            background: none;
-        }
-    }
-</style>

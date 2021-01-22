@@ -5,7 +5,7 @@
       <div class="my-5 mx-2 flex flex-contents-center align-items-center">
         <Breadcrumb :data="breadcrumbData" />
       </div>
-      <div class="d-flex flex-row mt-5"> 
+      <div class="d-flex flex-row mt-5 px-2 px-md-10"> 
           <div>
               <Sidebar />
           </div>

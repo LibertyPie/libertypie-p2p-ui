@@ -108,7 +108,7 @@ export default {
 
 </script>
 
-<style lang="scss">
+<style lang="scss" scope>
    #quick_search{
       
     input, select,   .select2-selection--single  { 

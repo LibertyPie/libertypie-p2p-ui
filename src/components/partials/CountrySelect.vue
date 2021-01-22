@@ -19,6 +19,11 @@ export default {
         selected: {
             type: String,
             default: ''
+        },
+
+        showWorldwide:{
+            type: Boolean,
+            default: true
         }
     },
 
@@ -61,12 +66,15 @@ export default {
                         id: "",
                         text: splaceholder,
                         disabled: true
-                    },
-                    {
+                    }
+                ];
+
+                if(this.showWorldwide) {
+                   processedData.push({
                         id: "worldwide",
                         text: this.$t("worldwide")
-                    }
-                ]
+                    });
+                }
 
                 for(let key in data){
                     processedData.push({
@@ -89,6 +97,17 @@ export default {
                     templateSelection: _this.formatItem,
                     width: '100%'
                 });
+
+                //emit on select
+                countrySelect.on("change", (e)=>{
+                   
+                   let code = countrySelect.val()
+                    
+                    if(!code) return;
+                    
+                    let name = (code == 'worldwide') ? code : data[code.toUpperCase()]
+                    _this.$emit('change',{code,name})
+                })
 
                 if(_this.selected != null || _this.selected != ""){
                     countrySelect.val(_this.selected).trigger("change")

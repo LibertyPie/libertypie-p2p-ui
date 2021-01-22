@@ -59,5 +59,7 @@ export default  {
     "basic_setup": "Basic Setup",
     "pricing_setup": "Pricing Setup",
     "final_setup":"Final Setup",
-    "select_payment_method": "Select Payment Method"
+    "select_payment_method": "Select Payment Method",
+    "territory": "Territory",
+    "select_one": "Select One"
 } 

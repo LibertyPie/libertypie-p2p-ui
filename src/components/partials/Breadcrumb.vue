@@ -1,5 +1,5 @@
 <template>
-    <div class="xbreadcrumb shadow-primary" aria-label="breadcrumb" role="navigation">
+    <div class="xbreadcrumb shadow-primary mx-2 mx-md-10" aria-label="breadcrumb" role="navigation">
         <div
             v-for="(item,index) in breadcrumbData" 
             :key="index"
