@@ -63,11 +63,15 @@
 </template>
 
 <script>
+
+require('sticksy')
+
 export default {
 
     data(){
         return {
-            isCollapsed: false
+            isCollapsed: false,
+            sticky: null
         }
     },
     beforeMount(){
@@ -77,7 +81,9 @@ export default {
         $(window).on("resize",this.fixViewPortHeight)
         $(window).on("orientationchange",this.fixViewPortHeight)
     },
-
+    mounted(){
+        this.sticky =  new Sticksy('#sidenav');
+    },
     watch: {
         isCollapsed(){
             $("#sidenav").toggleClass("nav-collapsed")

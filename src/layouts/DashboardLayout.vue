@@ -6,7 +6,7 @@
         <Breadcrumb :data="breadcrumbData" />
       </div>
       <div class="d-flex flex-row mt-5"> 
-          <div>
+          <div class="sidebar_wrapper">
               <Sidebar />
           </div>
           <div class="main-content flex-grow-1 mr-4"> 
@@ -35,13 +35,15 @@ export default {
     subTitle: { type: String, default: ''}
   },
     data() {
-    return {
-      breadcrumbData: this.breadcrumb
-    }
+      return {
+        breadcrumbData: this.breadcrumb,
+        sticky: null
+      }
   },
   beforeMount(){
     this.processBreadcrumb();
   },
+  
   methods: {
     processBreadcrumb(){
       this.breadcrumbData.unshift({

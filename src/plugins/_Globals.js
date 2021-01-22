@@ -5,13 +5,13 @@
  */
 import LibertyPie from '../classes/LibertyPie';
 import Loader from "../components/partials/Loader.vue";
-import HTTP from '../classes/Http';
 import Geo from "../classes/Geo"
+import Http from '../classes/Http';
 
 export default { 
     install(app, options) {
 
-        HTTP.loadPolyfill();
+        Http.loadPolyfill();
 
         //register global component
         app.component("Loader",Loader)
@@ -23,9 +23,9 @@ export default {
         //inject $libertypie in global space
         _globals.$libertypie = (new LibertyPie(app))
 
-        _globals.$httpGet = HTTP.get;
-        _globals.$httpPost = HTTP.post;
-        _globals.$getJson = HTTP.getJson;
+        _globals.$httpGet = Http.get;
+        _globals.$httpPost = Http.post;
+        _globals.$getJson = Http.getJson;
 
 
         //attach user country

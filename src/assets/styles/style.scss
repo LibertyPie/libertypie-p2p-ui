@@ -255,8 +255,6 @@ div:not(.float-right) {
 }
 
 .radio_btn_group {
-
-    transition: 0.5s all ease;
     
     & input[type="radio"] {
         opacity: 0;
@@ -266,15 +264,63 @@ div:not(.float-right) {
     & label {
         display: inline-block;
         background-color: lighten($secondary,10%);
-        padding: 10px 25px;
+        padding: 15px 25px;
         font-size: 16px;
         border: 2px solid $secondary;
         border-radius: 4px;
         margin-left: 10px;
+        transition: 0.3s all ease;
     }
 
     input[type="radio"]:checked + label {
         border-color: $primary;
     }
+
 }
   
+/*
+label {
+    position: relative;
+    flex-shrink: 0;
+    transition: all 200ms ease-in;
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    height: 50px;
+    width: 100%;
+    padding: 0 10px;
+    border-radius: 8px;
+    border: 1px solid transparent;
+    margin-bottom: 5px;
+    font-weight: 500;
+  }
+  */
+
+  input[type='radio'], input[type='checkbox'] {
+    position: absolute;
+    opacity: 0;
+  }
+
+  .radio-ghost {
+    position: relative;
+    display: block;
+    width: 18px;
+    height: 18px;
+    border-radius: 18px;
+    border: 3px solid $primary;
+    margin-right: 10px;
+  }
+
+  .radio-ghost-fill {
+    position: absolute;
+    transition: all 250ms ease-in-out;
+    transform: scale(.2);
+    content: '';
+    width: 14px;
+    height: 14px;
+    background-color: $primary;
+    border-radius: 7px;
+    opacity: 0;
+  }
+
+  .font-size-16 { font-size: 16px; }
