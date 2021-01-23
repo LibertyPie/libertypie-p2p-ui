@@ -1,4 +1,15 @@
 
+
+#step_wizard_contents {
+    .step_content {
+        display: none;
+    }
+
+    .active  {
+        display: block;
+    }
+}
+
 .step_wizard {
 
     $barColor: lighten($secondary,2%);
@@ -10,7 +21,7 @@
     height: 4px;
     justify-self: center;
 
-    
+
     .step {
         
         flex-wrap: nowrap;
@@ -25,13 +36,8 @@
 
         //background-color: $barColor;
 
-        border: 2px solid $barColor;
+        border-bottom: 2px solid $barColor;
 
-        &:last-child{
-           //border: none;
-           
-        }
-        
 
         .inner {
             
@@ -50,7 +56,7 @@
                 padding: 0px;
                 position: relative;
 
-                top: 2px;
+                top: 3px;
                
                 margin: 0px !important;
 
@@ -69,7 +75,7 @@
                 }
             }
 
-            .text{
+            .text, .text_alt{
                 background: $white;
                 padding: 2px 10px 0px 5px;
                 text-transform: uppercase;
@@ -78,10 +84,16 @@
                 position: relative;
                 top: 4px;
                 color: darken($secondary,20%);
-                
-                @include media-breakpoint-down(md){
-                    display: none;
-                }
+     
+            }
+
+            .text_alt{
+                display: none;
+            }
+
+            @include media-breakpoint-down(sm){
+                .text { display: none; }
+                .text_alt{ display: inline-block; font-size: 14px; }
             }
         } //end inner
 
@@ -97,7 +109,7 @@
             
             .inner .dot {
                 background-color: $activeColor; 
-                &::after { background-color: darken($primary,30%); }
+                &::after { background-color: darken($primary,1%); }
             }
         } //end completed
         
@@ -107,7 +119,7 @@
                 box-shadow: 0 0 0 0 rgba($activeColor, 1);
                 transform: scale(1);
                 animation: pulse 2s infinite;
-                &::after { background-color: darken($primary,30%); }
+                &::after { background-color: darken($primary,1%); }
                 z-index: 999;
             }
         }

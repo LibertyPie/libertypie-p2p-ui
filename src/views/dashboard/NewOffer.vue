@@ -15,56 +15,50 @@
                 <div class="row">
 
                     <div class="col-12 col-md-12 col-lg-8">
-                        <div class="mb-3 step_wizard my-10" id="pills-tab" role="tablist">
+
+                        <div class="mb-3 step_wizard my-10">
                             
                             <a class="step active" 
                                 id="basic_setup_tab" 
-                                data-toggle="pill"
-                                href="#basic_setup" 
-                                role="tab" 
-                                aria-controls="pills_basic_setup" 
-                                aria-selected="true"
+                                data-content="basic_setup" 
                             >
                                 <div class="inner">
                                     <span class="dot"></span>
                                     <span class="text">{{$t("basic_setup")}}</span>
+                                     <span class="text_alt">{{$t("1")}}</span>
                                 </div>
                             </a>
                 
                             <a class="step" 
                                 id="pricing_setup_tab" 
-                                data-toggle="pill" 
-                                href="#pricing_setup" 
-                                role="tab" 
-                                aria-controls="pills_pricing_setup" 
-                                aria-selected="false"
+                                data-content="pricing_setup" 
+                                disabled
                             >
                                 <div class="inner">
                                     <span class="dot"></span>
                                     <span class="text">{{$t("pricing_setup")}}</span>
+                                    <span class="text_alt">{{$t("2")}}</span>
                                 </div>
                             </a>
 
                             <a class="step" 
                                 id="final_setup_tab" 
-                                data-toggle="pill" 
-                                href="#final_setup" 
-                                role="tab" 
-                                aria-controls="pills_final_setup" 
-                                aria-selected="false"
+                                data-content="final_setup"
+                                disabled
                             >
                                 <div class="inner">
                                     <span class="dot"></span>
                                     <span class="text">{{$t("final_setup")}}</span>
+                                     <span class="text_alt">{{$t("3")}}</span>
                                 </div>
                             </a>
 
                         </div>
 
-                        <div class="tab-content" id="pills-tabContent">
+                        <div  id="step_wizard_contents">
 
                             <!-- Basic Setup -->
-                            <div class="tab-pane fade show active" id="basic_setup" role="tabpanel" aria-labelledby="pills_basic_setup">
+                            <div class="step_content" id="basic_setup">
                                 <div class="form-group my-5">
                                        <h5 class="mb-5">{{$t("select_offer_type")}}</h5>
                                     <div class="radio_btn_group d-flex flex-column flex-sm-row">
@@ -154,22 +148,31 @@
                             <!-- Basic Setup Tab Content Ends -->
 
                             <!-- Pricing Setup Tab -->
-                            <div class="tab-pane fade" id="pricing_setup" role="tabpanel" aria-labelledby="pills_pricing_setup">
+                            <div class="step_content" id="pricing_setup">
                                 Two ---
                             </div>
                             <!-- End Pricing Setup -->
 
-                            <div class="tab-pane fade" id="confirmation" role="tabpanel" aria-labelledby="confirmation_tab">
+                            <div class="step_content" id="confirmation">
                                 Three ---
                             </div>
-                        </div>
-                    </div>
-                    <div class="col-12 col-md-12 col-lg-4 d-flex flex-row">
-                        <div class="vdivider">
+
+                        </div> <!-- end step_contents -->
+
+                    </div> <!--end row -->
+
+                    <div class="col-12 col-md-12 col-lg-4 d-flex flex-row justify-content-center">
+                        <div class="vdivider d-none d-md-inline-block">
                             <div class="inner"></div>
                         </div>
-                        <div class="flex-grow-1">
-                            LOLLLLLLL
+                        <div class="flex-grow-1 d-flex justify-content-center  align-items-center">
+                     
+                            <button class="btn btn-info" @click.prevent="goToPreviousStep">
+                                {{$t("previous_set")}}
+                            </button>
+                            <button class="btn btn-success" @click.prevent="goToNextStep">
+                                {{$t("next_step")}}
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -200,7 +203,8 @@ export default {
             offerPaymentMethodInfo: null,
             offerTerritoryInfo: null,
             userCountry: "",
-            isPTModalVisible: false
+            isPTModalVisible: false,
+            currentStepId: ""
         }
     },
     watch: {
@@ -232,14 +236,36 @@ export default {
     mounted(){
         //set default offer type to buy 
         this.offerType = "buy";
+
+        this.goToStepById("#basic_setup")
     },
 
     methods: {
 
         async handleOnPaymenMethodSelect(info){
             this.offerPaymentMethodInfo = info
-        }
+        },
 
+        //go to step
+        goToStepById(id){
+
+            //lets remove class 
+             $("#step_wizard_contents").find('.step_content').removeClass('active')
+
+            //init first content
+            $("#step_wizard_contents").find(id).addClass('active')
+
+            this.currentStepId = id;
+        },
+
+        //go to next step
+        goToNextStep(){
+
+        },//end 
+
+        goToPreviousStep(){
+
+        }
     }
 }
 </script>

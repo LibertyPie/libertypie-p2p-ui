@@ -61,5 +61,7 @@ export default  {
     "final_setup":"Final Setup",
     "select_payment_method": "Select Payment Method",
     "territory": "Territory",
-    "select_one": "Select One"
+    "select_one": "Select One",
+    "previous_set": "Previous Step",
+    "next_step": "Next Step"
 } 
