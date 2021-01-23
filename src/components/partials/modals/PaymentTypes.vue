@@ -124,7 +124,7 @@ export default {
             currentSelectedCatId: null
         }
     },
-    beforeMount(){
+    async beforeMount(){
 
         this.modalProps = {...(this.$props), ...{
             id: 'paymentTypesModal', 
@@ -133,7 +133,8 @@ export default {
             showFooter: false
         }}
 
-        console.log( this.modalProps)
+        //console.log( this.modalProps)
+        await this.fetchPaymentTypes()
     },
     watch: {
 
@@ -143,7 +144,7 @@ export default {
 
     },
     mounted(){
-        this.fetchPaymentTypes()
+        
     },
     methods: {
 

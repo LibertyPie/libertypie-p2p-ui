@@ -69,7 +69,7 @@
                                         <input type="radio" v-model="offerType" value='sell'  name="offer_type" id="sell_offer">
                                         <label  for="sell_offer" class="text-center">{{$t("sell_offer")}}</label>
                                     </div>
-                                    <p class='my-2 text-mute'>{{offerTypeInfo}}</p>
+                                    <p class='my-2 text-mute'>{{offerTypeDesc}}</p>
                                  </div>
                                  <div class="form-group">
                                     <h5 class='text-capitalize'>{{$t("_i_want_to_{offer_type}",[this.offerType])}}</h5>
@@ -82,6 +82,8 @@
                                                 :id="'offer_asset_'+index" 
                                                 name="offer_asset" 
                                                 class="custom-control-input"
+                                                v-model="offerAssetId"
+                                                :value="index"
                                                 :checked="(index == 0)"
                                             />
                                             <label class="custom-control-label" :for="'offer_asset_'+index">
@@ -162,17 +164,21 @@
                     </div> <!--end row -->
 
                     <div class="col-12 col-md-12 col-lg-4 d-flex flex-row justify-content-center">
-                        <div class="vdivider d-none d-md-inline-block">
+                        <div class="vdivider d-none d-lg-inline-block">
                             <div class="inner"></div>
                         </div>
-                        <div class="flex-grow-1 d-flex justify-content-center  align-items-center">
-                     
-                            <button class="btn btn-info" @click.prevent="goToPreviousStep">
-                                {{$t("previous_set")}}
-                            </button>
-                            <button class="btn btn-success" @click.prevent="goToNextStep">
-                                {{$t("next_step")}}
-                            </button>
+                        <div class="flex-grow-1 d-flex pl-4 align-items-center justify-content-center flex-sm-column-reverse flex-md-row">
+                            
+                            <div class="p-1">
+                                <button class="btn btn-info btn-block" @click.prevent="goToPreviousStep">
+                                    {{$t("previous_set")}}
+                                </button>
+                            </div>
+                            <div class="p-1">
+                                <button class="btn btn-success btn-block" @click.prevent="goToNextStep">
+                                    {{$t("next_step")}}
+                                </button>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -198,8 +204,10 @@ export default {
        return {
             breadcrumbData: [],
             offerType: '',
-            offerTypeInfo: '',
+            offerTypeDesc: '',
             cryptoAssetsData: [],
+            offerAssetId: null,
+            paymentTypesData: [],
             offerPaymentMethodInfo: null,
             offerTerritoryInfo: null,
             userCountry: "",
@@ -209,7 +217,7 @@ export default {
     },
     watch: {
         offerType(){
-            this.offerTypeInfo = this.$t(`${this.offerType}_offer_desc`)
+            this.offerTypeDesc = this.$t(`${this.offerType}_offer_desc`)
         }
     },
 
@@ -229,8 +237,20 @@ export default {
         // fetch assets 
         this.cryptoAssetsData =  (await this.$libertypie.fetchAssets()).getData() || []
 
+        this.offerAssetId = Object.keys(this.cryptoAssetsData)[0];
+
         //fetch user current location
         this.$userCountry().then(c => this.userCountry = c);
+
+        let paymentTypesStatus = await this.$libertypie.getAllPaymentTypes(true)
+
+        if(paymentTypesStatus.isError()){
+            console.log("paymentTypesStatus ==> ",paymentTypesStatus.getMessage())
+        } else {
+            this.paymentTypesData = paymentTypesStatus.getData() || []
+        }
+
+        console.log(this.paymentTypesData )
     },
 
     mounted(){
@@ -261,10 +281,55 @@ export default {
         //go to next step
         goToNextStep(){
 
+            //lets do validations
+            if(!this.validateBasicStep()){
+                return false;
+            }
+
         },//end 
 
         goToPreviousStep(){
 
+        },
+
+        validateBasicStep(){
+
+            //validate offerType 
+            if(!["buy","sell"].includes(this.offerType)){
+                this.errorNotif(this.$t("unknown_offer_type"))
+                return false;
+            }
+
+            //next validation
+            if(this.offerAssetId == null){
+                this.errorNotif(this.$t("offer_asset_required"))
+                return false;
+            }
+
+            if(!this.cryptoAssetsData.hasOwnProperty(this.offerAssetId)){
+                 this.errorNotif(this.$t("unknown_crypto_asset"))
+                 return false;
+            }
+
+            if(this.offerPaymentMethodInfo == null){
+                this.errorNotif(this.$t("payment_method_required"))
+                return false;
+            }
+
+            //lets validate payment methods 
+            if(this.paymentTypesData.length == 0){
+                this.errorNotif(this.$t("failed_to_fetch_payment_methods"))
+                return false;
+            }
+
+            console.log(this.paymentTypesData)
+
+            if(!(this.offerPaymentMethodInfo.id in this.paymentTypesData)){
+                this.errorNotif(this.$t("unknown_payment_method"))
+                return false;
+            }
+
+            return true;
         }
     }
 }

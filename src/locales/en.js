@@ -63,5 +63,11 @@ export default  {
     "territory": "Territory",
     "select_one": "Select One",
     "previous_set": "Previous Step",
-    "next_step": "Next Step"
+    "next_step": "Next Step",
+    "unknown_offer_type": "Unknown offer type, it should be either buy or sell",
+    "offer_asset_required": "Kindly select the asset you want to sell or buy",
+    "unknown_crypto_asset": "Unknown crypto asset",
+    "payment_method_required": "Payment method is required",
+    "failed_to_fetch_payment_methods": "Failed to fetch payment methods, kindly make sure you have a stable internet & connected to your wallet",
+    "unknown_payment_method": "Unknown or invalid payment method"
 } 
