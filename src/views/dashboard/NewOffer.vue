@@ -233,6 +233,7 @@ export default {
             offerPaymentMethodInfo: null,
             offerTerritoryInfo: null,
             userCountry: "",
+            offerAssetPriceFeed: null,
             isPTModalVisible: false,
             currentStepId: "",
             previousStepId: "",
@@ -243,6 +244,13 @@ export default {
     watch: {
         offerType(){
             this.offerTypeDesc = this.$t(`${this.offerType}_offer_desc`)
+        },
+
+        //if the offer asset id changes 
+        // reset the price feed
+        offerAssetId() {
+            this.offerAssetPriceFeed = null;
+            this.fetchAssetPrice()
         }
     },
 
@@ -267,6 +275,7 @@ export default {
         //fetch user current location
         this.$userCountry().then(c => this.userCountry = c);
 
+        await this.fetchAssetPrice();
     },
 
     mounted(){
@@ -396,6 +405,17 @@ export default {
             }
 
             return true;
+        },
+
+        /**
+         * fetch selected asset price feed
+         */
+        async fetchAssetPrice(){
+            try {
+                let priceFeedData = await this.$libertypie.getPriceFeed("btc_usd")
+            } catch (e){
+                console.log(e)
+            }
         }
     }
 }
