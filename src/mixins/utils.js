@@ -1,6 +1,10 @@
 import Status from "../classes/Status";
 
 export default {
+
+    data(){
+        paymentTypesData: null
+    },
     created(){ 
         $(".alert").alert();
     },
@@ -23,9 +27,13 @@ export default {
             
             let markup = `
                 <div class="alert alert-${type} shadow-lg alert-notif alert-dismissible fade show" role="alert">
-                    <div class="content">
-                        ${msg}
-                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <div class="content d-flex flex-row">
+                        <span>${msg}</span>
+                        <button 
+                            type="button" 
+                            class="close" 
+                            data-dismiss="alert"
+                        >
                             <span aria-hidden="true">&times;</span>
                         </button>
                     </div>
@@ -88,7 +96,34 @@ export default {
                         .replace(/\s+/g, '-')           
                         .replace(/[^\w\-]+/g, '')
                         .replace(/\-\-+/g, '-') 
-        }
+        },
+
+        //check if payment type is valid
+        async validatePaymentType(pid){
+            
+           
+            let paymentTypesStatus = await this.$libertypie.getAllPaymentTypes(true)
+
+            console.log(paymentTypesStatus)
+
+            if(paymentTypesStatus.isError()){
+                return paymentTypesStatus;
+            } else {
+                this.paymentTypesData = (paymentTypesStatus.getData() || {});
+            }
+            
+
+            console.log(this.paymentTypesData)
+
+            for(let index in this.paymentTypesData){
+                if(pid == this.paymentTypesData[index].id){
+                    return Status.successPromise("")
+                }
+            }
+
+            return Status.errorPromise(this.$t("unknown_payment_method"))
+        }, //end fun 
+
     },  
 
 }

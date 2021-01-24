@@ -58,7 +58,11 @@
                         <div  id="step_wizard_contents">
 
                             <!-- Basic Setup -->
-                            <div class="step_content" id="basic_setup">
+                            <div 
+                                class="step_content" 
+                                id="basic_setup"
+                                data-next-step="pricing_setup"
+                            >
                                 <div class="form-group my-5">
                                        <h5 class="mb-5">{{$t("select_offer_type")}}</h5>
                                     <div class="radio_btn_group d-flex flex-column flex-sm-row">
@@ -150,12 +154,20 @@
                             <!-- Basic Setup Tab Content Ends -->
 
                             <!-- Pricing Setup Tab -->
-                            <div class="step_content" id="pricing_setup">
+                            <div class="step_content" 
+                              id="pricing_setup"
+                              data-next-step="final_setup"
+                              data-prev-step="basic_setup"
+                            >
                                 Two ---
                             </div>
                             <!-- End Pricing Setup -->
 
-                            <div class="step_content" id="confirmation">
+                            <div 
+                                class="step_content" 
+                                id="final_setup"
+                                data-prev-step="pricing_setup"
+                            >
                                 Three ---
                             </div>
 
@@ -170,12 +182,22 @@
                         <div class="flex-grow-1 d-flex pl-4 align-items-center justify-content-center flex-sm-column-reverse flex-md-row">
                             
                             <div class="p-1">
-                                <button class="btn btn-info btn-block" @click.prevent="goToPreviousStep">
+                                <button 
+                                    class="btn btn-info btn-block" 
+                                    @click.prevent="goToPrevOrNextStep('previous')"
+                                    :disabled="isPrevSetupDisabled"
+                                    :readonly="isPrevSetupDisabled"
+                                >
                                     {{$t("previous_set")}}
                                 </button>
                             </div>
                             <div class="p-1">
-                                <button class="btn btn-success btn-block" @click.prevent="goToNextStep">
+                                <button 
+                                    class="btn btn-success btn-block" 
+                                    @click.prevent="goToPrevOrNextStep('next')"
+                                    :disabled="isNextSetupDisabled"
+                                    :readonly="isNextSetupDisabled"
+                                >
                                     {{$t("next_step")}}
                                 </button>
                             </div>
@@ -212,7 +234,10 @@ export default {
             offerTerritoryInfo: null,
             userCountry: "",
             isPTModalVisible: false,
-            currentStepId: ""
+            currentStepId: "",
+            previousStepId: "",
+            isPrevSetupDisabled: false,
+            isNextSetupDisabled: false
         }
     },
     watch: {
@@ -242,57 +267,91 @@ export default {
         //fetch user current location
         this.$userCountry().then(c => this.userCountry = c);
 
-        let paymentTypesStatus = await this.$libertypie.getAllPaymentTypes(true)
-
-        if(paymentTypesStatus.isError()){
-            console.log("paymentTypesStatus ==> ",paymentTypesStatus.getMessage())
-        } else {
-            this.paymentTypesData = paymentTypesStatus.getData() || []
-        }
-
-        console.log(this.paymentTypesData )
     },
 
     mounted(){
         //set default offer type to buy 
         this.offerType = "buy";
 
-        this.goToStepById("#basic_setup")
+        this.goToStepById("basic_setup")
     },
 
     methods: {
 
         async handleOnPaymenMethodSelect(info){
             this.offerPaymentMethodInfo = info
-        },
+        },      
 
-        //go to step
         goToStepById(id){
-
-            //lets remove class 
-             $("#step_wizard_contents").find('.step_content').removeClass('active')
-
-            //init first content
-            $("#step_wizard_contents").find(id).addClass('active')
+            $("#step_wizard_contents")
+                .find('.step_content')
+                .removeClass("active")
+            $("#"+id).addClass("active")
 
             this.currentStepId = id;
         },
 
         //go to next step
-        goToNextStep(){
+        goToPrevOrNextStep(type){
 
-            //lets do validations
-            if(!this.validateBasicStep()){
-                return false;
+            let curStepEl = $("#"+this.currentStepId);
+            let curStepTabEl = $("#"+this.currentStepId+"_tab")
+
+            //lets get current step
+            let nextStep = curStepEl.data("nextStep") || null;
+            let prevStep = curStepEl.data("prevStep") || null;
+
+            let prevOrNextStepId = null;
+
+            if(type == "previous"){
+
+                if(prevStep == null){
+                    return false;
+                }
+
+                 prevOrNextStepId = prevStep;
+
+                 curStepTabEl.removeClass("active")
+                             .removeClass("completed")
+
+            } else {
+
+                if(this.currentStepId == "basic_setup"){
+                    if(!this.validateBasicStep()){
+                        return false;
+                    }
+                }
+
+                $("#"+nextStep+"_tab").addClass("active")
+
+                if(nextStep == null){
+                    return false;
+                }
+
+                //lets check if the next step has no next step
+                //then mark it as completed to fill the border
+                if(($("#"+nextStep).data("nextStep")|| null) == null){
+                    $("#"+nextStep+"_tab").addClass("completed")
+                }
+
+                curStepTabEl
+                    .removeClass("active")
+                    .addClass("completed")
+
+                prevOrNextStepId = nextStep;
             }
 
+            let stepContentDoms = $("#step_wizard_contents").find('.step_content')
+
+            stepContentDoms.removeClass('active')
+            
+            this.currentStepId = prevOrNextStepId
+
+            $("#"+this.currentStepId).addClass("active")
         },//end 
 
-        goToPreviousStep(){
 
-        },
-
-        validateBasicStep(){
+        async validateBasicStep(){
 
             //validate offerType 
             if(!["buy","sell"].includes(this.offerType)){
@@ -316,17 +375,24 @@ export default {
                 return false;
             }
 
-            //lets validate payment methods 
-            if(this.paymentTypesData.length == 0){
-                this.errorNotif(this.$t("failed_to_fetch_payment_methods"))
+            let validatePaymentMethodStatus = await this.validatePaymentType(this.paymentTypesData.id);
+
+            if(validatePaymentMethodStatus.isError()){
+                this.errorNotif(validatePaymentMethodStatus.getMessage())
                 return false;
             }
 
-            console.log(this.paymentTypesData)
+            //finally lets validate the country
+            if(this.offerTerritoryInfo == null){
+                this.errorNotif(this.$t("offer_territory_required"))
+                return false;                
+            }
 
-            if(!(this.offerPaymentMethodInfo.id in this.paymentTypesData)){
-                this.errorNotif(this.$t("unknown_payment_method"))
-                return false;
+            let countryCode = this.offerTerritoryInfo.code || null;
+
+            if(!/[a-z]+/i.test(countryCode) || countryCode.length != 2){
+                this.errorNotif(this.$t("unknown_territory"))
+                return false;                  
             }
 
             return true;
