@@ -71,5 +71,6 @@ export default  {
     "failed_to_fetch_payment_methods": "Failed to fetch payment methods, kindly make sure you have a stable internet & connected to your wallet",
     "unknown_payment_method": "Unknown or invalid payment method",
     "offer_territory_required": "offer territory field is required",
-    "unknown_territory": "Unknown or invalid territory provided"
+    "unknown_territory": "Unknown or invalid territory provided",
+    "failed_to_fetch_price_feed": "Failed to fetch price feed for {0}"
 } 

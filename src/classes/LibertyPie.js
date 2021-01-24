@@ -9,10 +9,10 @@ import Status from './Status';
 import Web3Net from "./Web3Net"
 import Cache from './Cache';
 import Logger from './Logger';
-const libertyPieAbi = require("../abi/libertypie")
+const libertyPieAbi = require("../abi/libertypie.json")
 const chainNets = NetConfig.networks;
 const defaultNetName = NetConfig.default_network;
-
+import chainlinkConfig from "../config/chainlink"
 /**
  * Custom methods for LibertyPie contract's methods
  * @class
@@ -128,5 +128,29 @@ export default class LibertyPie {
             return Status.errorPromise(this._vue.$t("request_failed",["Assets",e]))
         }
     }
+
+    /**
+     * getPriceFeed
+     */
+    async getPriceFeed(pair){
+
+        //lets get the default chain config 
+        let defaultConfig = chainlinkConfig[defaultNetName] || null;
+
+        if(defaultConfig == null){
+            Logger.error("getPriceFeed: Failed to fetch chainlink config for "+defaultNetName)
+            return Status.errorPromise("system_error")
+        }
+
+        //lets retrieve the pair contract 
+        let pairContract = chainlinkConfig[pair] || null;
+
+        if(pairContract == null){
+            Logger.error(`getPriceFeed: Missing contract address for ${pair} on ${defaultNetName}`)
+            return Status.errorPromise("failed_to_fetch_price_feed",[pair])
+        }
+
+        const aggregatorV3InterfaceABI = 
+    }//end pair
 
 }
