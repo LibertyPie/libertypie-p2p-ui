@@ -5,7 +5,8 @@
  */
 
  export default class Logger {
-     static error(msg, errObj){
-         console.error(msg,errObj.stack)
+     static error(msg, errObj={stack: ""}){
+         console.error(msg)
+         console.log(errObj, (errObj.stack || null))
      }
  }

@@ -108,7 +108,7 @@ export default {
   async beforeMount() {         
       //lets fetch assets
       this.cryptoAssets =  (await this.$libertypie.fetchAssets()).getData() || []
-      console.log(this.cryptoAssets)
+      //console.log(this.cryptoAssets)
   },
   
   mounted(){

@@ -8,6 +8,11 @@ import NetConfig from "../config/network"
 const chainNets = NetConfig.networks;
 const defaultNetName = NetConfig.default_network;
 import chainlinkConfig from "../config/chainlink"
+import Status from './Status';
+import Logger from './Logger';
+import Web3Net from "./Web3Net"
+import { BigNumber } from "ethers";
+import { formatUnits } from "ethers/lib/utils";
 
 const aggregatorV3InterfaceABI = require("../abi/chainlink_aggregator_v3");
 
@@ -18,6 +23,13 @@ const aggregatorV3InterfaceABI = require("../abi/chainlink_aggregator_v3");
  * @exports 
  */
 export default class ChainLink {
+
+    /**
+     * 
+     * @param decimal
+     */
+    defaultDecimal = 8;
+
 
     /**
      * getPriceFeed
@@ -34,11 +46,15 @@ export default class ChainLink {
             }
 
             //lets retrieve the pair contract 
-            let pairContract = chainlinkConfig[pair] || null;
+            let pairInfo = defaultConfig[pair] || {};
+
+            let pairContract = pairInfo.contract || null;
+
+            let decimal = pairInfo.decimal || this.defaultDecimal;
 
             if(pairContract == null){
                 Logger.error(`getPriceFeed: Missing contract address for ${pair} on ${defaultNetName}`)
-                return Status.errorPromise("failed_to_fetch_price_feed",[pair])
+                return Status.errorPromise("failed_to_fetch_price_feed")
             }
 
             //this isnt libertypie function, so we will start a new instance of 
@@ -47,13 +63,24 @@ export default class ChainLink {
             
             let resultStatus = await web3Net.requestContractPublicData("latestRoundData")
 
-            console.log(resultStatus)
-            
-            return resultStatus;
+           
+            if(resultStatus.isError()){
+                return resultStatus;
+            }
+
+            let data = resultStatus.getData();
+
+            let roundData = formatUnits(data.answer,decimal)
+
+            return Status.successPromise(null,roundData);
+
         } catch (e) {
-            //Logger.error(`getPriceFeed Error`,e)
-            console.log(e)
+            Logger.error(`getPriceFeed Error`,e)
             return Status.errorPromise("system_error")
         }
+
     }//end pair
+
+
+
 }

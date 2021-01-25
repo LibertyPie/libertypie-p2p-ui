@@ -217,6 +217,7 @@ import AssetSelect from '../../components/partials/AssetSelect.vue';
 import DashboardLayout from '../../layouts/DashboardLayout.vue';
 import PaymentTypesModal from "../../components/partials/modals/PaymentTypes.vue"
 import CountrySelect from '../../components/partials/CountrySelect.vue';
+import ChainLink from '../../classes/ChainLink'
 
 export default {
     name: "new_offer",
@@ -238,7 +239,8 @@ export default {
             currentStepId: "",
             previousStepId: "",
             isPrevSetupDisabled: false,
-            isNextSetupDisabled: false
+            isNextSetupDisabled: false,
+            
         }
     },
     watch: {
@@ -275,7 +277,7 @@ export default {
         //fetch user current location
         this.$userCountry().then(c => this.userCountry = c);
 
-        await this.fetchAssetPrice();
+        this.fetchAssetPrice();
     },
 
     mounted(){
@@ -411,12 +413,15 @@ export default {
          * fetch selected asset price feed
          */
         async fetchAssetPrice(){
-            try {
-                let priceFeedData = await this.$libertypie.getPriceFeed("btc_usd")
-            } catch (e){
-                console.log(e)
+           
+            let chainlink = new ChainLink();
+            let priceFeedStatus = await chainlink.getPriceFeed("btc_usd")
+            
+            if(priceFeedStatus.isError()){
+
             }
         }
+
     }
 }
 </script>

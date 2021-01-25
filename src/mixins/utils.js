@@ -2,9 +2,6 @@ import Status from "../classes/Status";
 
 export default {
 
-    data(){
-        paymentTypesData: null
-    },
     created(){ 
         $(".alert").alert();
     },
@@ -104,7 +101,7 @@ export default {
            
             let paymentTypesStatus = await this.$libertypie.getAllPaymentTypes(true)
 
-            console.log(paymentTypesStatus)
+            //console.log(paymentTypesStatus)
 
             if(paymentTypesStatus.isError()){
                 return paymentTypesStatus;
@@ -113,7 +110,7 @@ export default {
             }
             
 
-            console.log(this.paymentTypesData)
+            //console.log(this.paymentTypesData)
 
             for(let index in this.paymentTypesData){
                 if(pid == this.paymentTypesData[index].id){
