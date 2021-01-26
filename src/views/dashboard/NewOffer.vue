@@ -153,13 +153,35 @@
                             </div>
                             <!-- Basic Setup Tab Content Ends -->
 
+                           
                             <!-- Pricing Setup Tab -->
                             <div class="step_content" 
                               id="pricing_setup"
                               data-next-step="final_setup"
                               data-prev-step="basic_setup"
                             >
-                                Two ---
+                                <div v-if="stepsFatalErrors['pricing_setup'] != null">
+                                    <div class="alert alert-danger text-center">
+                                        {{stepsFatalErrors['pricing_setup']}}
+                                    </div>
+                                </div>
+                                <div v-else>
+                                    <div>
+                                        <div class="input-group mb-3">
+                                            <div class="input-group-prepend" id="button-addon3">
+                                                <button class="btn btn-outline-secondary" type="button">
+                                                   <SvgImg src="/assets/images/minus-solid.svg" alt="-" />
+                                                </button>
+                                            </div>
+                                                <input type="text" class="form-control" placeholder="" aria-label="Example text with two button addons" aria-describedby="button-addon3">
+                                              <div class="input-group-append" id="button-addon3">
+                                                <button class="btn btn-outline-secondary" type="button">
+                                                   <SvgImg src="/assets/images/plus-solid.svg" alt="+" />
+                                                </button>
+                                            </div>    
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                             <!-- End Pricing Setup -->
 
@@ -234,13 +256,17 @@ export default {
             offerPaymentMethodInfo: null,
             offerTerritoryInfo: null,
             userCountry: "",
-            offerAssetPriceFeed: null,
             isPTModalVisible: false,
             currentStepId: "",
             previousStepId: "",
             isPrevSetupDisabled: false,
             isNextSetupDisabled: false,
-            
+            offerAssetPriceFeed: null,
+            stepsFatalErrors: {
+                "basic_setup": null, 
+                "pricing_setup": null,
+                "final_setup": null
+            }
         }
     },
     watch: {
@@ -305,6 +331,9 @@ export default {
         //go to next step
         goToPrevOrNextStep(type){
 
+            this.isNextSetupDisabled = false;
+            this.isPrevSetupDisabled = false;
+
             let curStepEl = $("#"+this.currentStepId);
             let curStepTabEl = $("#"+this.currentStepId+"_tab")
 
@@ -350,6 +379,12 @@ export default {
                     .addClass("completed")
 
                 prevOrNextStepId = nextStep;
+
+                //lets check if current has error, it it does,
+                //avoid going to next
+                if(this.stepsFatalErrors[prevOrNextStepId] != null){
+                    this.isNextSetupDisabled = true;
+                }
             }
 
             let stepContentDoms = $("#step_wizard_contents").find('.step_content')
@@ -418,8 +453,12 @@ export default {
             let priceFeedStatus = await chainlink.getPriceFeed("btc_usd")
             
             if(priceFeedStatus.isError()){
-
+                this.stepsFatalErrors["pricing_setup"] = priceFeedStatus.getMessage()
+                return;
             }
+            
+            //price 
+            this.offerAssetPriceFeed = priceFeedStatus.getData()
         }
 
     }
