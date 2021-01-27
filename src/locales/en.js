@@ -72,5 +72,7 @@ export default  {
     "unknown_payment_method": "Unknown or invalid payment method",
     "offer_territory_required": "offer territory field is required",
     "unknown_territory": "Unknown or invalid territory provided",
-    "failed_to_fetch_price_feed": "Failed to fetch price feed for {0}"
+    "failed_to_fetch_price_feed": "Failed to fetch price feed for {0}",
+    "profit_margin": "Profit Margin",
+    "profit_margin_desc": "The p"
 } 

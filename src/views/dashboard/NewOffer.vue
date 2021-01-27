@@ -64,7 +64,7 @@
                                 data-next-step="pricing_setup"
                             >
                                 <div class="form-group my-5">
-                                       <h5 class="mb-5">{{$t("select_offer_type")}}</h5>
+                                    <h5 class="mb-5">{{$t("select_offer_type")}}</h5>
                                     <div class="radio_btn_group d-flex flex-column flex-sm-row">
 
                                         <input type="radio" v-model="offerType" value='buy' name="offer_type" id="buy_offer">
@@ -166,18 +166,22 @@
                                     </div>
                                 </div>
                                 <div v-else>
-                                    <div>
-                                        <div class="input-group mb-3 noborder">
-                                            <div class="input-group-prepend" id="button-addon3">
-                                                <button class="btn btn-outline-secondary" type="button">
+                                    <div class="form-group my-5">
+                                          <h5 class="mb-5">{{$t("profit_margin")}}</h5>
+                                        <div class="mb-3 form-item-button d-flex flex-row justify-content-center align-items-center">
+                                            <div>
+                                                <a  href="#" class="noborder nobg px-4">
                                                    <svg-img src="/assets/images/minus-solid.svg" alt="-" class="fill-gray-500" />
-                                                </button>
+                                                </a>
                                             </div>
-                                                <input type="text" class="form-control" placeholder="" aria-label="Example text with two button addons" aria-describedby="button-addon3">
-                                              <div class="input-group-append" id="button-addon3">
-                                                <button class="btn btn-outline-secondary" type="button">
-                                                   <svg-img src="/assets/images/plus-solid.svg" alt="+" class="fill-gray-500" />
-                                                </button>
+
+                                            <div class="flex-grow-1">
+                                                <input type="text" class="form-control text-center" placeholder="0"  />
+                                            </div>
+                                            <div>
+                                                <a href="#" class="noborder nobg px-4">
+                                                    <svg-img src="/assets/images/plus-solid.svg" alt="+" class="fill-gray-500" />
+                                                </a>
                                             </div>    
                                         </div>
                                     </div>
