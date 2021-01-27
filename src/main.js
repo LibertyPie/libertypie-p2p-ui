@@ -29,3 +29,4 @@ router.afterEach((to, from) => {
     awesomeLoader.init()
     $(".select2").select2() 
 })
+

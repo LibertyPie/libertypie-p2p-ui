@@ -167,16 +167,16 @@
                                 </div>
                                 <div v-else>
                                     <div>
-                                        <div class="input-group mb-3">
+                                        <div class="input-group mb-3 noborder">
                                             <div class="input-group-prepend" id="button-addon3">
                                                 <button class="btn btn-outline-secondary" type="button">
-                                                   <SvgImg src="/assets/images/minus-solid.svg" alt="-" />
+                                                   <svg-img src="/assets/images/minus-solid.svg" alt="-" class="fill-gray-500" />
                                                 </button>
                                             </div>
                                                 <input type="text" class="form-control" placeholder="" aria-label="Example text with two button addons" aria-describedby="button-addon3">
                                               <div class="input-group-append" id="button-addon3">
                                                 <button class="btn btn-outline-secondary" type="button">
-                                                   <SvgImg src="/assets/images/plus-solid.svg" alt="+" />
+                                                   <svg-img src="/assets/images/plus-solid.svg" alt="+" class="fill-gray-500" />
                                                 </button>
                                             </div>    
                                         </div>

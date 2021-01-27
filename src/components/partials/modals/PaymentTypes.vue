@@ -7,8 +7,8 @@
             <div class="form-group b-0 m-0">
                 <div class="input-group m-0">
                     <div class="input-group-prepend">
-                        <span class="input-group-text">
-                           <i class="fas fa-search"></i>
+                        <span class="input-group-text nobg noborder">
+                           <svg-img class="search_icon" src="/assets/images/search-solid.svg" alt=""/>
                         </span>
                     </div>
                     <input class="form-control" 

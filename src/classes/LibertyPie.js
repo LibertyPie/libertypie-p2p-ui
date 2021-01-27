@@ -61,14 +61,18 @@ export default class LibertyPie {
             let processedPaymentTypes = [];
 
             for(let data of paymentTypesArray){
+
+                //console.log(data)
                 
                 let idNum   = data.id || null 
 
-                if(idNum == null || idNum == ""){continue; }
+                if(idNum == null || idNum == "") continue; 
                 
                 let id = idNum.toNumber()
-                let name = data.name
+                let name = (data.name || "").trim()
                 let catId = data.categoryId.toNumber()
+
+                if(name.length == 0 || name == "") continue;
 
                 processedPaymentTypes[id] = {
                     id,
