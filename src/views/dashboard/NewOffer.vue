@@ -257,6 +257,7 @@ import DashboardLayout from '../../layouts/DashboardLayout.vue';
 import PaymentTypesModal from "../../components/partials/modals/PaymentTypes.vue"
 import CountrySelect from '../../components/partials/CountrySelect.vue';
 import ChainLink from '../../classes/ChainLink'
+import CurrencyCore from '../../classes/CurrencyCore'
 
 export default {
     name: "new_offer",
@@ -306,7 +307,7 @@ export default {
         },
 
         offerTerritoryInfo(){
-            this.computeOfferAssetLocalPrice()
+            this.fetchAssetPrice()
         }
     },
 
@@ -488,6 +489,8 @@ export default {
             //price 
             this.offerAssetPriceFeed = priceFeedStatus.getData()
 
+           this.computeOfferAssetLocalPrice()
+
             return priceFeedStatus;
         },
 
@@ -496,15 +499,18 @@ export default {
             
             if(this.offerTerritoryInfo == null) return;
 
-            let offerCountry = this.offerTerritoryInfo.code;
+            let offerCountryCode = this.offerTerritoryInfo.code;
 
             if(this.offerAssetPriceFeed == null){
-               let priceFeedStatus = await this.fetchAssetPrice()
+               let priceFeedStatus = await this.fetchAssetPrice(false)
 
                if(priceFeedStatus.isError()) return;
             }
 
-            
+            //lets now get rate by country info
+            let rateStatus =  await CurrencyCore.convertByCountry(offerCountryCode,this.offerAssetPriceFeed)
+
+            console.log(rateStatus)
         },
 
         // compute price margin

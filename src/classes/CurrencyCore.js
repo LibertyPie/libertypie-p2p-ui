@@ -18,25 +18,34 @@ export default class CurrencyCore {
      * get currency rate
      * @param {String} to 
      */
-    static async getRate(to){
+    static async getRate(currency){
         try {
 
-            let cacheKey = `_currency_rate_${to}`
+            let _currency = currency.toUpperCase()
+
+            let cacheKey = `_currency_rate_${_currency}`
 
             let cachedData = Cache.get(cacheKey)
 
             if(cachedData != null) return Status.successPromise(null, cachedData)
 
             let resultStatus = await Http.getJson(appConfig.currency_api,{
-                symbols: to,
-                format: 'json'
+                symbols: _currency,
+                format: 'json',
+                base: 'USD'
             })
 
             if(resultStatus.isError()) return resultStatus
 
-            console.log(resultStatus)
+            let resultData = resultStatus.getData()
 
-            return Status.successPromise("",null)
+            if(!(resultData.success || false)){
+                Logger.error("CurrencyCore::getRate ",(new Error(resultData.msg || "")))
+                return Status.errorPromise(window._vue("failed_to_fetch_currency_rates"))
+            }
+
+            return Status.successPromise("", resultData.rates[_currency])
+
         } catch (e) {
             Logger.error("CurrencyCore::getRate ",e)
             return Status.errorPromise(window._vue("currency_converter_error",[e]))
@@ -48,12 +57,12 @@ export default class CurrencyCore {
      * @param {*} to 
      * @param {*} amount 
      */
-    static async convertCurrency(to,amount){
+    static async convertCurrency(currency,amount){
 
         try {
 
             //lets get the currency rate 
-            let currencyRateStatus = await this.getRate(to)
+            let currencyRateStatus = await this.getRate(currency)
 
             if(currencyRateStatus.isError()) return currencyRateStatus 
 
