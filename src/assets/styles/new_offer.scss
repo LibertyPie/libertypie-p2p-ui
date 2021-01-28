@@ -9,7 +9,7 @@
         height: 65px;
         display: inline-block;
         width: 100%;
-        max-width: 380px !important;
+        max-width: 380px;
         transition: 0.3s all ease;
         text-align: center;
         display: flex;
@@ -23,6 +23,11 @@
 
         &.selected {
             border-color: $primary;
+        }
+
+        @include media-breakpoint-down(md) {
+            width: 100%;   
+            max-width: 100%;
         }
     }
 

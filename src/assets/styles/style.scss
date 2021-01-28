@@ -192,12 +192,12 @@ a, a:hover, a:active, a:visited{  text-decoration: none !important;}
     }
   } 
   
-  .payment_types_list{
+   .payment_types_list{
          a { 
           display: block; height: 55px; 
           .icon{ height: 20px; }
         }
-  }
+    }
 }  
 
 .modal-full-screen{
@@ -278,6 +278,10 @@ div:not(.float-right) {
         border-radius: 4px;
         margin-left: 10px;
         transition: 0.3s all ease;
+
+        @include media-breakpoint-down(md) {
+            width: 100%;   
+        }
     }
 
     input[type="radio"]:checked + label {
@@ -362,4 +366,22 @@ label {
 
 .fill-gray-600 {
     fill: $gray-500 !important;
+}
+
+.stroke-gray-600 {
+    fill: $gray-500 !important;
+}
+
+
+.md-and-down-100pw{
+    @include media-breakpoint-down(md) {
+        width: 100%;   
+    }
+}
+
+.double-arrow{
+    width: 20px; height: 20px;
+    @include media-breakpoint-down(sm) {
+        transform: rotate(90deg);
+    }
 }

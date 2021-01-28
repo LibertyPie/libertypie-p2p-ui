@@ -49,7 +49,7 @@
                                 <div class="inner">
                                     <span class="dot"></span>
                                     <span class="text">{{$t("final_setup")}}</span>
-                                     <span class="text_alt">{{$t("3")}}</span>
+                                    <span class="text_alt">{{$t("3")}}</span>
                                 </div>
                             </a>
 
@@ -73,7 +73,7 @@
                                         <input type="radio" v-model="offerType" value='sell'  name="offer_type" id="sell_offer">
                                         <label  for="sell_offer" class="text-center">{{$t("sell_offer")}}</label>
                                     </div>
-                                    <p class='my-2 text-mute'>{{offerTypeDesc}}</p>
+                                    <p class='my-2 text-mute text-center text-lg-left'>{{offerTypeDesc}}</p>
                                  </div>
                                  <div class="form-group">
                                     <h5 class='text-capitalize'>{{$t("_i_want_to_{offer_type}",[this.offerType])}}</h5>
@@ -166,11 +166,71 @@
                                     </div>
                                 </div>
                                 <div v-else>
+
                                     <div class="form-group my-5">
-                                          <h5 class="mb-5">{{$t("profit_margin")}}</h5>
+                                        <h5 class="mb-5">{{$t("pricing_mode")}}</h5>
+                                        <div class="radio_btn_group d-flex flex-column flex-sm-row">
+
+                                            <input type="radio" v-model="offerPricingMode" value='static' name="offer_pricing_type" id="offer_pricing_type_static" />
+                                            <label  for="offer_pricing_type_static"  class="text-center">{{$t("static")}}</label>
+
+                                            <input type="radio" v-model="offerPricingMode" value='dynamic'  name="offer_pricing_type" id="offer_pricing_type_dynamic" />
+                                            <label  for="offer_pricing_type_dynamic" class="text-center">{{$t("dynamic")}}</label>
+                                        </div>
+                                        <p class='my-2 text-mute text-center text-lg-left'>{{offerPricingTypeDesc}}</p>
+                                   </div>
+
+                                    <!--static pricing -->
+                                    <div class="form-group my-5" v-if="offerPricingMode == 'static'">
+                                        <h5 class="mb-5">{{$t("offer_price")}}</h5>
+                                        
+                                        <div class="d-flex align-items-center flex-column flex-md-row">
+
+                                            <div class="form-item-button d-flex flex-row align-items-center">
+                                                 <input 
+                                                    type="numeric" 
+                                                    class="form-control text-center nobg noborder flex-grow-1" 
+                                                    placeholder="0" 
+                                                    style="letter-spacing:0.1em"
+                                                    @keyup="updateStaticOfferPriceUSD"
+                                                />
+                                                <span class="text-uppercase d-flex align-items-center px-4">
+                                                    {{offerCurrency}}
+                                                </span>
+                                            </div>
+                                            
+                                            <div class="d-flex p-2 align-items-center" 
+                                                v-if="(offerCurrency || '').toLowerCase() != 'usd'"
+                                            >
+                                                <svg-img src="/assets/images/exchange_arrow.svg"  alt="-" class="stroke-gray-600 double-arrow" />
+                                            </div>
+                                            
+                                            <div class="form-item-button d-flex flex-row align-items-center" 
+                                                v-show="(offerCurrency || '').toLowerCase() != 'usd'"
+                                            >
+                                                 <input 
+                                                    type="numeric" 
+                                                    v-model="staticOfferPrice" 
+                                                    class="form-control text-center nobg noborder flex-grow-1" 
+                                                    placeholder="0" 
+                                                    style="letter-spacing:0.1em"
+                                                    disabled
+                                                    readonly
+                                                />
+                                                <span class="text-uppercase d-flex align-items-center px-4">
+                                                    USD
+                                                </span>
+                                            </div>
+
+                                        </div>
+                                    </div>
+
+                                    <!-- dynamic pricing -->
+                                    <div class="form-group my-5" v-else>
+                                        <h5 class="mb-5">{{$t("profit_margin")}}</h5>
                                         <div class="mb-3 form-item-button d-flex flex-row justify-content-center align-items-center">
                                             <div>
-                                                <a  href="#" class="noborder text-gray-500 nobg px-4" @click.prevent="computeProfitMargin('subtract')">
+                                                <a  href="#" class="noborder text-gray-500 nobg px-4" @click.prevent="computeProfitMarginToggle('subtract')">
                                                    <svg-img src="/assets/images/minus-solid.svg" alt="-" class="fill-gray-500" />
                                                 </a>
                                             </div>
@@ -189,21 +249,23 @@
                                             </div>
                                             <div>
                                                 <a href="#" 
-                                                   class="noborder text-gray-500 nobg px-4" @click.prevent="computeProfitMargin('add')">
+                                                   class="noborder text-gray-500 nobg px-4" @click.prevent="computeProfitMarginToggle('add')">
                                                     <svg-img src="/assets/images/plus-solid.svg" alt="+" class="fill-gray-500" />
                                                 </a>
                                             </div>    
                                         </div>
                                         <p>
                                             <div class="text-sm">{{$t("profit_margin_desc")}}</div>
-                                            <div v-if="offerAssetId != null" class="text-capitalize py-1">
-                                                {{$t("{asset_name}_current_price",[cryptoAssetsData[offerAssetId].originalName])}}: {{offerAssetPriceLocal}} {{offerCurrency}}
-                                            </div>
-                                            <div v-if="offerAssetId != null" class="text-capitalize py-1">
-                                                {{$t("profit_margin_per_{asset}", [cryptoAssetsData[offerAssetId].originalName])}}: {{ profitMarginAmount }} {{offerCurrency}}
-                                            </div>
-                                            <div v-if="offerAssetId != null" class="text-capitalize py-1">
-                                                {{$t("final_offer_price_per_{asset}", [cryptoAssetsData[offerAssetId].originalName])}}: {{ offerPriceWithProfitMargin }} {{offerCurrency}}
+                                            <div class="font-weight-bold text-sm">
+                                                <div v-if="offerAssetId != null" class="text-capitalize py-1">
+                                                    {{$t("{asset_name}_current_price",[cryptoAssetsData[offerAssetId].originalName])}}: {{offerAssetPriceLocal}} {{offerCurrency}}
+                                                </div>
+                                                <div v-if="offerAssetId != null" class="text-capitalize py-1">
+                                                    {{$t("profit_margin_per_{asset}", [cryptoAssetsData[offerAssetId].originalName])}}: {{ profitMarginAmount }} {{offerCurrency}}
+                                                </div>
+                                                <div v-if="offerAssetId != null" class="text-capitalize text-center text-lg-left py-1">
+                                                    {{$t("final_offer_price_per_{asset}", [cryptoAssetsData[offerAssetId].originalName])}}: {{ offerPriceWithProfitMargin }} {{offerCurrency}}
+                                                </div>
                                             </div>
                                         </p>
                                     </div>
@@ -229,9 +291,9 @@
                         </div>
                         <div class="flex-grow-1 d-flex pl-4 align-items-center justify-content-center flex-sm-column-reverse flex-md-row">
                             
-                            <div class="p-1">
+                            <div class="p-1 md-and-down-100pw flex-grow-1">
                                 <button 
-                                    class="btn btn-info btn-block" 
+                                    class="btn btn-info btn-block md-and-down-100pw" 
                                     @click.prevent="goToPrevOrNextStep('previous')"
                                     :disabled="isPrevSetupDisabled"
                                     :readonly="isPrevSetupDisabled"
@@ -239,7 +301,7 @@
                                     {{$t("previous_set")}}
                                 </button>
                             </div>
-                            <div class="p-1">
+                            <div class="p-1 md-and-down-100pw flex-grow-1">
                                 <button 
                                     class="btn btn-success btn-block" 
                                     @click.prevent="goToPrevOrNextStep('next')"
@@ -293,6 +355,7 @@ export default {
             offerAssetPriceFeed: null,
             offerAssetPriceLocal: null,
             offerCurrency: null,
+            offerCurrencyRate: null,
             
             stepsFatalErrors: {
                 "basic_setup": null, 
@@ -301,9 +364,12 @@ export default {
             },
 
             //pricing setup vars 
-            profitMarginPercent: 0,
+            profitMarginPercent: 1,
             profitMarginAmount: 0,
             offerPriceWithProfitMargin: 0,
+            offerPricingMode: "dynamic",
+            offerPricingTypeDesc: this.$t("offer_dynamic_pricing_desc"),
+            staticOfferPrice: 0
         }
     },
     watch: {
@@ -322,7 +388,11 @@ export default {
             this.fetchAssetPrice()
         },
 
-        profitMarginPercent(){ this.computeProfitMarginMath() }
+        profitMarginPercent(){ this.computeProfitMarginMath() },
+
+        offerPricingMode() { 
+            this.offerPricingTypeDesc = this.$t(`offer_${this.offerPricingMode}_pricing_desc`)
+        }
     },
 
     async beforeMount(){
@@ -524,17 +594,18 @@ export default {
             this.offerCurrency = await CurrencyCore.getCurrencyByCountry(this.offerTerritoryInfo.code)
 
             //lets now get rate by country info
-            let assetLocalPriceStatus =  await CurrencyCore.convertCurrency(
-                this.offerCurrency,
-                this.offerAssetPriceFeed
+            let currencyRateStatus =  await CurrencyCore.getRate(
+                this.offerCurrency
             )
 
-            if(assetLocalPriceStatus.isError()){
-                this.stepsFatalErrors["pricing_setup"] = assetLocalPriceStatus.getMessage()
+            if(currencyRateStatus.isError()){
+                this.stepsFatalErrors["pricing_setup"] = currencyRateStatus.getMessage()
                 return false;
             }
 
-            this.offerAssetPriceLocal = assetLocalPriceStatus.getData()
+            this.offerCurrencyRate = currencyRateStatus.getData()
+            
+            this.offerAssetPriceLocal = (this.offerAssetPriceFeed * this.offerCurrencyRate)
             
             this.computeProfitMarginMath()
         },
@@ -550,9 +621,18 @@ export default {
         },
 
         computeProfitMarginMath(){
-            let profitMarginAmount = this.formatMoney((this.profitMarginPercent / 100) * this.offerAssetPriceLocal);
-            this.offerPriceWithProfitMargin = this.formatMoney(this.offerAssetPriceLocal + profitMarginAmount);
-            this. profitMarginAmount = profitMarginAmount;
+
+            let assetLocalPrice = parseFloat(this.offerAssetPriceLocal)
+            this.profitMarginAmount = this.formatMoney((this.profitMarginPercent / 100) * assetLocalPrice);
+            this.offerPriceWithProfitMargin = this.formatMoney(assetLocalPrice + parseFloat(this.profitMarginAmount));      
+        },
+
+        /**
+         * update static offer price usd 
+         */
+        updateStaticOfferPriceUSD(e){
+            let value = parseFloat(e.target.value) || 0;
+            this.staticOfferPrice = this.formatMoney(parseFloat(this.offerCurrencyRate) * value)
         }
 
     }

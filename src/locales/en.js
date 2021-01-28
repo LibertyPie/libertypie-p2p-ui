@@ -79,5 +79,11 @@ export default  {
     "failed_to_fetch_currency_rates": "Failed to fetch currency data",
     "{asset_name}_current_price": "{0} Current Price",
     "profit_margin_per_{asset}": "Profit margin per {0}",
-    "final_offer_price_per_{asset}": "Final Offer Price Per {0}"
+    "final_offer_price_per_{asset}": "Final Offer Price Per {0}",
+    "pricing_mode": "Pricing Mode",
+    "dynamic": "Dynamic",
+    "static": "Static",
+    "offer_dynamic_pricing_desc": "Offer price will change in respective to asset's price change",
+    "offer_static_pricing_desc": "Offer price will remain the same as provided disregarding asset's price change",
+    "offer_price": "Offer Price"
 } 
