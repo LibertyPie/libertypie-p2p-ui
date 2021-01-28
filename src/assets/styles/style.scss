@@ -224,6 +224,8 @@ a, a:hover, a:active, a:visited{  text-decoration: none !important;}
     color: $gray-500;
 }
 
+.text-sm{ font-size: 14px; }
+
 .select2-container--bootstrap4.select2-container--focus .select2-selection {
     border: none !important;
     outline: none !important;

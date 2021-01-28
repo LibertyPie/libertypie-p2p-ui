@@ -76,5 +76,8 @@ export default  {
     "profit_margin": "Profit Margin",
     "profit_margin_desc": "Profit margin is the amount in percentage added to the  current asset price for the buyer or seller to pay",
     "currency_converter_error": "Currency Converter Error: {0}",
-    "failed_to_fetch_currency_rates": "Failed to fetch currency data"
+    "failed_to_fetch_currency_rates": "Failed to fetch currency data",
+    "{asset_name}_current_price": "{0} Current Price",
+    "profit_margin_per_{asset}": "Profit margin per {0}",
+    "final_offer_price_per_{asset}": "Final Offer Price Per {0}"
 } 

@@ -54,7 +54,7 @@ export default class CurrencyCore {
 
     /**
      * convert currency
-     * @param {*} to 
+     * @param {*} currency 
      * @param {*} amount 
      */
     static async convertCurrency(currency,amount){
@@ -68,9 +68,20 @@ export default class CurrencyCore {
 
             let rate = currencyRateStatus.getData()
 
+            let converted = rate * amount;
+            let decimal = 2
+
+            if(converted.toString().startsWith("0.")){
+                decimal = 4
+            } 
+
+            let _converted = parseFloat(converted).toFixed(decimal)
+
+            return Status.successPromise(null, _converted)
+
         } catch (e) {
             Logger.error("CurrencyCore::convertCurrency ",e)
-            return Status.errorPromise(window._vue("currency_converter_error",[e]))
+            return Status.errorPromise(window._vue.$t("currency_converter_error",[e]))
         }
     }
 
@@ -78,28 +89,18 @@ export default class CurrencyCore {
      * convertByCountryCode
      */
     static async convertByCountry(countryCode, amount){
+        try {
 
-        let countryCodeAlpha = countryCode.toUpperCase()
+            let countryCodeAlpha = countryCode.toUpperCase()
+            
+            if(this.countryCurrencyMap == null) await this.getCurrencyByCountry(countryCode)
 
-        return new Promise((resolve,reject)=>{
-
-            if(this.countryCurrencyMap != null){
-                resolve(this.convertCurrency(this.countryCurrencyMap[countryCodeAlpha], amount))
-                return;
-            }
-
-            //lets fetch the data 
-            import("../data/currencies.js").then(async (result)=>{
-
-                this.countryCurrencyMap = result.default
-                resolve(this.convertCurrency(this.countryCurrencyMap[countryCodeAlpha], amount))
-
-            },(error) => {
-                resolve(Status.errorPromise(window._vue("currency_converter_error",[error])))
-                Logger.error("rateByCountry: ",error)
-            })
-        })
-    }
+            return this.convertCurrency(this.countryCurrencyMap[countryCodeAlpha], amount)
+        } catch (e){
+            Logger.error("rateByCountry: ",e)
+            return Status.errorPromise(window._vue("currency_converter_error",[e]))
+        } 
+    } //end fun 
 
 
     /**
@@ -109,5 +110,25 @@ export default class CurrencyCore {
     static async getRateByCountry(countryCode){
         return this.convertByCountry(countryCode,1)
     }
+
+    
+    /**
+     * get currency by country
+     * @param {*} countryCode 
+     */
+    static getCurrencyByCountry(countryCode){
+        return new Promise((resolve,reject)=>{
+            //lets fetch the data 
+            import("../data/currencies.js").then(async (result)=>{
+
+                this.countryCurrencyMap = result.default
+                
+                resolve(result.default[countryCode.toUpperCase()])
+
+            },(error) => {
+                reject(error)
+            })
+        })
+    } //end fun 
 
 }

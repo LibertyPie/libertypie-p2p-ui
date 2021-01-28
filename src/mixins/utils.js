@@ -121,6 +121,19 @@ export default {
             return Status.errorPromise(this.$t("unknown_payment_method"))
         }, //end fun 
 
+
+        /**
+         * formatMoney
+         */
+        formatMoney(value){
+
+            let d = 2;
+            if(value.toString().startsWith("0.")){
+                d = 4;
+            }
+
+            return parseFloat(value).toFixed(d)
+        }
     },  
 
 }

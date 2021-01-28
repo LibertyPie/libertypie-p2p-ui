@@ -96,7 +96,7 @@
                                                         <span class="pr-2">{{item.originalSymbol}}</span>
                                                         <span class="text-gray-600">{{item.originalName}}</span>
                                                     </div>
-                                                    <div class='text-small'>
+                                                    <div class='text-sm'>
                                                         {{$t("_offer_asset_info",[$t(offerType).toLowerCase(),item.originalName])}}
                                                     </div>
                                                 </div>
@@ -178,7 +178,7 @@
                                             <div class="flex-grow-1">
                                                 <input 
                                                     type="numeric" 
-                                                    v-model="profitMargin" 
+                                                    v-model="profitMarginPercent" 
                                                     class="form-control text-center nobg noborder" 
                                                     placeholder="0" 
                                                     style="letter-spacing:0.1em"
@@ -195,7 +195,16 @@
                                             </div>    
                                         </div>
                                         <p>
-                                            <div class="text-small">{{$t("profit_margin_desc")}}</div>
+                                            <div class="text-sm">{{$t("profit_margin_desc")}}</div>
+                                            <div v-if="offerAssetId != null" class="text-capitalize py-1">
+                                                {{$t("{asset_name}_current_price",[cryptoAssetsData[offerAssetId].originalName])}}: {{offerAssetPriceLocal}} {{offerCurrency}}
+                                            </div>
+                                            <div v-if="offerAssetId != null" class="text-capitalize py-1">
+                                                {{$t("profit_margin_per_{asset}", [cryptoAssetsData[offerAssetId].originalName])}}: {{ profitMarginAmount }} {{offerCurrency}}
+                                            </div>
+                                            <div v-if="offerAssetId != null" class="text-capitalize py-1">
+                                                {{$t("final_offer_price_per_{asset}", [cryptoAssetsData[offerAssetId].originalName])}}: {{ offerPriceWithProfitMargin }} {{offerCurrency}}
+                                            </div>
                                         </p>
                                     </div>
                                 </div>
@@ -283,6 +292,7 @@ export default {
             isNextSetupDisabled: false,
             offerAssetPriceFeed: null,
             offerAssetPriceLocal: null,
+            offerCurrency: null,
             
             stepsFatalErrors: {
                 "basic_setup": null, 
@@ -291,7 +301,9 @@ export default {
             },
 
             //pricing setup vars 
-            profitMargin: 0,
+            profitMarginPercent: 0,
+            profitMarginAmount: 0,
+            offerPriceWithProfitMargin: 0,
         }
     },
     watch: {
@@ -308,7 +320,9 @@ export default {
 
         offerTerritoryInfo(){
             this.fetchAssetPrice()
-        }
+        },
+
+        profitMarginPercent(){ this.computeProfitMarginMath() }
     },
 
     async beforeMount(){
@@ -507,19 +521,38 @@ export default {
                if(priceFeedStatus.isError()) return;
             }
 
-            //lets now get rate by country info
-            let rateStatus =  await CurrencyCore.convertByCountry(offerCountryCode,this.offerAssetPriceFeed)
+            this.offerCurrency = await CurrencyCore.getCurrencyByCountry(this.offerTerritoryInfo.code)
 
-            console.log(rateStatus)
+            //lets now get rate by country info
+            let assetLocalPriceStatus =  await CurrencyCore.convertCurrency(
+                this.offerCurrency,
+                this.offerAssetPriceFeed
+            )
+
+            if(assetLocalPriceStatus.isError()){
+                this.stepsFatalErrors["pricing_setup"] = assetLocalPriceStatus.getMessage()
+                return false;
+            }
+
+            this.offerAssetPriceLocal = assetLocalPriceStatus.getData()
+            
+            this.computeProfitMarginMath()
         },
 
         // compute price margin
-        computeProfitMargin(mode){
+        computeProfitMarginToggle(mode){
 
-            let pm = parseFloat(this.profitMargin.toString())
+            let pm = parseFloat(this.profitMarginPercent.toString())
             
-            if(mode=='add'){ this.profitMargin = (pm + 0.1).toFixed(1); } 
-            else { this.profitMargin = (pm - 0.1).toFixed(1); }
+            if(mode=='add'){ this.profitMarginPercent = (pm + 0.1).toFixed(1); } 
+            else { this.profitMarginPercent = (pm - 0.1).toFixed(1); }
+
+        },
+
+        computeProfitMarginMath(){
+            let profitMarginAmount = this.formatMoney((this.profitMarginPercent / 100) * this.offerAssetPriceLocal);
+            this.offerPriceWithProfitMargin = this.formatMoney(this.offerAssetPriceLocal + profitMarginAmount);
+            this. profitMarginAmount = profitMarginAmount;
         }
 
     }
