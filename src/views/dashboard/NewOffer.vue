@@ -482,16 +482,29 @@ export default {
             
             if(priceFeedStatus.isError()){
                 this.stepsFatalErrors["pricing_setup"] = priceFeedStatus.getMessage()
-                return;
+                return priceFeedStatus;
             }
             
             //price 
             this.offerAssetPriceFeed = priceFeedStatus.getData()
+
+            return priceFeedStatus;
         },
 
         //lets get localized price of assets
-        computeOfferAssetLocalPrice(){
+        async computeOfferAssetLocalPrice(){
+            
+            if(this.offerTerritoryInfo == null) return;
 
+            let offerCountry = this.offerTerritoryInfo.code;
+
+            if(this.offerAssetPriceFeed == null){
+               let priceFeedStatus = await this.fetchAssetPrice()
+
+               if(priceFeedStatus.isError()) return;
+            }
+
+            
         },
 
         // compute price margin
