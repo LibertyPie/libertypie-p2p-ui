@@ -220,6 +220,10 @@ a, a:hover, a:active, a:visited{  text-decoration: none !important;}
     color: $gray-600;
 }
 
+.text-gray-500 {
+    color: $gray-500;
+}
+
 .select2-container--bootstrap4.select2-container--focus .select2-selection {
     border: none !important;
     outline: none !important;
@@ -354,6 +358,6 @@ label {
 
 .noborder{ border: none !important; }
 
-.fill-gray-500 {
-    fill: $gray-500;
+.fill-gray-600 {
+    fill: $gray-500 !important;
 }

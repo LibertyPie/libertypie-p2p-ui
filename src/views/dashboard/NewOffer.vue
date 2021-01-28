@@ -170,20 +170,33 @@
                                           <h5 class="mb-5">{{$t("profit_margin")}}</h5>
                                         <div class="mb-3 form-item-button d-flex flex-row justify-content-center align-items-center">
                                             <div>
-                                                <a  href="#" class="noborder nobg px-4">
+                                                <a  href="#" class="noborder text-gray-500 nobg px-4" @click.prevent="computeProfitMargin('subtract')">
                                                    <svg-img src="/assets/images/minus-solid.svg" alt="-" class="fill-gray-500" />
                                                 </a>
                                             </div>
 
                                             <div class="flex-grow-1">
-                                                <input type="text" class="form-control text-center" placeholder="0"  />
+                                                <input 
+                                                    type="numeric" 
+                                                    v-model="profitMargin" 
+                                                    class="form-control text-center nobg noborder" 
+                                                    placeholder="0" 
+                                                    style="letter-spacing:0.1em"
+                                                />
+                                            </div>
+                                            <div class="px-4">
+                                                %
                                             </div>
                                             <div>
-                                                <a href="#" class="noborder nobg px-4">
+                                                <a href="#" 
+                                                   class="noborder text-gray-500 nobg px-4" @click.prevent="computeProfitMargin('add')">
                                                     <svg-img src="/assets/images/plus-solid.svg" alt="+" class="fill-gray-500" />
                                                 </a>
                                             </div>    
                                         </div>
+                                        <p>
+                                            <div class="text-small">{{$t("profit_margin_desc")}}</div>
+                                        </p>
                                     </div>
                                 </div>
                             </div>
@@ -256,21 +269,27 @@ export default {
             offerTypeDesc: '',
             cryptoAssetsData: [],
             offerAssetId: null,
+
             paymentTypesData: [],
             offerPaymentMethodInfo: null,
             offerTerritoryInfo: null,
             userCountry: "",
+
             isPTModalVisible: false,
             currentStepId: "",
             previousStepId: "",
             isPrevSetupDisabled: false,
             isNextSetupDisabled: false,
             offerAssetPriceFeed: null,
+            
             stepsFatalErrors: {
                 "basic_setup": null, 
                 "pricing_setup": null,
                 "final_setup": null
-            }
+            },
+
+            //pricing setup vars 
+            profitMargin: 0,
         }
     },
     watch: {
@@ -463,6 +482,15 @@ export default {
             
             //price 
             this.offerAssetPriceFeed = priceFeedStatus.getData()
+        },
+
+        // compute price margin
+        computeProfitMargin(mode){
+
+            let pm = parseFloat(this.profitMargin.toString())
+            
+            if(mode=='add'){ this.profitMargin = (pm + 0.1).toFixed(1); } 
+            else { this.profitMargin = (pm - 0.1).toFixed(1); }
         }
 
     }
