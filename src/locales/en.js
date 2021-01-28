@@ -74,5 +74,6 @@ export default  {
     "unknown_territory": "Unknown or invalid territory provided",
     "failed_to_fetch_price_feed": "Failed to fetch price feed for {0}",
     "profit_margin": "Profit Margin",
-    "profit_margin_desc": "Profit margin is the amount in percentage added to the  current asset price for the buyer or seller to pay"
+    "profit_margin_desc": "Profit margin is the amount in percentage added to the  current asset price for the buyer or seller to pay",
+    "currency_converter_error": "Currency Converter Error: {0}"
 } 

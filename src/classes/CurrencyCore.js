@@ -18,12 +18,40 @@ export default class CurrencyCore {
     static async getRate(to){
         try {
 
-            let resultStatus = await Http.get(appConfig.currency_api,{
-                symbols: to
+            let resultStatus = await Http.getJson(appConfig.currency_api,{
+                symbols: to,
+                format: 'json'
             })
+
+            if(resultStatus.isError()) return resultStatus
+
+            
         } catch (e) {
             Logger.error("CurrencyCore::getRate ",e)
-            return Status.errorPromise()
+            return Status.errorPromise(window._vue("currency_converter_error",[e]))
         }
     }
+
+    /**
+     * convert currency
+     * @param {*} to 
+     * @param {*} amount 
+     */
+    static async convertCurrency(to,amount){
+
+        try {
+
+            //lets get the currency rate 
+            let currencyRateStatus = await this.getRate(to)
+
+            if(currencyRateStatus.isError()) return currencyRateStatus 
+
+            let rate = currencyRateStatus.getData()
+
+        } catch (e) {
+            Logger.error("CurrencyCore::convertCurrency ",e)
+            return Status.errorPromise(window._vue("currency_converter_error",[e]))
+        }
+    }
+
 }
