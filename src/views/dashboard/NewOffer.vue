@@ -281,6 +281,7 @@ export default {
             isPrevSetupDisabled: false,
             isNextSetupDisabled: false,
             offerAssetPriceFeed: null,
+            offerAssetPriceLocal: null,
             
             stepsFatalErrors: {
                 "basic_setup": null, 
@@ -302,6 +303,10 @@ export default {
         offerAssetId() {
             this.offerAssetPriceFeed = null;
             this.fetchAssetPrice()
+        },
+
+        offerTerritoryInfo(){
+            this.computeOfferAssetLocalPrice()
         }
     },
 
@@ -482,6 +487,11 @@ export default {
             
             //price 
             this.offerAssetPriceFeed = priceFeedStatus.getData()
+        },
+
+        //lets get localized price of assets
+        computeOfferAssetLocalPrice(){
+
         },
 
         // compute price margin

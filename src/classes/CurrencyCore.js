@@ -25,7 +25,9 @@ export default class CurrencyCore {
 
             if(resultStatus.isError()) return resultStatus
 
-            
+            console.log(resultStatus)
+
+            return Status.successPromise("",null)
         } catch (e) {
             Logger.error("CurrencyCore::getRate ",e)
             return Status.errorPromise(window._vue("currency_converter_error",[e]))
