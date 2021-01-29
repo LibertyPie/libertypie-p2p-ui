@@ -133,6 +133,11 @@ export default {
             }
 
             return parseFloat(value).toFixed(d)
+        },
+
+        formatMoneyAsText(value){
+            let formatted = this.formatMoney(value)
+            
         }
     },  
 

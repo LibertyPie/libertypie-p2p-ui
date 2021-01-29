@@ -93,4 +93,5 @@ export default  {
     "sell_offer_min_order_desc": "A visitor can sell a minimum of {0} ({1}) to this offer",
     "buy_offer_max_order_desc": "A visitor can buy a maximum of {0} ({1}) from this offer",
     "sell_offer_max_order_desc": "A visitor can sell a maximum of {0} ({1}) to this offer",
+    "offer_static_price_notice": "Note: this offer's price will always be {0} irrespective of {1}'s price"
 } 

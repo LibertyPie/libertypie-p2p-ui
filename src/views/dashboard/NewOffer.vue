@@ -223,6 +223,17 @@
                                             </div>
 
                                         </div>
+                                            <div class="text-sm pt-2">
+                                                {{$t("offer_static_price_notice",[
+                                                    formatMoneyAsText(staticOfferPrice)
+                                                ])}}
+                                            </div>
+                                           <div v-if="offerAssetId != null" class="text-capitalize py-1">
+                                                {{$t("{asset_name}_current_price",[cryptoAssetsData[offerAssetId].originalName])}}: {{offerAssetPriceLocal}} {{offerCurrency}}
+                                            </div>
+                                            <div v-if="offerAssetId != null" class="text-capitalize py-1">
+                                                {{$t("final_offer_price_per_{asset}", [cryptoAssetsData[offerAssetId].originalName])}}: {{ staticOfferPrice }} {{offerCurrency}}
+                                            </div>
                                     </div>
 
                                     <!-- dynamic pricing -->
