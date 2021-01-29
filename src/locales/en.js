@@ -85,5 +85,6 @@ export default  {
     "static": "Static",
     "offer_dynamic_pricing_desc": "Offer price will change in respective to asset's price change",
     "offer_static_pricing_desc": "Offer price will remain the same as provided disregarding asset's price change",
-    "offer_price": "Offer Price"
+    "offer_price": "Offer Price",
+    "order_limit": "Order Limit"
 } 

@@ -192,6 +192,7 @@
                                                     class="form-control text-center nobg noborder flex-grow-1" 
                                                     placeholder="0" 
                                                     style="letter-spacing:0.1em"
+                                                    ref="staticLocalPriceInput"
                                                     @keyup="updateStaticOfferPriceUSD"
                                                 />
                                                 <span class="text-uppercase d-flex align-items-center px-4">
@@ -214,8 +215,7 @@
                                                     class="form-control text-center nobg noborder flex-grow-1" 
                                                     placeholder="0" 
                                                     style="letter-spacing:0.1em"
-                                                    disabled
-                                                    readonly
+                                                    @keyup="calculateStaticLocalPrice"
                                                 />
                                                 <span class="text-uppercase d-flex align-items-center px-4">
                                                     USD
@@ -263,16 +263,62 @@
                                                 <div v-if="offerAssetId != null" class="text-capitalize py-1">
                                                     {{$t("profit_margin_per_{asset}", [cryptoAssetsData[offerAssetId].originalName])}}: {{ profitMarginAmount }} {{offerCurrency}}
                                                 </div>
-                                                <div v-if="offerAssetId != null" class="text-capitalize text-center text-lg-left py-1">
+                                                <div v-if="offerAssetId != null" class="text-capitalize py-1">
                                                     {{$t("final_offer_price_per_{asset}", [cryptoAssetsData[offerAssetId].originalName])}}: {{ offerPriceWithProfitMargin }} {{offerCurrency}}
                                                 </div>
                                             </div>
                                         </p>
                                     </div>
+
                                 </div>
                             </div>
                             <!-- End Pricing Setup -->
 
+                            <!-- order limit -->
+                            <div class="form-group my-5">
+                                <h5 class="mb-5">{{$t("order_limit")}}</h5>
+                                
+                                <div class="d-flex align-items-center flex-column flex-md-row">
+
+                                    <div class="form-item-button d-flex flex-row align-items-center">
+                                        <input 
+                                            type="numeric" 
+                                            class="form-control text-center nobg noborder flex-grow-1" 
+                                            placeholder="0" 
+                                            style="letter-spacing:0.1em"
+                                            ref="staticLocalPriceInput"
+                                            @keyup="computeOrderLimitUSD('min')"
+                                        />
+                                        <span class="text-uppercase d-flex align-items-center px-4">
+                                            {{offerCurrency}}
+                                        </span>
+                                    </div>
+                                    
+                                    <div class="d-flex p-2 align-items-center">
+                                        -
+                                    </div>
+                                    
+                                    <div class="form-item-button d-flex flex-row align-items-center" 
+                                        v-show="(offerCurrency || '').toLowerCase() != 'usd'"
+                                    >
+                                        <input 
+                                            type="numeric" 
+                                            v-model="staticOfferPrice" 
+                                            class="form-control text-center nobg noborder flex-grow-1" 
+                                            placeholder="0" 
+                                            style="letter-spacing:0.1em"
+                                            @keyup="computeOrderLimitUSD('max')"
+                                        />
+                                        <span class="text-uppercase d-flex align-items-center px-4">
+                                            USD
+                                        </span>
+                                    </div>
+
+                                </div>
+                            </div>
+                            <!-- end order limit -->
+
+                            <!-- Final Setup -->
                             <div 
                                 class="step_content" 
                                 id="final_setup"
@@ -632,7 +678,13 @@ export default {
          */
         updateStaticOfferPriceUSD(e){
             let value = parseFloat(e.target.value) || 0;
-            this.staticOfferPrice = this.formatMoney(parseFloat(this.offerCurrencyRate) * value)
+            this.staticOfferPrice = this.formatMoney( value / parseFloat(this.offerCurrencyRate) )
+        },
+
+        //calculate the local price  for static offer price
+        calculateStaticLocalPrice(e){
+            let dom = this.$refs.staticLocalPriceInput;
+            dom.setAttribute("value", this.formatMoney( parseFloat(this.staticOfferPrice || 0) * parseFloat(this.offerCurrencyRate) ))
         }
 
     }
