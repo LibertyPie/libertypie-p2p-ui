@@ -274,9 +274,9 @@
                                     <div class="form-group my-5">
                                         <h5 class="mb-5">{{$t("order_limit")}}</h5>
                                         
-                                        <div class="d-flex align-items-center flex-column flex-md-row">
+                                        <div class="d-flex align-items-center justify-content-center flex-column flex-md-row">
 
-                                            <div class="py-4">
+                                            <div class="pb-4">
                                                 <div class="form-item-button d-flex flex-row align-items-center">
                                                     <span class="text-capitalize d-flex align-items-center px-4">
                                                         {{$t("min")}}
@@ -304,12 +304,12 @@
                                             </div>
                                             
                                             <div class="p-4 align-items-center font-weight-bold d-none d-md-flex">
-                                                <span class="position-relative" style="top:-20px;">
+                                                <span class="position-relative" style="top:-35px;left:-3px;">
                                                     -
                                                 </span>
                                             </div>
                                             
-                                            <div  class="py-4">
+                                            <div  class="pb-4">
                                                 <div class="form-item-button d-flex flex-row align-items-center">
                                                     <span class="text-capitalize d-flex align-items-center px-4">
                                                         {{$t("max")}}
