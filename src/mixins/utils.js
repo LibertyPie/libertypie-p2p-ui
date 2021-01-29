@@ -136,8 +136,9 @@ export default {
         },
 
         formatMoneyAsText(value){
-            let formatted = this.formatMoney(value)
-            
+            if(value == null || !value) return "";
+            return this.formatMoney(value)
+                       .replace(/\d(?=(\d{3})+\.)/g, '$&,'); 
         }
     },  
 

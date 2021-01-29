@@ -193,6 +193,7 @@
                                                     placeholder="0" 
                                                     style="letter-spacing:0.1em"
                                                     ref="staticLocalPriceInput"
+                                                    value="0"
                                                     @keyup="updateStaticOfferPriceUSD"
                                                 />
                                                 <span class="text-uppercase d-flex align-items-center px-4">
@@ -223,18 +224,21 @@
                                             </div>
 
                                         </div>
-                                            <div class="text-sm pt-2">
+                                            <div class="text-sm pt-2 text-danger">
                                                 {{$t("offer_static_price_notice",[
-                                                    formatMoneyAsText(staticOfferPrice)
+                                                    `${formatMoneyAsText(staticOfferPriceLocal || 0)} ${offerCurrency}`,
+                                                    `${formatMoneyAsText(staticOfferPrice || 0)} USD`,
+                                                    cryptoAssetsData[offerAssetId].originalName
                                                 ])}}
                                             </div>
-                                           <div v-if="offerAssetId != null" class="text-capitalize py-1">
-                                                {{$t("{asset_name}_current_price",[cryptoAssetsData[offerAssetId].originalName])}}: {{offerAssetPriceLocal}} {{offerCurrency}}
+                                           <div v-if="offerAssetId != null" class="text-capitalize py-1 text-sm font-weight-bold">
+                                                {{$t("{asset_name}_current_price",[cryptoAssetsData[offerAssetId].originalName])}}: {{ formatMoneyAsText(offerAssetPriceLocal) }} {{offerCurrency}}
                                             </div>
-                                            <div v-if="offerAssetId != null" class="text-capitalize py-1">
-                                                {{$t("final_offer_price_per_{asset}", [cryptoAssetsData[offerAssetId].originalName])}}: {{ staticOfferPrice }} {{offerCurrency}}
+                                            <div v-if="offerAssetId != null" class="text-capitalize py-1 text-sm font-weight-bold">
+                                                {{$t("final_offer_price_per_{asset}", [cryptoAssetsData[offerAssetId].originalName])}}: {{ formatMoneyAsText(staticOfferPrice) }} {{offerCurrency}}
                                             </div>
                                     </div>
+                                    <!-- end static pricing -->
 
                                     <!-- dynamic pricing -->
                                     <div class="form-group my-5" v-else>
@@ -269,13 +273,13 @@
                                             <div class="text-sm">{{$t("profit_margin_desc")}}</div>
                                             <div class="font-weight-bold text-sm">
                                                 <div v-if="offerAssetId != null" class="text-capitalize py-1">
-                                                    {{$t("{asset_name}_current_price",[cryptoAssetsData[offerAssetId].originalName])}}: {{offerAssetPriceLocal}} {{offerCurrency}}
+                                                    {{$t("{asset_name}_current_price",[cryptoAssetsData[offerAssetId].originalName])}}: {{formatMoneyAsText(offerAssetPriceLocal)}} {{offerCurrency}}
                                                 </div>
                                                 <div v-if="offerAssetId != null" class="text-capitalize py-1">
-                                                    {{$t("profit_margin_per_{asset}", [cryptoAssetsData[offerAssetId].originalName])}}: {{ profitMarginAmount }} {{offerCurrency}}
+                                                    {{$t("profit_margin_per_{asset}", [cryptoAssetsData[offerAssetId].originalName])}}: {{ formatMoneyAsText(profitMarginAmount) }} {{offerCurrency}}
                                                 </div>
                                                 <div v-if="offerAssetId != null" class="text-capitalize py-1">
-                                                    {{$t("final_offer_price_per_{asset}", [cryptoAssetsData[offerAssetId].originalName])}}: {{ offerPriceWithProfitMargin }} {{offerCurrency}}
+                                                    {{$t("final_offer_price_per_{asset}", [cryptoAssetsData[offerAssetId].originalName])}}: {{ formatMoneyAsText(offerPriceWithProfitMargin) }} {{offerCurrency}}
                                                 </div>
                                             </div>
                                         </p>
@@ -287,7 +291,7 @@
                                         
                                         <div class="d-flex align-items-center justify-content-center flex-column flex-md-row">
 
-                                            <div class="pb-4">
+                                            <div class="pb-4 full-width">
                                                 <div class="form-item-button d-flex flex-row align-items-center">
                                                     <span class="text-capitalize d-flex align-items-center px-4">
                                                         {{$t("min")}}
@@ -320,7 +324,7 @@
                                                 </span>
                                             </div>
                                             
-                                            <div  class="pb-4">
+                                            <div  class="pb-4 full-width">
                                                 <div class="form-item-button d-flex flex-row align-items-center">
                                                     <span class="text-capitalize d-flex align-items-center px-4">
                                                         {{$t("max")}}
@@ -455,6 +459,7 @@ export default {
             offerPricingMode: "dynamic",
             offerPricingTypeDesc: this.$t("offer_dynamic_pricing_desc"),
             staticOfferPrice: 0,
+            staticOfferPriceLocal: 0,
 
             orderMinLimit: null,
             orderMinLimitLocal: null,
@@ -723,13 +728,16 @@ export default {
          */
         updateStaticOfferPriceUSD(e){
             let value = parseFloat(e.target.value) || 0;
+            this.staticOfferPriceLocal = value;
             this.staticOfferPrice = this.formatMoney( value / parseFloat(this.offerCurrencyRate) )
         },
 
         //calculate the local price  for static offer price
         calculateStaticLocalPrice(e){
             let dom = this.$refs.staticLocalPriceInput;
-            dom.setAttribute("value", this.formatMoney( parseFloat(this.staticOfferPrice || 0) * parseFloat(this.offerCurrencyRate) ))
+            let priceLocal = this.formatMoney(parseFloat(this.staticOfferPrice || 0) * parseFloat(this.offerCurrencyRate));
+            this.staticOfferPriceLocal = priceLocal;
+            dom.value = priceLocal
         },
 
         /**
