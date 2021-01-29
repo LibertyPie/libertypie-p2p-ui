@@ -86,5 +86,11 @@ export default  {
     "offer_dynamic_pricing_desc": "Offer price will change in respective to asset's price change",
     "offer_static_pricing_desc": "Offer price will remain the same as provided disregarding asset's price change",
     "offer_price": "Offer Price",
-    "order_limit": "Order Limit"
+    "order_limit": "Order Limit",
+    "min": "Min",
+    "max": "Max",
+    "buy_offer_min_order_desc": "A visitor can buy a minimum of {0} ({1}) from this offer",
+    "sell_offer_min_order_desc": "A visitor can sell a minimum of {0} ({1}) to this offer",
+    "buy_offer_max_order_desc": "A visitor can buy a maximum of {0} ({1}) from this offer",
+    "sell_offer_max_order_desc": "A visitor can sell a maximum of {0} ({1}) to this offer",
 } 

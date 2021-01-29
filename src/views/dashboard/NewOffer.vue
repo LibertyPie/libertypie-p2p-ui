@@ -270,53 +270,82 @@
                                         </p>
                                     </div>
 
-                                </div>
+                                    <!-- order limit -->
+                                    <div class="form-group my-5">
+                                        <h5 class="mb-5">{{$t("order_limit")}}</h5>
+                                        
+                                        <div class="d-flex align-items-center flex-column flex-md-row">
+
+                                            <div class="py-4 full-width">
+
+                                                <div class="form-item-button d-flex flex-row align-items-center">
+                                                    <span class="text-capitalize d-flex align-items-center px-4">
+                                                        {{$t("min")}}
+                                                    </span>
+                                                    <input 
+                                                        type="numeric" 
+                                                        class="form-control text-center nobg noborder flex-grow-1" 
+                                                        placeholder="0" 
+                                                        style="letter-spacing:0.1em"
+                                                        v-model="orderMinLimitLocal"
+                                                        @keyup="computeOrderLimitUSD('min')"
+                                                    />
+                                                    <span class="text-uppercase d-flex align-items-center px-4">
+                                                        {{offerCurrency}}
+                                                    </span>
+                                                </div>
+                                                <div class="text-sm  py-2">
+                                                  {{$t(`${offerType}_offer_min_order_desc`,[
+                                                      `${orderMinLimitLocal || 0} ${offerCurrency}`,
+                                                      `${orderMaxLimit || 0} USD`,
+                                                      offerType
+                                                    ]
+                                                  )}}
+                                                </div>
+                                            </div>
+                                            
+                                            <div class="p-4 align-items-center font-weight-bold d-none d-md-flex">
+                                                <span class="position-relative" style="top:-20px;">
+                                                    -
+                                                </span>
+                                            </div>
+                                            
+                                            <div  class="py-4 full-width">
+                                                <div class="form-item-button d-flex flex-row align-items-center">
+                                                    <span class="text-capitalize d-flex align-items-center px-4">
+                                                        {{$t("max")}}
+                                                    </span>
+                                                    <input 
+                                                        type="numeric" 
+                                                        v-model="orderMaxLimitLocal" 
+                                                        class="form-control text-center nobg noborder flex-grow-1" 
+                                                        placeholder="0" 
+                                                        style="letter-spacing:0.1em"
+                                                        @keyup="computeOrderLimitUSD('max')"
+                                                    />
+                                                    <span class="text-uppercase d-flex align-items-center px-4">
+                                                        {{offerCurrency}}
+                                                    </span>
+                                                </div>
+                                                <div class="text-sm py-2">
+                                                  {{$t(`${offerType}_offer_max_order_desc`,[
+                                                      `${orderMaxLimitLocal || 0} ${offerCurrency}`,
+                                                      `${orderMaxLimit || 0} USD`,
+                                                      offerType
+                                                    ]
+                                                  )}}
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                    <!-- end order limit -->
+
+                                    
+                                </div> <!-- end if no error -->
                             </div>
                             <!-- End Pricing Setup -->
 
-                            <!-- order limit -->
-                            <div class="form-group my-5">
-                                <h5 class="mb-5">{{$t("order_limit")}}</h5>
-                                
-                                <div class="d-flex align-items-center flex-column flex-md-row">
-
-                                    <div class="form-item-button d-flex flex-row align-items-center">
-                                        <input 
-                                            type="numeric" 
-                                            class="form-control text-center nobg noborder flex-grow-1" 
-                                            placeholder="0" 
-                                            style="letter-spacing:0.1em"
-                                            ref="staticLocalPriceInput"
-                                            @keyup="computeOrderLimitUSD('min')"
-                                        />
-                                        <span class="text-uppercase d-flex align-items-center px-4">
-                                            {{offerCurrency}}
-                                        </span>
-                                    </div>
-                                    
-                                    <div class="d-flex p-2 align-items-center">
-                                        -
-                                    </div>
-                                    
-                                    <div class="form-item-button d-flex flex-row align-items-center" 
-                                        v-show="(offerCurrency || '').toLowerCase() != 'usd'"
-                                    >
-                                        <input 
-                                            type="numeric" 
-                                            v-model="staticOfferPrice" 
-                                            class="form-control text-center nobg noborder flex-grow-1" 
-                                            placeholder="0" 
-                                            style="letter-spacing:0.1em"
-                                            @keyup="computeOrderLimitUSD('max')"
-                                        />
-                                        <span class="text-uppercase d-flex align-items-center px-4">
-                                            USD
-                                        </span>
-                                    </div>
-
-                                </div>
-                            </div>
-                            <!-- end order limit -->
 
                             <!-- Final Setup -->
                             <div 
@@ -415,7 +444,13 @@ export default {
             offerPriceWithProfitMargin: 0,
             offerPricingMode: "dynamic",
             offerPricingTypeDesc: this.$t("offer_dynamic_pricing_desc"),
-            staticOfferPrice: 0
+            staticOfferPrice: 0,
+
+            orderMinLimit: null,
+            orderMinLimitLocal: null,
+            orderMaxLimit: null,
+            orderMaxLimitLocal: null,
+
         }
     },
     watch: {
@@ -685,7 +720,21 @@ export default {
         calculateStaticLocalPrice(e){
             let dom = this.$refs.staticLocalPriceInput;
             dom.setAttribute("value", this.formatMoney( parseFloat(this.staticOfferPrice || 0) * parseFloat(this.offerCurrencyRate) ))
-        }
+        },
+
+        /**
+         * orderLimit
+         */
+        computeOrderLimitUSD(limitType){
+
+            if(this.offerCurrency.toLowerCase() == "usd") return;
+
+            if(limitType == 'min'){ 
+                this.orderMinLimit = this.formatMoney( this.orderMinLimitLocal / parseFloat(this.offerCurrencyRate) ) 
+            } else { 
+                this.orderMaxLimit = this.formatMoney( this.orderMaxLimitLocal / parseFloat(this.offerCurrencyRate) ) 
+            }
+        }//end 
 
     }
 }
