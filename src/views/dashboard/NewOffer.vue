@@ -276,8 +276,7 @@
                                         
                                         <div class="d-flex align-items-center flex-column flex-md-row">
 
-                                            <div class="py-4 full-width">
-
+                                            <div class="py-4">
                                                 <div class="form-item-button d-flex flex-row align-items-center">
                                                     <span class="text-capitalize d-flex align-items-center px-4">
                                                         {{$t("min")}}
@@ -310,7 +309,7 @@
                                                 </span>
                                             </div>
                                             
-                                            <div  class="py-4 full-width">
+                                            <div  class="py-4">
                                                 <div class="form-item-button d-flex flex-row align-items-center">
                                                     <span class="text-capitalize d-flex align-items-center px-4">
                                                         {{$t("max")}}

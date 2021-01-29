@@ -27,7 +27,7 @@ export default class CurrencyCore {
 
             let cachedData = Cache.get(cacheKey)
 
-            if(cachedData != null) return Status.successPromise(null, cachedData)
+            if(cachedData != null) return Status.successPromise(null, cachedData[_currency])
 
             let resultStatus = await Http.getJson(appConfig.currency_api,{
                 symbols: _currency,
@@ -42,6 +42,12 @@ export default class CurrencyCore {
             if(!(resultData.success || false)){
                 Logger.error("CurrencyCore::getRate ",(new Error(resultData.msg || "")))
                 return Status.errorPromise(window._vue("failed_to_fetch_currency_rates"))
+            }
+
+            if(Object.keys(resultData.rates || {}).length > 0){
+                //lets cache the result
+                //cache for 6hrs
+                Cache.set(cacheKey, resultData.rates, 60 * 60  * 6);
             }
 
             return Status.successPromise("", resultData.rates[_currency])
