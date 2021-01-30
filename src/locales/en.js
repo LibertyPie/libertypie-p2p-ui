@@ -105,5 +105,11 @@ export default  {
     "security_deposit": "Security Deposit",
     "enable": "Enable",
     "security_deposit_desc": "A security deposit increases the trust level, both the buyer & seller will lock an extra percentage of the amount to trade, this will be released some period after trade completes",
-    "security_deposit_rate": "Security Deposit Rate"
+    "security_deposit_rate": "Security Deposit Rate",
+    "security_deposit_rate_info": "For every trade, both the buyer & seller will require {0}% of {1} as security deposit",
+    "uncapped_max_limit": "Uncapped Limit",
+    "unknown_offer_pricing_mode": "Unknown pricing mode",
+    "offer_fixed_price_required": "Offer fixed price is required",
+    "offer_fixed_price_cannot_be_zero": "Offer fixed price cannot be less or equal zero (0)",
+    "min_trade_limit_error": "Minimum trade limit cannot be less than {0} ({1})"
 } 

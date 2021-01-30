@@ -62,6 +62,7 @@
                                 class="step_content" 
                                 id="basic_setup"
                                 data-next-step="pricing_setup"
+                                data-validator="validateBasicStep"
                             >
                                 <div class="form-group my-5">
                                     <h5 class="mb-5">{{$t("select_offer_type")}}</h5>
@@ -171,23 +172,23 @@
                                         <h5 class="mb-5">{{$t("pricing_mode")}}</h5>
                                         <div class="radio_btn_group  d-flex flex-column flex-sm-row">
                                             
-                                            <input type="radio" v-model="offerPriceMode" value='market'  name="offer_pricing_mode" id="offer_pricing_type_market" />
+                                            <input type="radio" v-model="offerPricingMode" value='market'  name="offer_pricing_mode" id="offer_pricing_type_market" />
                                             <label  for="offer_pricing_type_market" class="full-width p-6 py-4 flex-fill">
                                                 <div class="font-weight-bold py-2"> {{$t("market_price")}} </div>
-                                                <p> {{$t( `market_${offerType}_price_desc`,[(cryptoAssetsData[offerAssetId] || {}).originalName || ""] )}} </p>
+                                                <p> {{$t( `market_${offerType}_price_desc`,[offerAssetName] )}} </p>
                                             </label>
 
-                                            <input type="radio" v-model="offerPriceMode" value='fixed' name="offer_pricing_mode" id="offer_pricing_type_fixed" />
+                                            <input type="radio" v-model="offerPricingMode" value='fixed' name="offer_pricing_mode" id="offer_pricing_type_fixed" />
                                             <label  for="offer_pricing_type_fixed"   class="full-width p-6 py-4 flex-fill">
                                                 <div class="font-weight-bold py-2"> {{$t("fixed_price")}} </div>
-                                                <p> {{$t( `fixed_${offerType}_price_desc`, [(cryptoAssetsData[offerAssetId] || {}).originalName || ""] )}} </p>
+                                                <p> {{$t( `fixed_${offerType}_price_desc`, [offerAssetName] )}} </p>
                                             </label>
 
                                         </div>
                                    </div>
 
                                     <!--fixed pricing -->
-                                    <div class="form-group my-5" v-if="offerPriceMode == 'fixed'">
+                                    <div class="form-group my-5" v-if="offerPricingMode == 'fixed'">
                                         <h5 class="mb-5">{{$t("offer_price")}}</h5>
                                         
                                         <div class="d-flex align-items-center flex-column flex-md-row">
@@ -234,14 +235,14 @@
                                                 {{$t("offer_fixed_price_notice",[
                                                     `${formatMoneyAsText(offerFixedPriceLocal || 0)} ${offerCurrency}`,
                                                     `${formatMoneyAsText(offerFixedPrice || 0)} USD`,
-                                                    cryptoAssetsData[offerAssetId].originalName
+                                                    offerAssetName
                                                 ])}}
                                             </div>
                                            <div v-if="offerAssetId != null" class="text-capitalize py-1 text-sm font-weight-bold">
-                                                {{$t("{asset_name}_current_price",[cryptoAssetsData[offerAssetId].originalName])}}: {{ formatMoneyAsText(offerAssetPriceLocal) }} {{offerCurrency}}
+                                                {{$t("{asset_name}_current_price",[offerAssetName])}}: {{ formatMoneyAsText(offerAssetPriceLocal) }} {{offerCurrency}}
                                             </div>
                                             <div v-if="offerAssetId != null" class="text-capitalize py-1 text-sm font-weight-bold">
-                                                {{$t("final_offer_price_per_{asset}", [cryptoAssetsData[offerAssetId].originalName])}}: {{ formatMoneyAsText(staticOfferPrice) }} {{offerCurrency}}
+                                                {{$t("final_offer_price_per_{asset}", [offerAssetName])}}: {{ formatMoneyAsText(staticOfferPrice) }} {{offerCurrency}}
                                             </div>
                                     </div>
                                     <!-- end fixed pricing -->
@@ -279,13 +280,16 @@
                                             <div class="text-sm">{{$t("profit_margin_desc")}}</div>
                                             <div class="font-weight-bold text-sm">
                                                 <div v-if="offerAssetId != null" class="text-capitalize py-1">
-                                                    {{$t("{asset_name}_current_price",[cryptoAssetsData[offerAssetId].originalName])}}: {{formatMoneyAsText(offerAssetPriceLocal)}} {{offerCurrency}}
+                                                    {{$t("{asset_name}_current_price",[offerAssetName])}}: {{formatMoneyAsText(offerAssetPriceLocal)}} {{offerCurrency}} 
+                                                    &nbsp;(<span v-if="offerCurrencyRate != null">{{formatMoneyAsText(offerCurrencyRate * offerAssetPriceLocal)}} USD</span>)
                                                 </div>
                                                 <div v-if="offerAssetId != null" class="text-capitalize py-1">
-                                                    {{$t("profit_margin_per_{asset}", [cryptoAssetsData[offerAssetId].originalName])}}: {{ formatMoneyAsText(profitMarginAmount) }} {{offerCurrency}}
+                                                    {{$t("profit_margin_per_{asset}", [offerAssetName])}}: {{ formatMoneyAsText(profitMarginAmount) }} {{offerCurrency}}
+                                                    &nbsp;(<span v-if="offerCurrencyRate != null">{{formatMoneyAsText(offerCurrencyRate * profitMarginAmount)}} USD</span>)
                                                 </div>
                                                 <div v-if="offerAssetId != null" class="text-capitalize py-1">
-                                                    {{$t("final_offer_price_per_{asset}", [cryptoAssetsData[offerAssetId].originalName])}}: {{ formatMoneyAsText(offerPriceWithProfitMargin) }} {{offerCurrency}}
+                                                    {{$t("final_offer_price_per_{asset}", [offerAssetName])}}: {{ formatMoneyAsText(offerPriceWithProfitMargin) }} {{offerCurrency}}
+                                                     &nbsp;(<span v-if="offerCurrencyRate != null">{{formatMoneyAsText(offerCurrencyRate * offerPriceWithProfitMargin)}} USD</span>)
                                                 </div>
                                             </div>
                                         </p>
@@ -303,23 +307,19 @@
                                         </div>
                                         <div class="my-2" v-show="securityDeposit == '1'">
                                             <div class="mb-2">{{$t("security_deposit_rate")}}</div>
-                                            <div>
-                                                <input
-                                                    type="range"
-                                                    min="1"              
-                                                    max="10"                 
-                                                    step="1"                  
-                                                    id="securityDepositRateSlider"
-                                                    v-model="securityDepositRate"
-                                                />
-                                            </div>
+                                         
+                                            <div ref="securityDepositRateSlide"></div>
+                                           
                                             <div class="text-sm d-flex flex-row justify-content-between">
                                                 <span v-for="(v,i) in [...Array(10).keys()]" :key="i">
                                                     {{$t(v+1) + '%'}}
                                                 </span>
                                             </div>
-                                            <div class="text-sm">
-                                                {{$t("security_deposit_rate_info",[securityDepositRate])}}
+                                            <div class="text-sm my-3">
+                                                {{$t("security_deposit_rate_info",[
+                                                    securityDepositRate,
+                                                    offerAssetName
+                                               ])}}
                                             </div>
                                         </div>
                                     </div>
@@ -338,15 +338,15 @@
                                                         class="form-control text-center nobg noborder flex-grow-1" 
                                                         :placeholder="$t('amount')" 
                                                         style="letter-spacing:0.1em"
-                                                        v-model="orderMinLimitLocal"
-                                                        @keyup="computeOrderLimitUSD('min')"
+                                                        v-model="minTradeLimitLocal"
+                                                        @keyup="computeTradeLimitUSD('min')"
                                                     />
                                                     <span class="text-uppercase d-flex align-items-center px-4">
                                                         {{offerCurrency}}
                                                     </span>
                                                 </div>
-                                                <div class="text-sm  py-2" v-if="minTradeLimit != null">
-                                                  {{minTradeLimit}} USD
+                                                <div class="text-sm  py-2">
+                                                  {{minTradeLimit || 0}} USD
                                                 </div>
                                             </div>
                                             
@@ -363,14 +363,15 @@
                                                         class="form-control text-center nobg noborder flex-grow-1" 
                                                         :placeholder="$t('amount')" 
                                                         style="letter-spacing:0.1em"
-                                                        @keyup="computeOrderLimitUSD('max')"
+                                                        @keyup="computeTradeLimitUSD('max')"
                                                     />
                                                     <span class="text-uppercase d-flex align-items-center px-4">
                                                         {{offerCurrency}}
                                                     </span>
                                                 </div>
-                                                <div class="text-sm py-2 text-center" v-if="maxTradeLimit != null">
-                                                  {{maxTradeLimit}} USD
+                                                <div class="text-sm py-2">
+                                                  <span v-if="maxTradeLimit != null">{{maxTradeLimit}} USD</span>
+                                                  <span v-else>{{$t("uncapped_max_limit")}}</span>
                                                 </div>
                                             </div>
 
@@ -414,7 +415,7 @@
                             
                             <div class="p-1 md-and-down-100pw flex-grow-1 full-width">
                                 <button 
-                                    class="btn btn-info btn-block md-and-down-100pw full-width" 
+                                    class="btn btn-info btn-block md-and-down-100pw full-width text-truncate" 
                                     @click.prevent="goToPrevOrNextStep('previous')"
                                     :disabled="isPrevSetupDisabled"
                                     :readonly="isPrevSetupDisabled"
@@ -424,7 +425,7 @@
                             </div>
                             <div class="p-1 md-and-down-100pw flex-grow-1 full-width">
                                 <button 
-                                    class="btn btn-success btn-block full-width" 
+                                    class="btn btn-success btn-block full-width text-truncate" 
                                     @click.prevent="goToPrevOrNextStep('next')"
                                     :disabled="isNextSetupDisabled"
                                     :readonly="isNextSetupDisabled"
@@ -451,6 +452,8 @@ import CountrySelect from '../../components/partials/CountrySelect.vue';
 import ChainLink from '../../classes/ChainLink'
 import CurrencyCore from '../../classes/CurrencyCore'
 import rangesliderJs from 'rangeslider-js'
+import noUiSlider from 'nouislider';
+import 'nouislider/distribute/nouislider.css';
 
 
 export default {
@@ -464,6 +467,7 @@ export default {
             offerTypeDesc: '',
             cryptoAssetsData: [],
             offerAssetId: null,
+            offerAssetName: "",
 
             paymentTypesData: [],
             offerPaymentMethodInfo: null,
@@ -487,14 +491,17 @@ export default {
             },
 
             //pricing setup vars 
+        
+            offerPricingMode: "market",
+
             profitMarginPercent: 1,
             profitMarginAmount: 0,
             offerPriceWithProfitMargin: 0,
-            offerPriceMode: "market",
+
             offerFixedPrice: 0,
             offerFixedPriceLocal: 0,
 
-            minTradeLimit: null,
+            minTradeLimit: 5,
             minTradeLimitLocal: null,
             maxTradeLimit: null,
             maxTradeLimitLocal: null,
@@ -515,6 +522,7 @@ export default {
         //if the offer asset id changes 
         // reset the price feed
         offerAssetId() {
+            this.offerAssetName = this.cryptoAssetsData[this.offerAssetId].originalName;
             this.offerAssetPriceFeed = null;
             this.fetchAssetPrice()
         },
@@ -557,8 +565,18 @@ export default {
 
         this.goToStepById("basic_setup")
 
-        //initialize security deposit slider
-        rangesliderJs.create(document.getElementById("securityDepositRateSlider"));
+        let slider = this.$refs.securityDepositRateSlide
+        
+        noUiSlider.create(slider,{
+               start: [this.securityDepositRate],
+                step: 1,
+                range: {
+                    'min': [1],
+                    'max': [10]
+                }
+        })
+        
+        slider.noUiSlider.on("slide", (value)=> this.securityDepositRate = value[0]);
     },
 
     methods: {
@@ -693,6 +711,55 @@ export default {
         },
 
         /**
+         * validatePricing Setup
+         */
+        async validatePricingSetup() {
+
+            if(["fixed","market"].includes(this.offerPricingMode)){
+                this.errorNotif(this.$t("unknown_offer_pricing_mode"))
+                return false;
+            }
+
+            if(this.offerPricingMode == "market" && typeof this.profitMarginPercent !== 'number' ){
+                this.errorNotif(this.$t("profit_margin_required"))
+                return false;
+            }
+
+            //if fixed pricing
+
+            if(this.offerPricingMode == "fixed" && typeof this.offerFixedPrice !== 'number' ){
+                this.errorNotif(this.$t("offer_fixed_price_required"))
+                return false;
+            }
+
+            if(parseFloat(this.offerFixedPrice) <= 0){
+                this.errorNotif(this.$t("offer_fixed_price_cannot_be_zero"))
+                return false;
+            }
+
+            if(!this.minTradeLimit || parseFloat(this.minTradeLimit) == 0){
+                this.errorNotif(this.$t("min_trade_limit_error",[
+                    `${5 * this.offerCurrencyRate} ${this.offerCurrency}`,
+                    `5 USD`
+                ]))
+
+                return false;
+            }
+
+            //if security deposit is enabled lets validate it 
+            if(this.securityDeposit == '1'){
+
+                let securityDepositRate = parseInt(this.securityDeposit)
+
+                //lets get security depoist rate
+                if(securityDepositRate <= 0 || securityDepositRate > 10){
+                    this.errorNotif(this.$t("security_deposit_rate_error"))
+                    return false; 
+                }
+            }
+        }, //end validate
+
+        /**
          * fetch selected asset price feed
          */
         async fetchAssetPrice(){
@@ -742,7 +809,9 @@ export default {
             
             this.offerAssetPriceLocal = (this.offerAssetPriceFeed * this.offerCurrencyRate)
 
-            this.minimumTradeLimitAmountLocal = (this.offerAssetPriceFeed * this.minimumTradeLimitAmount)
+            this.minimumTradeLimitAmountLocal = (this.offerCurrencyRate * this.minimumTradeLimitAmount)
+
+            this.minTradeLimitLocal = (this.minTradeLimit * this.offerCurrencyRate)
             
             this.computeProfitMarginMath()
         },
