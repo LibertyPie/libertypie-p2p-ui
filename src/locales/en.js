@@ -1,4 +1,4 @@
-{
+export default {
     "quick_search": "Quick Search",
     "quick_search_desc": "Find top rated local offers  instantly",
     "asset": "Asset",
