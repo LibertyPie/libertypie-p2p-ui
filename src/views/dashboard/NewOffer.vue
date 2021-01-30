@@ -281,15 +281,15 @@
                                             <div class="font-weight-bold text-sm">
                                                 <div v-if="offerAssetId != null" class="text-capitalize py-1">
                                                     {{$t("{asset_name}_current_price",[offerAssetName])}}: {{formatMoneyAsText(offerAssetPriceLocal)}} {{offerCurrency}} 
-                                                    &nbsp;(<span v-if="offerCurrencyRate != null">{{formatMoneyAsText(offerCurrencyRate * offerAssetPriceLocal)}} USD</span>)
+                                                    &nbsp;(<span v-if="offerCurrencyRate != null">{{formatMoneyAsText(offerAssetPriceFeed)}} USD</span>)
                                                 </div>
                                                 <div v-if="offerAssetId != null" class="text-capitalize py-1">
-                                                    {{$t("profit_margin_per_{asset}", [offerAssetName])}}: {{ formatMoneyAsText(profitMarginAmount) }} {{offerCurrency}}
-                                                    &nbsp;(<span v-if="offerCurrencyRate != null">{{formatMoneyAsText(offerCurrencyRate * profitMarginAmount)}} USD</span>)
+                                                    {{$t("profit_margin_per_{asset}", [offerAssetName])}}: {{ formatMoneyAsText(profitMarginAmountLocal) }} {{offerCurrency}}
+                                                    &nbsp;(<span v-if="offerCurrencyRate != null">{{formatMoneyAsText(profitMarginAmount)}} USD</span>)
                                                 </div>
                                                 <div v-if="offerAssetId != null" class="text-capitalize py-1">
-                                                    {{$t("final_offer_price_per_{asset}", [offerAssetName])}}: {{ formatMoneyAsText(offerPriceWithProfitMargin) }} {{offerCurrency}}
-                                                     &nbsp;(<span v-if="offerCurrencyRate != null">{{formatMoneyAsText(offerCurrencyRate * offerPriceWithProfitMargin)}} USD</span>)
+                                                    {{$t("final_offer_price_per_{asset}", [offerAssetName])}}: {{ formatMoneyAsText(offerPriceWithProfitMarginLocal) }} {{offerCurrency}}
+                                                     &nbsp;(<span v-if="offerCurrencyRate != null">{{formatMoneyAsText(offerPriceWithProfitMargin)}} USD</span>)
                                                 </div>
                                             </div>
                                         </p>
@@ -496,7 +496,9 @@ export default {
 
             profitMarginPercent: 1,
             profitMarginAmount: 0,
+            profitMarginAmountLocal: 0,
             offerPriceWithProfitMargin: 0,
+            offerPriceWithProfitMarginLocal: 0,
 
             offerFixedPrice: 0,
             offerFixedPriceLocal: 0,
@@ -828,9 +830,20 @@ export default {
 
         computeProfitMarginMath(){
 
-            let assetLocalPrice = parseFloat(this.offerAssetPriceLocal)
-            this.profitMarginAmount = this.formatMoney((this.profitMarginPercent / 100) * assetLocalPrice);
-            this.offerPriceWithProfitMargin = this.formatMoney(assetLocalPrice + parseFloat(this.profitMarginAmount));      
+            this.profitMarginAmount = this.formatMoney((this.profitMarginPercent / 100) * this.offerAssetPriceFeed);
+            
+            this.profitMarginAmountLocal = ( this.profitMarginAmount * this.offerCurrencyRate)
+
+            this.offerPriceWithProfitMargin = this.formatMoney(this.offerAssetPriceFeed + parseFloat(this.profitMarginAmount));
+            
+            //this.offerPriceWithProfitMarginLocal =  ( this.offerPriceWithProfitMargin * this.offerCurrencyRate)
+
+            // profitMarginAmount: 0,
+            //profitMarginAmountLocal: 0,
+           // offerPriceWithProfitMargin: 0,
+           // offerPriceWithProfitMarginLocal: 0,
+
+
         },
 
         /**
