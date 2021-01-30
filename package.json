@@ -16,6 +16,8 @@
     "ethers": "^5.0.25",
     "fontawesome-svg-loader": "^0.4.0",
     "jdenticon": "^3.1.0",
+    "rangeslider-js": "^3.2.5",
+    "rangeslider.js": "^2.3.3",
     "simple-scrollbar": "git+https://github.com/buzinas/simple-scrollbar.git",
     "sticksy": "^0.2.0",
     "vue": "^3.0.0",

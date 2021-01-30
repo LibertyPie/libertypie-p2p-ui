@@ -81,17 +81,29 @@ export default  {
     "profit_margin_per_{asset}": "Profit margin per {0}",
     "final_offer_price_per_{asset}": "Final Offer Price Per {0}",
     "pricing_mode": "Pricing Mode",
-    "dynamic": "Dynamic",
-    "static": "Static",
-    "offer_dynamic_pricing_desc": "Offer price will change in respective to asset's price change",
-    "offer_static_pricing_desc": "Offer price will remain the same as provided disregarding asset's price change",
+    "market_price": "Market Price",
+    "fixed_price": "Fixed Price",
+
+    "market_sell_price_desc": "This offer's selling price will change in respective to {0}'s market price",
+    "market_buy_price_desc": "This offer's buying price will change in respective to {0}'s market price",
+
+    "fixed_sell_price_desc": "This offer's selling price will remain the same as provided disregarding {0}'s market price",
+    "fixed_buy_price_desc": "This offer's buying price will remain the same as provided disregarding {0}'s market price",
+
+
     "offer_price": "Offer Price",
-    "order_limit": "Order Limit",
-    "minimum": "Minimum",
-    "maximum": "Maximum",
+    "offer_trade_limits": "Offer Trade Limits",
+    "minimum_trade_limit": "Minimum Trade Limit",
+    "maximum_trade_limit": "Maximum Trade Limit",
     "buy_offer_min_order_desc": "A visitor can buy a minimum of {0} ({1}) from this offer",
     "sell_offer_min_order_desc": "A visitor can sell a minimum of {0} ({1}) to this offer",
     "buy_offer_max_order_desc": "A visitor can buy a maximum of {0} ({1}) from this offer",
     "sell_offer_max_order_desc": "A visitor can sell a maximum of {0} ({1}) to this offer",
-    "offer_static_price_notice": "Note: this offer's price will always be {0} ({1}) irrespective of {2}'s price"
+    "offer_fixed_price_notice": "Note: this offer's price will always be {0} ({1}) irrespective of {2}'s price",
+    "trade_limit_info": "Trade limits restrict buyers or sellers to initiate a trade within your minimum & maximum amount range",
+    "minimum_trade_limit_info": "The minimum trade amount limit is {0} ({1}), during a trade initiation, the minimum amount will reset to {1} equivalent if your local currency drops against USD",
+    "security_deposit": "Security Deposit",
+    "enable": "Enable",
+    "security_deposit_desc": "A security deposit increases the trust level, both the buyer & seller will lock an extra percentage of the amount to trade, this will be released some period after trade completes",
+    "security_deposit_rate": "Security Deposit Rate"
 } 

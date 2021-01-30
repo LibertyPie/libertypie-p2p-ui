@@ -169,32 +169,38 @@
 
                                     <div class="form-group my-5">
                                         <h5 class="mb-5">{{$t("pricing_mode")}}</h5>
-                                        <div class="radio_btn_group d-flex flex-column flex-sm-row">
+                                        <div class="radio_btn_group  d-flex flex-column flex-sm-row">
+                                            
+                                            <input type="radio" v-model="offerPriceMode" value='market'  name="offer_pricing_mode" id="offer_pricing_type_market" />
+                                            <label  for="offer_pricing_type_market" class="full-width p-6 py-4 flex-fill">
+                                                <div class="font-weight-bold py-2"> {{$t("market_price")}} </div>
+                                                <p> {{$t( `market_${offerType}_price_desc`,[(cryptoAssetsData[offerAssetId] || {}).originalName || ""] )}} </p>
+                                            </label>
 
-                                            <input type="radio" v-model="offerPricingMode" value='static' name="offer_pricing_type" id="offer_pricing_type_static" />
-                                            <label  for="offer_pricing_type_static"  class="text-center">{{$t("static")}}</label>
+                                            <input type="radio" v-model="offerPriceMode" value='fixed' name="offer_pricing_mode" id="offer_pricing_type_fixed" />
+                                            <label  for="offer_pricing_type_fixed"   class="full-width p-6 py-4 flex-fill">
+                                                <div class="font-weight-bold py-2"> {{$t("fixed_price")}} </div>
+                                                <p> {{$t( `fixed_${offerType}_price_desc`, [(cryptoAssetsData[offerAssetId] || {}).originalName || ""] )}} </p>
+                                            </label>
 
-                                            <input type="radio" v-model="offerPricingMode" value='dynamic'  name="offer_pricing_type" id="offer_pricing_type_dynamic" />
-                                            <label  for="offer_pricing_type_dynamic" class="text-center">{{$t("dynamic")}}</label>
                                         </div>
-                                        <p class='my-2 text-mute text-center text-lg-left'>{{offerPricingTypeDesc}}</p>
                                    </div>
 
-                                    <!--static pricing -->
-                                    <div class="form-group my-5" v-if="offerPricingMode == 'static'">
+                                    <!--fixed pricing -->
+                                    <div class="form-group my-5" v-if="offerPriceMode == 'fixed'">
                                         <h5 class="mb-5">{{$t("offer_price")}}</h5>
                                         
                                         <div class="d-flex align-items-center flex-column flex-md-row">
 
                                             <div class="form-item-button d-flex flex-row align-items-center">
-                                                 <input 
+                                                <input 
                                                     type="numeric" 
                                                     class="form-control text-center nobg noborder flex-grow-1" 
                                                     placeholder="0" 
                                                     style="letter-spacing:0.1em"
-                                                    ref="staticLocalPriceInput"
+                                                    ref="offerFixedPriceLocal"
                                                     value="0"
-                                                    @keyup="updateStaticOfferPriceUSD"
+                                                    @keyup="updateOfferFixedPriceUSD"
                                                 />
                                                 <span class="text-uppercase d-flex align-items-center px-4">
                                                     {{offerCurrency}}
@@ -212,11 +218,11 @@
                                             >
                                                  <input 
                                                     type="numeric" 
-                                                    v-model="staticOfferPrice" 
+                                                    v-model="orderFixedPrice" 
                                                     class="form-control text-center nobg noborder flex-grow-1" 
                                                     placeholder="0" 
                                                     style="letter-spacing:0.1em"
-                                                    @keyup="calculateStaticLocalPrice"
+                                                    @keyup="updateOfferFixedPriceLocal"
                                                 />
                                                 <span class="text-uppercase d-flex align-items-center px-4">
                                                     USD
@@ -224,10 +230,10 @@
                                             </div>
 
                                         </div>
-                                            <div class="text-sm pt-2 text-danger">
-                                                {{$t("offer_static_price_notice",[
-                                                    `${formatMoneyAsText(staticOfferPriceLocal || 0)} ${offerCurrency}`,
-                                                    `${formatMoneyAsText(staticOfferPrice || 0)} USD`,
+                                            <div class="text-sm pt-2 text-danger" v-if="offerFixedPriceLocal.length != 0">
+                                                {{$t("offer_fixed_price_notice",[
+                                                    `${formatMoneyAsText(offerFixedPriceLocal || 0)} ${offerCurrency}`,
+                                                    `${formatMoneyAsText(offerFixedPrice || 0)} USD`,
                                                     cryptoAssetsData[offerAssetId].originalName
                                                 ])}}
                                             </div>
@@ -238,9 +244,9 @@
                                                 {{$t("final_offer_price_per_{asset}", [cryptoAssetsData[offerAssetId].originalName])}}: {{ formatMoneyAsText(staticOfferPrice) }} {{offerCurrency}}
                                             </div>
                                     </div>
-                                    <!-- end static pricing -->
+                                    <!-- end fixed pricing -->
 
-                                    <!-- dynamic pricing -->
+                                    <!-- dynamic /market pricing -->
                                     <div class="form-group my-5" v-else>
                                         <h5 class="mb-5">{{$t("profit_margin")}}</h5>
                                         <div class="mb-3 form-item-button d-flex flex-row justify-content-center align-items-center">
@@ -285,21 +291,52 @@
                                         </p>
                                     </div>
 
+                                    <!-- Trade Security Deposit -->
+                                    <div class="form-group my-5 mb-8">
+                                        <h5 class="mb-5">{{$t("security_deposit")}}</h5>
+                                        <div class="custom-control custom-checkbox mb-3">
+                                            <input  v-model="securityDeposit" class="custom-control-input" value="1" id="security_deposit" type="checkbox" />
+                                            <label class="custom-control-label" for="security_deposit">
+                                                <div>{{$t("enable")}}</div>
+                                                <p class="text-sm">{{$t("security_deposit_desc")}}</p>
+                                            </label>
+                                        </div>
+                                        <div class="my-2" v-show="securityDeposit == '1'">
+                                            <div class="mb-2">{{$t("security_deposit_rate")}}</div>
+                                            <div>
+                                                <input
+                                                    type="range"
+                                                    min="1"              
+                                                    max="10"                 
+                                                    step="1"                  
+                                                    id="securityDepositRateSlider"
+                                                    v-model="securityDepositRate"
+                                                />
+                                            </div>
+                                            <div class="text-sm d-flex flex-row justify-content-between">
+                                                <span v-for="(v,i) in [...Array(10).keys()]" :key="i">
+                                                    {{$t(v+1) + '%'}}
+                                                </span>
+                                            </div>
+                                            <div class="text-sm">
+                                                {{$t("security_deposit_rate_info",[securityDepositRate])}}
+                                            </div>
+                                        </div>
+                                    </div>
+
                                     <!-- order limit -->
                                     <div class="form-group my-5">
-                                        <h5 class="mb-5">{{$t("order_limit")}}</h5>
+                                        <h5 class="mb-5">{{$t("offer_trade_limits")}}</h5>
                                         
                                         <div class="d-flex align-items-center justify-content-center flex-column flex-md-row">
 
                                             <div class="pb-4 full-width">
+                                                <div class="mb-2">{{$t("minimum_trade_limit")}}</div>
                                                 <div class="form-item-button d-flex flex-row align-items-center">
-                                                    <span class="text-capitalize d-flex align-items-center px-4">
-                                                        {{$t("min")}}
-                                                    </span>
                                                     <input 
                                                         type="numeric" 
                                                         class="form-control text-center nobg noborder flex-grow-1" 
-                                                        placeholder="0" 
+                                                        :placeholder="$t('amount')" 
                                                         style="letter-spacing:0.1em"
                                                         v-model="orderMinLimitLocal"
                                                         @keyup="computeOrderLimitUSD('min')"
@@ -308,32 +345,23 @@
                                                         {{offerCurrency}}
                                                     </span>
                                                 </div>
-                                                <div class="text-sm  py-2">
-                                                  {{$t(`${offerType}_offer_min_order_desc`,[
-                                                      `${orderMinLimitLocal || 0} ${offerCurrency}`,
-                                                      `${orderMaxLimit || 0} USD`,
-                                                      offerType
-                                                    ]
-                                                  )}}
+                                                <div class="text-sm  py-2" v-if="minTradeLimit != null">
+                                                  {{minTradeLimit}} USD
                                                 </div>
                                             </div>
                                             
-                                            <div class="p-4 align-items-center font-weight-bold d-none d-md-flex">
-                                                <span class="position-relative" style="top:-35px;left:-3px;">
-                                                    -
-                                                </span>
+                                            <div class="align-items-center d-none d-md-flex">
+                                                &nbsp;
                                             </div>
                                             
                                             <div  class="pb-4 full-width">
+                                                <div class="mb-2">{{$t("maximum_trade_limit")}}</div>
                                                 <div class="form-item-button d-flex flex-row align-items-center">
-                                                    <span class="text-capitalize d-flex align-items-center px-4">
-                                                        {{$t("max")}}
-                                                    </span>
                                                     <input 
                                                         type="numeric" 
-                                                        v-model="orderMaxLimitLocal" 
+                                                        v-model="maxTradeLimitLocal" 
                                                         class="form-control text-center nobg noborder flex-grow-1" 
-                                                        placeholder="0" 
+                                                        :placeholder="$t('amount')" 
                                                         style="letter-spacing:0.1em"
                                                         @keyup="computeOrderLimitUSD('max')"
                                                     />
@@ -341,16 +369,20 @@
                                                         {{offerCurrency}}
                                                     </span>
                                                 </div>
-                                                <div class="text-sm py-2">
-                                                  {{$t(`${offerType}_offer_max_order_desc`,[
-                                                      `${orderMaxLimitLocal || 0} ${offerCurrency}`,
-                                                      `${orderMaxLimit || 0} USD`,
-                                                      offerType
-                                                    ]
-                                                  )}}
+                                                <div class="text-sm py-2 text-center" v-if="maxTradeLimit != null">
+                                                  {{maxTradeLimit}} USD
                                                 </div>
                                             </div>
 
+                                        </div>
+                                        <div class="text-sm">
+                                            {{$t("trade_limit_info")}}
+                                        </div>
+                                        <div class="alert alert-info my-2">
+                                            {{$t("minimum_trade_limit_info",[
+                                                `${minimumTradeLimitAmountLocal} ${offerCurrency}`,
+                                                `${minimumTradeLimitAmount} USD`
+                                            ])}}
                                         </div>
                                     </div>
                                     <!-- end order limit -->
@@ -380,9 +412,9 @@
                         </div>
                         <div class="flex-grow-1 d-flex pl-4 align-items-center justify-content-center flex-sm-column-reverse flex-md-row">
                             
-                            <div class="p-1 md-and-down-100pw flex-grow-1">
+                            <div class="p-1 md-and-down-100pw flex-grow-1 full-width">
                                 <button 
-                                    class="btn btn-info btn-block md-and-down-100pw" 
+                                    class="btn btn-info btn-block md-and-down-100pw full-width" 
                                     @click.prevent="goToPrevOrNextStep('previous')"
                                     :disabled="isPrevSetupDisabled"
                                     :readonly="isPrevSetupDisabled"
@@ -390,9 +422,9 @@
                                     {{$t("previous_set")}}
                                 </button>
                             </div>
-                            <div class="p-1 md-and-down-100pw flex-grow-1">
+                            <div class="p-1 md-and-down-100pw flex-grow-1 full-width">
                                 <button 
-                                    class="btn btn-success btn-block" 
+                                    class="btn btn-success btn-block full-width" 
                                     @click.prevent="goToPrevOrNextStep('next')"
                                     :disabled="isNextSetupDisabled"
                                     :readonly="isNextSetupDisabled"
@@ -418,6 +450,8 @@ import PaymentTypesModal from "../../components/partials/modals/PaymentTypes.vue
 import CountrySelect from '../../components/partials/CountrySelect.vue';
 import ChainLink from '../../classes/ChainLink'
 import CurrencyCore from '../../classes/CurrencyCore'
+import rangesliderJs from 'rangeslider-js'
+
 
 export default {
     name: "new_offer",
@@ -456,16 +490,21 @@ export default {
             profitMarginPercent: 1,
             profitMarginAmount: 0,
             offerPriceWithProfitMargin: 0,
-            offerPricingMode: "dynamic",
-            offerPricingTypeDesc: this.$t("offer_dynamic_pricing_desc"),
-            staticOfferPrice: 0,
-            staticOfferPriceLocal: 0,
+            offerPriceMode: "market",
+            offerFixedPrice: 0,
+            offerFixedPriceLocal: 0,
 
-            orderMinLimit: null,
-            orderMinLimitLocal: null,
-            orderMaxLimit: null,
-            orderMaxLimitLocal: null,
+            minTradeLimit: null,
+            minTradeLimitLocal: null,
+            maxTradeLimit: null,
+            maxTradeLimitLocal: null,
 
+            minimumTradeLimitAmount: 5,
+            minimumTradeLimitAmountLocal: 0,
+
+            //security deposit
+            securityDeposit: 0, //0 means disabled
+            securityDepositRate: 5
         }
     },
     watch: {
@@ -486,9 +525,6 @@ export default {
 
         profitMarginPercent(){ this.computeProfitMarginMath() },
 
-        offerPricingMode() { 
-            this.offerPricingTypeDesc = this.$t(`offer_${this.offerPricingMode}_pricing_desc`)
-        }
     },
 
     async beforeMount(){
@@ -520,6 +556,9 @@ export default {
         this.offerType = "buy";
 
         this.goToStepById("basic_setup")
+
+        //initialize security deposit slider
+        rangesliderJs.create(document.getElementById("securityDepositRateSlider"));
     },
 
     methods: {
@@ -702,6 +741,8 @@ export default {
             this.offerCurrencyRate = currencyRateStatus.getData()
             
             this.offerAssetPriceLocal = (this.offerAssetPriceFeed * this.offerCurrencyRate)
+
+            this.minimumTradeLimitAmountLocal = (this.offerAssetPriceFeed * this.minimumTradeLimitAmount)
             
             this.computeProfitMarginMath()
         },
@@ -726,31 +767,31 @@ export default {
         /**
          * update static offer price usd 
          */
-        updateStaticOfferPriceUSD(e){
+        updateOfferFixedPriceUSD(e){
             let value = parseFloat(e.target.value) || 0;
-            this.staticOfferPriceLocal = value;
-            this.staticOfferPrice = this.formatMoney( value / parseFloat(this.offerCurrencyRate) )
+            this.offerFixedPriceLocal = value;
+            this.offerFixedPrice = this.formatMoney( value / parseFloat(this.offerCurrencyRate) )
         },
 
         //calculate the local price  for static offer price
-        calculateStaticLocalPrice(e){
+        updateOfferFixedPriceLocal(e){
             let dom = this.$refs.staticLocalPriceInput;
-            let priceLocal = this.formatMoney(parseFloat(this.staticOfferPrice || 0) * parseFloat(this.offerCurrencyRate));
-            this.staticOfferPriceLocal = priceLocal;
+            let priceLocal = this.formatMoney(parseFloat(this.offerFixedPrice || 0) * parseFloat(this.offerCurrencyRate));
+            this.offerFixedPriceLocal = priceLocal;
             dom.value = priceLocal
         },
 
         /**
          * orderLimit
          */
-        computeOrderLimitUSD(limitType){
+        computeTradeLimitUSD(limitType){
 
             if(this.offerCurrency.toLowerCase() == "usd") return;
 
             if(limitType == 'min'){ 
-                this.orderMinLimit = this.formatMoney( this.orderMinLimitLocal / parseFloat(this.offerCurrencyRate) ) 
+                this.minTradeLimit = this.formatMoney( this.minTradeLimitLocal / parseFloat(this.offerCurrencyRate) ) 
             } else { 
-                this.orderMaxLimit = this.formatMoney( this.orderMaxLimitLocal / parseFloat(this.offerCurrencyRate) ) 
+                this.maxTradeLimit = this.formatMoney( this.maxTradeLimitLocal / parseFloat(this.offerCurrencyRate) ) 
             }
         }//end 
 
