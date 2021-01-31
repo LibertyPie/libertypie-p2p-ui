@@ -388,7 +388,43 @@
                                     </div>
                                     <!-- end order limit -->
 
-                                    
+                                    <!--Payment Window -->
+                                    <div class="form-group my-5 mt-6">
+                                        <h5 class="mb-5">{{$t("payment_window")}}</h5>
+                                        <div class="mb-3 form-item-button d-flex flex-row justify-content-center align-items-center">
+                                            <div>
+                                                <a  href="#" class="noborder text-gray-500 nobg px-4" @click.prevent="computePaymentWindow('sub')">
+                                                   <svg-img src="/assets/images/minus-solid.svg" alt="-" class="fill-gray-500" />
+                                                </a>
+                                            </div>
+
+                                            <div class="flex-grow-1">
+                                                <input 
+                                                    type="numeric" 
+                                                    v-model="offerPaymentWindow" 
+                                                    class="form-control text-center nobg noborder" 
+                                                    placeholder="0" 
+                                                    style="letter-spacing:0.1em"
+                                                />
+                                            </div>
+                                            <div class="px-4">
+                                                {{$t("minutes")}}
+                                            </div>
+                                            <div>
+                                                <a href="#" 
+                                                   class="noborder text-gray-500 nobg px-4" @click.prevent="computePaymentWindow('add')">
+                                                    <svg-img src="/assets/images/plus-solid.svg" alt="+" class="fill-gray-500" />
+                                                </a>
+                                            </div>    
+                                        </div>
+                                        <div v-if="paymentWindowError != ''" class="text-sm text-error my-2">
+                                            {{paymentWindowError}}
+                                        </div>
+                                        <div class="my-2 text-sm">
+                                            {{$t("payment_window_desc")}}
+                                        </div>
+                                     </div><!--end payment window time -->
+
                                 </div> <!-- end if no error -->
                             </div>
                             <!-- End Pricing Setup -->
@@ -451,10 +487,9 @@ import PaymentTypesModal from "../../components/partials/modals/PaymentTypes.vue
 import CountrySelect from '../../components/partials/CountrySelect.vue';
 import ChainLink from '../../classes/ChainLink'
 import CurrencyCore from '../../classes/CurrencyCore'
-import rangesliderJs from 'rangeslider-js'
 import noUiSlider from 'nouislider';
 import 'nouislider/distribute/nouislider.css';
-
+import offerConfig from "../../config/offer"
 
 export default {
     name: "new_offer",
@@ -513,7 +548,11 @@ export default {
 
             //security deposit
             securityDeposit: 0, //0 means disabled
-            securityDepositRate: 5
+            securityDepositRate: 5,
+
+            //payment window 
+            paymentWindowError: "",
+            offerPaymentWindow: 15
         }
     },
     watch: {
@@ -759,6 +798,21 @@ export default {
                     return false; 
                 }
             }
+
+
+            //lets check if paymentWindowError has an error
+            if(this.paymentWindowError != ''){
+                 this.errorNotif(this.paymentWindowError)
+                 return false;
+            }
+
+            //lets check if we have paymentWindow
+            if(!this.offerPaymentWindow || this.offerPaymentWindow.toString().trim().length == 0){
+                this.errorNotif(this.$t("offer_payment_window_required"))
+                return false; 
+            }
+
+            return true;
         }, //end validate
 
         /**
@@ -775,7 +829,7 @@ export default {
             }
             
             //price 
-            this.offerAssetPriceFeed = priceFeedStatus.getData()
+            this.offerAssetPriceFeed = parseFloat(priceFeedStatus.getData() || 0)
 
            this.computeOfferAssetLocalPrice()
 
@@ -811,9 +865,9 @@ export default {
             
             this.offerAssetPriceLocal = (this.offerAssetPriceFeed * this.offerCurrencyRate)
 
-            this.minimumTradeLimitAmountLocal = (this.offerCurrencyRate * this.minimumTradeLimitAmount)
+            this.minimumTradeLimitAmountLocal = this.formatMoney(this.offerCurrencyRate * this.minimumTradeLimitAmount)
 
-            this.minTradeLimitLocal = (this.minTradeLimit * this.offerCurrencyRate)
+            this.minTradeLimitLocal = this.formatMoney(this.minTradeLimit * this.offerCurrencyRate)
             
             this.computeProfitMarginMath()
         },
@@ -827,14 +881,40 @@ export default {
             else { this.profitMarginPercent = (pm - 0.1).toFixed(1); }
 
         },
+        
+        //compute payment window
+        computePaymentWindow(mode){
+
+             this.paymentWindowError = "";
+
+            let pw = parseInt(this.offerPaymentWindow.toString())
+
+            if(mode=='add'){
+                this.offerPaymentWindow = pw + 1;
+            } else {
+
+                let sub = pw - 1;
+
+                let paymentWindowLimit = offerConfig.payment_window_limit || 10;
+
+                if(sub < paymentWindowLimit){
+                    this.paymentWindowError = this.$t("payment_window_too_low",[`${paymentWindowLimit}`])
+                    return;
+                }
+
+                this.offerPaymentWindow = sub;
+            }
+        },
 
         computeProfitMarginMath(){
 
-            this.profitMarginAmount = this.formatMoney((this.profitMarginPercent / 100) * this.offerAssetPriceFeed);
+            let assetPrice = parseFloat(this.offerAssetPriceFeed)
+
+            this.profitMarginAmount = this.formatMoney((this.profitMarginPercent / 100) * assetPrice);
             
             this.profitMarginAmountLocal = ( this.profitMarginAmount * this.offerCurrencyRate)
 
-            this.offerPriceWithProfitMargin = this.formatMoney(this.offerAssetPriceFeed + parseFloat(this.profitMarginAmount));
+            this.offerPriceWithProfitMargin = this.formatMoney(assetPrice + parseFloat(this.profitMarginAmount));
             
             this.offerPriceWithProfitMarginLocal =  this.formatMoney( this.offerPriceWithProfitMargin * this.offerCurrencyRate)
 

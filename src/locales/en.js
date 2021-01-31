@@ -111,5 +111,9 @@ export default {
     "unknown_offer_pricing_mode": "Unknown pricing mode",
     "offer_fixed_price_required": "Offer fixed price is required",
     "offer_fixed_price_cannot_be_zero": "Offer fixed price cannot be less or equal zero (0)",
-    "min_trade_limit_error": "Minimum trade limit cannot be less than {0} ({1})"
+    "min_trade_limit_error": "Minimum trade limit cannot be less than {0} ({1})",
+    "payment_window": "Payment Window",
+    "payment_window_too_low": "Payment window cannot be less than {0} minutes",
+    "payment_window_desc": "Payment window is the duration a trade partner has to make payment. The trade will be cancelled if the 'Paid' button is not clicked within the specified time.",
+    "offer_payment_window_required": "Offer payment window is required"
 } 

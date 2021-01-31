@@ -131,7 +131,7 @@ a, a:hover, a:active, a:visited{  text-decoration: none !important;}
     top:-1px;
 }
 
-.error_msg{color: $danger; }
+.error_msg, .text-error {color: $danger; }
 
 
 #paymentTypesModal {
