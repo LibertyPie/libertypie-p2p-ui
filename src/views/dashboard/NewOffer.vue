@@ -21,6 +21,7 @@
                             <a class="step active" 
                                 id="basic_setup_tab" 
                                 data-content="basic_setup" 
+                                 data-validator="ValidateBasicSetup"
                             >
                                 <div class="inner">
                                     <span class="dot"></span>
@@ -160,6 +161,7 @@
                               id="pricing_setup"
                               data-next-step="final_setup"
                               data-prev-step="basic_setup"
+                              data-validator="validatePricingStep"
                             >
                                 <div v-if="stepsFatalErrors['pricing_setup'] != null">
                                     <div class="alert alert-danger text-center">
@@ -188,7 +190,7 @@
                                    </div>
 
                                     <!--fixed pricing -->
-                                    <div class="form-group my-5" v-if="offerPricingMode == 'fixed'">
+                                    <div class="form-group my-5" v-show="offerPricingMode == 'fixed'">
                                         <h5 class="mb-5">{{$t("offer_price")}}</h5>
                                         
                                         <div class="d-flex align-items-center flex-column flex-md-row">
@@ -199,7 +201,7 @@
                                                     class="form-control text-center nobg noborder flex-grow-1" 
                                                     placeholder="0" 
                                                     style="letter-spacing:0.1em"
-                                                    ref="offerFixedPriceLocal"
+                                                    ref="offerFixedPriceLocalInput"
                                                     value="0"
                                                     @keyup="updateOfferFixedPriceUSD"
                                                 />
@@ -219,7 +221,7 @@
                                             >
                                                  <input 
                                                     type="numeric" 
-                                                    v-model="orderFixedPrice" 
+                                                    v-model="offerFixedPrice" 
                                                     class="form-control text-center nobg noborder flex-grow-1" 
                                                     placeholder="0" 
                                                     style="letter-spacing:0.1em"
@@ -231,7 +233,7 @@
                                             </div>
 
                                         </div>
-                                            <div class="text-sm pt-2 text-danger" v-if="offerFixedPriceLocal.length != 0">
+                                            <div class="alert alert-warning my-2" v-if="offerFixedPriceLocal.length != 0">
                                                 {{$t("offer_fixed_price_notice",[
                                                     `${formatMoneyAsText(offerFixedPriceLocal || 0)} ${offerCurrency}`,
                                                     `${formatMoneyAsText(offerFixedPrice || 0)} USD`,
@@ -248,7 +250,7 @@
                                     <!-- end fixed pricing -->
 
                                     <!-- dynamic /market pricing -->
-                                    <div class="form-group my-5" v-else>
+                                    <div class="form-group my-5" v-show="offerPricingMode == 'market'">
                                         <h5 class="mb-5">{{$t("profit_margin")}}</h5>
                                         <div class="mb-3 form-item-button d-flex flex-row justify-content-center align-items-center">
                                             <div>
@@ -336,7 +338,7 @@
                                                     <input 
                                                         type="numeric" 
                                                         class="form-control text-center nobg noborder flex-grow-1" 
-                                                        :placeholder="$t('amount')" 
+                                                        :placeholder="$t('type..')" 
                                                         style="letter-spacing:0.1em"
                                                         v-model="minTradeLimitLocal"
                                                         @keyup="computeTradeLimitUSD('min')"
@@ -345,7 +347,7 @@
                                                         {{offerCurrency}}
                                                     </span>
                                                 </div>
-                                                <div class="text-sm  py-2">
+                                                <div class="text-sm  py-2 text-muted">
                                                   {{minTradeLimit || 0}} USD
                                                 </div>
                                             </div>
@@ -361,7 +363,7 @@
                                                         type="numeric" 
                                                         v-model="maxTradeLimitLocal" 
                                                         class="form-control text-center nobg noborder flex-grow-1" 
-                                                        :placeholder="$t('amount')" 
+                                                        :placeholder="$t('type..')" 
                                                         style="letter-spacing:0.1em"
                                                         @keyup="computeTradeLimitUSD('max')"
                                                     />
@@ -369,9 +371,8 @@
                                                         {{offerCurrency}}
                                                     </span>
                                                 </div>
-                                                <div class="text-sm py-2">
-                                                  <span v-if="maxTradeLimit != null">{{maxTradeLimit}} USD</span>
-                                                  <span v-else>{{$t("uncapped_max_limit")}}</span>
+                                                <div class="text-sm py-2 text-muted">
+                                                   {{maxTradeLimit || 0}} USD
                                                 </div>
                                             </div>
 
@@ -436,7 +437,11 @@
                                 id="final_setup"
                                 data-prev-step="pricing_setup"
                             >
-                                Three ---
+                                
+                                <div class="form-group my-5 mt-6">
+                                    <h5 class="mb-5">{{$t("offer_terms")}}</h5>
+
+                                </div>
                             </div>
 
                         </div> <!-- end step_contents -->
@@ -618,7 +623,10 @@ export default {
         })
         
         slider.noUiSlider.on("slide", (value)=> this.securityDepositRate = value[0]);
+        
     },
+
+    
 
     methods: {
 
@@ -636,7 +644,7 @@ export default {
         },
 
         //go to next step
-        goToPrevOrNextStep(type){
+        async goToPrevOrNextStep(type){
 
             this.isNextSetupDisabled = false;
             this.isPrevSetupDisabled = false;
@@ -663,11 +671,29 @@ export default {
 
             } else {
 
-                if(this.currentStepId == "basic_setup"){
-                    if(!this.validateBasicStep()){
+                //lets do verification of the data, if success we move on
+                let validatorFuncName = curStepEl.data("validator") || null;
+
+                //console.log(validatorFuncName)
+
+                if(validatorFuncName != null){
+
+                    if(this[validatorFuncName]  == undefined){
+                        this.errorNotif("validation_method_not_found",[validatorFuncName])
+                        return false;
+                    }
+                  
+                    let isValidationSuccess = await this[validatorFuncName]();
+                    
+                    //console.log(isValidationSuccess)
+
+                    //if validation was not success, dont continue
+                    if(!isValidationSuccess){
                         return false;
                     }
                 }
+
+                //return false;
 
                 $("#"+nextStep+"_tab").addClass("active")
 
@@ -692,6 +718,7 @@ export default {
                 if(this.stepsFatalErrors[prevOrNextStepId] != null){
                     this.isNextSetupDisabled = true;
                 }
+                
             }
 
             let stepContentDoms = $("#step_wizard_contents").find('.step_content')
@@ -703,7 +730,9 @@ export default {
             $("#"+this.currentStepId).addClass("active")
         },//end 
 
-
+        /**
+         * validate basic step
+         */
         async validateBasicStep(){
 
             //validate offerType 
@@ -754,9 +783,9 @@ export default {
         /**
          * validatePricing Setup
          */
-        async validatePricingSetup() {
+        async validatePricingStep() {
 
-            if(["fixed","market"].includes(this.offerPricingMode)){
+            if(!["fixed","market"].includes(this.offerPricingMode)){
                 this.errorNotif(this.$t("unknown_offer_pricing_mode"))
                 return false;
             }
@@ -768,17 +797,20 @@ export default {
 
             //if fixed pricing
 
-            if(this.offerPricingMode == "fixed" && typeof this.offerFixedPrice !== 'number' ){
-                this.errorNotif(this.$t("offer_fixed_price_required"))
-                return false;
+            if(this.offerPricingMode == "fixed"){
+
+                if(typeof this.offerFixedPrice !== 'number'){
+                    this.errorNotif(this.$t("offer_fixed_price_required"))
+                    return false;
+                }
+
+                if(parseFloat(this.offerFixedPrice) <= 0){
+                    this.errorNotif(this.$t("offer_fixed_price_cannot_be_zero"))
+                    return false;
+                }
             }
 
-            if(parseFloat(this.offerFixedPrice) <= 0){
-                this.errorNotif(this.$t("offer_fixed_price_cannot_be_zero"))
-                return false;
-            }
-
-            if(!this.minTradeLimit || parseFloat(this.minTradeLimit) == 0){
+            if(!this.minTradeLimit || parseFloat(this.minTradeLimit) <= 0){
                 this.errorNotif(this.$t("min_trade_limit_error",[
                     `${5 * this.offerCurrencyRate} ${this.offerCurrency}`,
                     `5 USD`
@@ -786,6 +818,16 @@ export default {
 
                 return false;
             }
+
+            if(!this.maxTradeLimit || parseFloat(this.maxTradeLimit) <= 0){
+                 this.errorNotif(this.$t("max_trade_limit_required"));
+                 return false;
+            }
+
+            if(this.minTradeLimit > this.maxTradeLimit){
+                this.errorNotif(this.$t("min_trade_limit_exceeds_max_limit"));
+                return false;
+            }   
 
             //if security deposit is enabled lets validate it 
             if(this.securityDeposit == '1'){
@@ -810,6 +852,14 @@ export default {
             if(!this.offerPaymentWindow || this.offerPaymentWindow.toString().trim().length == 0){
                 this.errorNotif(this.$t("offer_payment_window_required"))
                 return false; 
+            }
+
+            //finally
+            let paymentWindowLimit = offerConfig.payment_window_limit || 10;
+
+            if(this.offerPaymentWindow < paymentWindowLimit){
+                this.errorNotif(this.$t("payment_window_too_low",[paymentWindowLimit]))
+                return false;                
             }
 
             return true;
@@ -869,6 +919,10 @@ export default {
 
             this.minTradeLimitLocal = this.formatMoney(this.minTradeLimit * this.offerCurrencyRate)
             
+            this.offerFixedPrice = this.formatMoney(this.offerAssetPriceFeed);
+
+            this.updateOfferFixedPriceLocal();
+
             this.computeProfitMarginMath()
         },
 
@@ -930,11 +984,13 @@ export default {
         },
 
         //calculate the local price  for static offer price
-        updateOfferFixedPriceLocal(e){
-            let dom = this.$refs.staticLocalPriceInput;
-            let priceLocal = this.formatMoney(parseFloat(this.offerFixedPrice || 0) * parseFloat(this.offerCurrencyRate));
+        updateOfferFixedPriceLocal(){
+
+            let dom = this.$refs.offerFixedPriceLocalInput;
+            let priceLocal = this.formatMoney(parseFloat(this.offerFixedPrice.toString()) * parseFloat(this.offerCurrencyRate));
             this.offerFixedPriceLocal = priceLocal;
             dom.value = priceLocal
+           
         },
 
         /**

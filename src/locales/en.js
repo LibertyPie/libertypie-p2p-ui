@@ -115,5 +115,11 @@ export default {
     "payment_window": "Payment Window",
     "payment_window_too_low": "Payment window cannot be less than {0} minutes",
     "payment_window_desc": "Payment window is the duration a trade partner has to make payment. The trade will be cancelled if the 'Paid' button is not clicked within the specified time.",
-    "offer_payment_window_required": "Offer payment window is required"
+    "offer_payment_window_required": "Offer payment window is required",
+    "validation_method_not_found": "Validation method {0} was not found",
+    "max_trade_limit_required": "Maximum trade limit  amount required",
+    "min_trade_limit_exceeds_max_limit": "Minimum trade limit amount cannot exceed maximum trade limit",
+    "type..": "Type..",
+    "offer_terms": "Offer Terms",
+    "trade_instructions": "Trade Instructions"
 } 
