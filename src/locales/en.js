@@ -133,5 +133,11 @@ export default {
 
     "minimum_reputation_desc": "The minimum reputation required before anyone can open a trade to this offer",
 
-    "stars": "Stars"
+    "stars": "Stars",
+
+    "minimum_trades": "Minimum Trades",
+
+    "minimum_trade_desc": "The minimum trades required by anyone who wants to open a trade to this offer",
+
+    "confirm_and_save": "Confirm & Save"
 } 

@@ -16,6 +16,10 @@
             />
         </div>
 
+         <div class="px-4" v-if="unitLabel != null">
+            {{unitLabel}}
+        </div>
+
         <div>
             <a href="#" 
                 class="noborder text-gray-500 nobg px-4" @click.prevent="computeToggle('add')">
@@ -47,6 +51,16 @@ export default {
         step: {
             type: Number,
             default: 1 
+        },
+
+        unitLabel: {
+            type: String,
+            default: null
+        },
+
+        decimals: {
+            type: Number,
+            default: 0
         }
     },
     data(){ 
@@ -54,15 +68,10 @@ export default {
             inputValue: this.default
         }    
     },
-    mounted(){
-
-        if(this.default != null) {
-            this.$emit("change",this.default)
-        }
-    },
+   
     watch: {
         inputValue(){
-            this.$emit("change",this.inputValue)
+            this.$emit("change",Number.parseFloat(this.inputValue.toString()).toFixed(this.decimals))
         }
     },
 
@@ -71,7 +80,8 @@ export default {
             let value = parseFloat(this.inputValue.toString())
 
             let step = parseFloat(this.step.toString())
-
+            
+            let result;
 
             if(mode == "sub"){
 
@@ -81,7 +91,7 @@ export default {
                      if ((value - step) < min) return;
                 }
 
-                this.inputValue = value - step;
+                result = value - step;
             } else {
                 
                 if(this.max != null){
@@ -89,8 +99,10 @@ export default {
                     if((value + step) > max) return;
                 }
 
-                this.inputValue = value + step;
+                result = (value + step);
             }
+            
+            this.inputValue = Number.parseFloat(result.toString()).toFixed(this.decimals)
         }
     }
 }

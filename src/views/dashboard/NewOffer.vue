@@ -252,32 +252,16 @@
                                     <!-- dynamic /market pricing -->
                                     <div class="form-group my-5" v-show="offerPricingMode == 'market'">
                                         <h5 class="mb-5">{{$t("profit_margin")}}</h5>
-                                        <div class="mb-3 form-item-button d-flex flex-row justify-content-center align-items-center">
-                                            <div>
-                                                <a  href="#" class="noborder text-gray-500 nobg px-4" @click.prevent="computeProfitMarginToggle('subtract')">
-                                                   <svg-img src="/assets/images/minus-solid.svg" alt="-" class="fill-gray-500" />
-                                                </a>
-                                            </div>
 
-                                            <div class="flex-grow-1">
-                                                <input 
-                                                    type="numeric" 
-                                                    v-model="profitMarginPercent" 
-                                                    class="form-control text-center nobg noborder" 
-                                                    placeholder="0" 
-                                                    style="letter-spacing:0.1em"
-                                                />
-                                            </div>
-                                            <div class="px-4">
-                                                %
-                                            </div>
-                                            <div>
-                                                <a href="#" 
-                                                   class="noborder text-gray-500 nobg px-4" @click.prevent="computeProfitMarginToggle('add')">
-                                                    <svg-img src="/assets/images/plus-solid.svg" alt="+" class="fill-gray-500" />
-                                                </a>
-                                            </div>    
-                                        </div>
+                                        <NumberInput 
+                                            :default="profitMarginPercent"
+                                            :min="0"
+                                            :step="0.1"
+                                            unitLabel="%"
+                                            :decimals="1"
+                                            @change="no => profitMarginPercent = no"
+                                        />
+                                   
                                         <p>
                                             <div class="text-sm">{{$t("profit_margin_desc")}}</div>
                                             <div class="font-weight-bold text-sm">
@@ -392,32 +376,15 @@
                                     <!--Payment Window -->
                                     <div class="form-group my-5 mt-6">
                                         <h5 class="mb-5">{{$t("payment_window")}}</h5>
-                                        <div class="mb-3 form-item-button d-flex flex-row justify-content-center align-items-center">
-                                            <div>
-                                                <a  href="#" class="noborder text-gray-500 nobg px-4" @click.prevent="computePaymentWindow('sub')">
-                                                   <svg-img src="/assets/images/minus-solid.svg" alt="-" class="fill-gray-500" />
-                                                </a>
-                                            </div>
 
-                                            <div class="flex-grow-1">
-                                                <input 
-                                                    type="numeric" 
-                                                    v-model="offerPaymentWindow" 
-                                                    class="form-control text-center nobg noborder" 
-                                                    placeholder="0" 
-                                                    style="letter-spacing:0.1em"
-                                                />
-                                            </div>
-                                            <div class="px-4">
-                                                {{$t("minutes")}}
-                                            </div>
-                                            <div>
-                                                <a href="#" 
-                                                   class="noborder text-gray-500 nobg px-4" @click.prevent="computePaymentWindow('add')">
-                                                    <svg-img src="/assets/images/plus-solid.svg" alt="+" class="fill-gray-500" />
-                                                </a>
-                                            </div>    
-                                        </div>
+                                         <NumberInput 
+                                            :default="offerPaymentWindow"
+                                            :min="minOfferPaymentWindow"
+                                            :step="1"
+                                            :unitLabel="$t('minutes')"
+                                            @change="no => offerPaymentWindow = no"
+                                        />
+
                                         <div v-if="paymentWindowError != ''" class="text-sm text-error my-2">
                                             {{paymentWindowError}}
                                         </div>
@@ -466,31 +433,13 @@
 
                                 <div class="form-group my-5 mt-6">
                                     <h5 class="mb-5">{{$t("partner_minimum_reputation")}}</h5>
-
-                                        <div class="mb-3 form-item-button d-flex flex-row justify-content-center align-items-center">
-                                        <div>
-                                            <a  href="#" class="noborder text-gray-500 nobg px-4" @click.prevent="computeMinReputation('sub')">
-                                                <svg-img src="/assets/images/minus-solid.svg" alt="-" class="fill-gray-500" />
-                                            </a>
-                                        </div>
-
-                                        <div class="flex-grow-1">
-                                            <input 
-                                                type="numeric" 
-                                                v-model="minimumReputation" 
-                                                class="form-control text-center nobg noborder" 
-                                                placeholder="0" 
-                                                style="letter-spacing:0.1em"
-                                            />
-                                        </div>
-                                    
-                                        <div>
-                                            <a href="#" 
-                                                class="noborder text-gray-500 nobg px-4" @click.prevent="computeMinReputation('add')">
-                                                <svg-img src="/assets/images/plus-solid.svg" alt="+" class="fill-gray-500" />
-                                            </a>
-                                        </div>    
-                                    </div>
+                                        
+                                    <NumberInput 
+                                        :default="minimumReputation"
+                                        :min="0"
+                                        :step="1"
+                                        @change="no => minimumReputation = no"
+                                    />
 
                                     <div class="text-sm pb-5 text-gray-600" style="line-height:24px;">
                                         {{$t("minimum_reputation_desc")}}
@@ -510,6 +459,17 @@
                                     <div class="text-sm pb-5 text-gray-600" style="line-height:24px;">
                                         {{$t("minimum_trade_desc")}}
                                     </div>
+
+                                    <div class="my-5">
+                                        <button 
+                                            class="btn btn-success btn-block full-width text-truncate" 
+                                            @click.prevent="goToPrevOrNextStep('next')"
+                                            :disabled="isNextSetupDisabled"
+                                            :readonly="isNextSetupDisabled"
+                                        >
+                                            {{$t("confirm_and_save")}}
+                                        </button>
+                                    </div>
                                 </div>
 
                             </div> <!-- end step_contents -->
@@ -524,17 +484,19 @@
                         </div>
                         <div class="flex-grow-1 d-flex pl-4 align-items-center justify-content-center flex-sm-column-reverse flex-md-row">
                             
-                            <div class="p-1 md-and-down-100pw flex-grow-1 full-width">
+                            
+                            <div v-if="showPrevStepBtn"  class="p-1 md-and-down-100pw flex-grow-1 full-width">
                                 <button 
                                     class="btn btn-info btn-block md-and-down-100pw full-width text-truncate" 
                                     @click.prevent="goToPrevOrNextStep('previous')"
                                     :disabled="isPrevSetupDisabled"
                                     :readonly="isPrevSetupDisabled"
+                                     v-show="showPrevStepBtn"
                                 >
                                     {{$t("previous_set")}}
                                 </button>
                             </div>
-                            <div class="p-1 md-and-down-100pw flex-grow-1 full-width">
+                            <div v-if="showNextStepBtn" class="p-1 md-and-down-100pw flex-grow-1 full-width">
                                 <button 
                                     class="btn btn-success btn-block full-width text-truncate" 
                                     @click.prevent="goToPrevOrNextStep('next')"
@@ -574,6 +536,10 @@ export default {
       
        return {
             breadcrumbData: [],
+
+            showNextStepBtn: true,
+            showPrevStepBtn: true,
+
             offerType: '',
             offerTypeDesc: '',
             cryptoAssetsData: [],
@@ -629,6 +595,8 @@ export default {
             //payment window 
             paymentWindowError: "",
             offerPaymentWindow: 15,
+
+            minOfferPaymentWindow: offerConfig.payment_window_limit || 10,
 
             minimumReputation: 0,
 
@@ -724,6 +692,9 @@ export default {
             this.isNextSetupDisabled = false;
             this.isPrevSetupDisabled = false;
 
+            this.showNextStepBtn = true;
+            this.showPrevStepBtn = true;
+            
             let curStepEl = $("#"+this.currentStepId);
             let curStepTabEl = $("#"+this.currentStepId+"_tab")
 
@@ -801,8 +772,19 @@ export default {
             stepContentDoms.removeClass('active')
             
             this.currentStepId = prevOrNextStepId
+            
+             let currentStepContentDom = $("#"+this.currentStepId)
 
-            $("#"+this.currentStepId).addClass("active")
+            currentStepContentDom.addClass("active")
+
+            //lets check if the current has next and prev btn
+            if(!currentStepContentDom.data("nextStep")){
+                this.showNextStepBtn = false;
+            }
+
+            if(!currentStepContentDom.data("prevStep")){
+                this.showPrevStepBtn = false;
+            }
         },//end 
 
         /**
@@ -1003,59 +985,7 @@ export default {
             this.computeProfitMarginMath()
         },
 
-        // compute price margin
-        computeProfitMarginToggle(mode){
-
-            let pm = parseFloat(this.profitMarginPercent.toString())
-            
-            if(mode=='add'){ this.profitMarginPercent = (pm + 0.1).toFixed(1); } 
-            else { this.profitMarginPercent = (pm - 0.1).toFixed(1); }
-
-        },
-
-        // compute price margin
-        computeMinReputation(mode){
-
-            let mr = parseFloat(this.minimumReputation.toString())
-            
-            if(mode=='add'){ 
-
-                if(mr+1 > 10) return;
-
-                this.minimumReputation = (mr + 1)
-            } else { 
-
-                 if(mr-1 < 0) return;
-
-                this.minimumReputation = (mr - 1) 
-            }
-
-        },
-        
-        //compute payment window
-        computePaymentWindow(mode){
-
-             this.paymentWindowError = "";
-
-            let pw = parseInt(this.offerPaymentWindow.toString())
-
-            if(mode=='add'){
-                this.offerPaymentWindow = pw + 1;
-            } else {
-
-                let sub = pw - 1;
-
-                let paymentWindowLimit = offerConfig.payment_window_limit || 10;
-
-                if(sub < paymentWindowLimit){
-                    this.paymentWindowError = this.$t("payment_window_too_low",[`${paymentWindowLimit}`])
-                    return;
-                }
-
-                this.offerPaymentWindow = sub;
-            }
-        },
-
+      
         computeProfitMarginMath(){
 
             let assetPrice = parseFloat(this.offerAssetPriceFeed)
