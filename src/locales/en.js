@@ -121,5 +121,17 @@ export default {
     "min_trade_limit_exceeds_max_limit": "Minimum trade limit amount cannot exceed maximum trade limit",
     "type..": "Type..",
     "offer_terms": "Offer Terms",
-    "trade_instructions": "Trade Instructions"
+    "trade_instructions": "Trade Instructions",
+    "profit_margin_required": "Profit margin required",
+    "write_your_terms_here": "Write your terms here",
+    "offer_terms_desc": "This clearly lists the do's and don'ts of the offer, what the trade partner should expect based on your terms & your conditions",
+    "trade_instructions_desc": "Carefully list all the instructions for the trade, this includes payment information and other useful information the trade partner is required to know",
+
+    "write_your_instructions_here": "Write your instructions here",
+
+    "partner_minimum_reputation": "Minimum Reputation",
+
+    "minimum_reputation_desc": "The minimum reputation required before anyone can open a trade to this offer",
+
+    "stars": "Stars"
 } 
