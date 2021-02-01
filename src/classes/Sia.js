@@ -40,11 +40,11 @@ export default class Sia {
 
             let client = new SkynetClient();
 
-            let result = await client.uploadFile(file);
+            const { skylink } = await client.uploadFile(file);
 
-            console.log(result)
+            console.log(skylink)
 
-            return Status.successPromise("")
+            return Status.successPromise("",skylink)
         } catch(e){
             Logger.error("Sia::save: Failed to save file data "+filename,e)
             return Status.errorPromise(window._vue.$t("failed_to_save_file_to_sia"))

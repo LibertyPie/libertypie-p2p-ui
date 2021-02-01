@@ -498,7 +498,7 @@
                                 <button 
                                     v-else
                                     class="btn bg-pink btn-block full-width text-truncate py-5 v-center-sticky" 
-                                    @click.prevent=""
+                                    @click.prevent="doConfirmAndSaveOffer"
                                 >
                                     {{$t("confirm_and_save")}}
                                 </button>
@@ -927,6 +927,29 @@ export default {
 
             return true;
         }, //end validate
+
+        /**
+         * validate final step
+         */
+        async validateFinalStep(){
+
+        },
+
+        /**
+         * doConfirmAndSaveOffer
+         */
+        async doConfirmAndSaveOffer() {
+
+            //lets  revalidate all the 3 steps 
+            let isBasicStepValid = this.validateBasicStep()
+
+            if(!isBasicStepValid){
+                return;
+            }
+
+            //lets validate pricing step
+            let isPricingStepValid = this.validatePricingStep()
+        }, //end fun 
 
         /**
          * fetch selected asset price feed
