@@ -1,4 +1,4 @@
-.sidebar{
+#sidenav{
     border-radius: 10px;
     width: 280px;
 
@@ -12,6 +12,11 @@
     transition: all 0.1s linear;
     padding-top: 20px;
     padding-bottom: 25px;
+
+    position: sticky;
+
+    top: 10;
+    bottom: 10;
 
     &.nav-collapsed {
         width: 80px;

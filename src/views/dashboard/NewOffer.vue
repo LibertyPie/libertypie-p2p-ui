@@ -460,16 +460,6 @@
                                         {{$t("minimum_trade_desc")}}
                                     </div>
 
-                                    <div class="my-5">
-                                        <button 
-                                            class="btn btn-success btn-block full-width text-truncate" 
-                                            @click.prevent="goToPrevOrNextStep('next')"
-                                            :disabled="isNextSetupDisabled"
-                                            :readonly="isNextSetupDisabled"
-                                        >
-                                            {{$t("confirm_and_save")}}
-                                        </button>
-                                    </div>
                                 </div>
 
                             </div> <!-- end step_contents -->
@@ -478,34 +468,42 @@
 
                     </div> <!--end row -->
 
-                    <div class="col-12 col-md-12 col-lg-4 d-flex flex-row justify-content-center">
+                    <div id="nextPrevBtnParent" class="col-12 col-md-12 col-lg-4 d-flex flex-row justify-content-center">
                         <div class="vdivider d-none d-lg-inline-block">
                             <div class="inner"></div>
                         </div>
-                        <div class="flex-grow-1 d-flex pl-4 align-items-center justify-content-center flex-sm-column-reverse flex-md-row">
+                        <div id="nextPrevBtn" class="flex-grow-1 d-flex pl-4  justify-content-center flex-sm-column-reverse flex-md-row ">
                             
-                            
-                            <div v-if="showPrevStepBtn"  class="p-1 md-and-down-100pw flex-grow-1 full-width">
+                            <div class="p-1 md-and-down-100pw flex-grow-1 full-width">
                                 <button 
-                                    class="btn btn-info btn-block md-and-down-100pw full-width text-truncate" 
+                                    class="btn btn-info btn-block md-and-down-100pw full-width text-truncate py-5 v-center-sticky" 
                                     @click.prevent="goToPrevOrNextStep('previous')"
-                                    :disabled="isPrevSetupDisabled"
-                                    :readonly="isPrevSetupDisabled"
-                                     v-show="showPrevStepBtn"
+                                    :disabled="!showPrevStepBtn"
+                                    :readonly="!showPrevStepBtn"
                                 >
                                     {{$t("previous_set")}}
                                 </button>
                             </div>
-                            <div v-if="showNextStepBtn" class="p-1 md-and-down-100pw flex-grow-1 full-width">
+                            <div class="p-1 md-and-down-100pw flex-grow-1 full-width">
                                 <button 
-                                    class="btn btn-success btn-block full-width text-truncate" 
+                                    v-if="showNextStepBtn"
+                                    class="btn btn-success btn-block full-width text-truncate py-5 v-center-sticky" 
                                     @click.prevent="goToPrevOrNextStep('next')"
-                                    :disabled="isNextSetupDisabled"
-                                    :readonly="isNextSetupDisabled"
+                                    :disabled="!showNextStepBtn"
+                                    :readonly="!showNextStepBtn"
                                 >
                                     {{$t("next_step")}}
                                 </button>
+
+                                <button 
+                                    v-else
+                                    class="btn bg-pink btn-block full-width text-truncate py-5 v-center-sticky" 
+                                    @click.prevent=""
+                                >
+                                    {{$t("confirm_and_save")}}
+                                </button>
                             </div>
+
                         </div>
                     </div>
                 </div>
@@ -528,6 +526,7 @@ import noUiSlider from 'nouislider';
 import 'nouislider/distribute/nouislider.css';
 import offerConfig from "../../config/offer"
 import NumberInput from '../../components/partials/NumberInput.vue'
+
 
 export default {
     name: "new_offer",
@@ -672,6 +671,11 @@ export default {
     
 
     methods: {
+
+        handleStickeyBtns(){
+
+        
+        },
 
         async handleOnPaymenMethodSelect(info){
             this.offerPaymentMethodInfo = info

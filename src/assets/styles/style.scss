@@ -133,6 +133,18 @@ a, a:hover, a:active, a:visited{  text-decoration: none !important;}
 
 .error_msg, .text-error {color: $danger; }
 
+.v-center-sticky {
+    position: -webkit-sticky; /* Safari */
+    position: sticky;
+    bottom: 50%;
+    top:50%;
+
+    @include media-breakpoint-down(sm) {
+        position: relative;
+        bottom: auto;
+        top: auto;
+    }
+}
 
 #paymentTypesModal {
     
@@ -389,3 +401,9 @@ label {
 }
 
 .full-width{ width: 100%; }
+
+.bg-pink {
+    background: #e91e63;
+    color: #ffffff;
+    color: rgba(255,255,255,0.8);
+}

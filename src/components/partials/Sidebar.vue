@@ -64,6 +64,7 @@
 
 <script>
 
+import stickybits from 'stickybits'
 
 export default {
 
@@ -82,6 +83,17 @@ export default {
     },
     mounted(){
         
+        let stickybitsInstancetoBeUpdated = stickybits("#sidenav",{
+            stickyBitStickyOffset: 20
+        });
+
+        window.addEventListener("resize", () => {
+            stickybitsInstancetoBeUpdated.update();
+        });
+        // when the url hash changes
+        window.addEventListener("hashchange", () => {
+            stickybitsInstancetoBeUpdated.update();
+        });
     },
     watch: {
         isCollapsed(){
