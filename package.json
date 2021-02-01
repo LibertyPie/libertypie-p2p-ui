@@ -19,6 +19,7 @@
     "nouislider": "^14.6.3",
     "rangeslider-js": "^3.2.5",
     "simple-scrollbar": "git+https://github.com/buzinas/simple-scrollbar.git",
+    "skynet-js": "^3.0.0",
     "vue": "^3.0.0",
     "vue-router": "^4.0.0-0",
     "vuex": "^4.0.0-0",
