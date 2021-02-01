@@ -131,7 +131,7 @@ export default {
 
     "partner_minimum_reputation": "Minimum Reputation",
 
-    "minimum_reputation_desc": "The minimum reputation required before anyone can open a trade with this offer",
+    "minimum_reputation_desc": "The minimum reputation required before anyone can open a trade to this offer",
 
     "stars": "Stars"
 } 

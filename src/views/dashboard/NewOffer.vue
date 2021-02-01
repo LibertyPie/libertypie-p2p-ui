@@ -483,9 +483,7 @@
                                                 style="letter-spacing:0.1em"
                                             />
                                         </div>
-                                        <div class="px-4">
-                                            {{$t("stars")}}
-                                        </div>
+                                    
                                         <div>
                                             <a href="#" 
                                                 class="noborder text-gray-500 nobg px-4" @click.prevent="computeMinReputation('add')">
@@ -494,8 +492,23 @@
                                         </div>    
                                     </div>
 
-                                    <div class="text-sm py-5 text-gray-600" style="line-height:24px;">
+                                    <div class="text-sm pb-5 text-gray-600" style="line-height:24px;">
                                         {{$t("minimum_reputation_desc")}}
+                                    </div>
+                                </div>
+
+                                <div class="form-group my-5 mt-6">
+                                    <h5 class="mb-5">{{$t("minimum_trades")}}</h5>
+
+                                    <NumberInput 
+                                        :default="minimumTrades"
+                                        :min="0"
+                                        :step="1"
+                                        @change="no => minimumTrades = no"
+                                    />
+
+                                    <div class="text-sm pb-5 text-gray-600" style="line-height:24px;">
+                                        {{$t("minimum_trade_desc")}}
                                     </div>
                                 </div>
 
@@ -552,10 +565,11 @@ import CurrencyCore from '../../classes/CurrencyCore'
 import noUiSlider from 'nouislider';
 import 'nouislider/distribute/nouislider.css';
 import offerConfig from "../../config/offer"
+import NumberInput from '../../components/partials/NumberInput.vue'
 
 export default {
     name: "new_offer",
-    components: {DashboardLayout, AssetSelect, PaymentTypesModal, CountrySelect},
+    components: {DashboardLayout, AssetSelect, PaymentTypesModal, CountrySelect, NumberInput},
     data(){
       
        return {
@@ -618,7 +632,7 @@ export default {
 
             minimumReputation: 0,
 
-            minimumTrade: 0,
+            minimumTrades: 0,
         }
     },
     watch: {
