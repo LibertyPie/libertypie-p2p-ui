@@ -4,19 +4,38 @@
  * @license MIT
  */
 
+import { SkynetClient } from "skynet-js";
+
 
  /**
  * Sia Skynet class
  * @class
- * @typedef {object} 
  * @exports 
  */
-class Sia {
+export default class Sia {
+
+    static async getClient() {
+        let c = new SkynetClient();
+        return c;
+    }
 
     /**
      * save
+     * @param {*} data
      */
-    save(data){
-        
-    }
+    static async save(filename, data){
+
+        try {
+            
+            //lets convert the data to json 
+            let d = JSON.stringify({d: data})
+
+            //lets create file obj
+            let f = new File([d],filename, {
+                type: "text/plain",
+            })
+        } catch(e){
+
+        }
+    } //end fun
 }
