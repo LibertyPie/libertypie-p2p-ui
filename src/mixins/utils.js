@@ -24,15 +24,17 @@ export default {
             
             let markup = `
                 <div class="alert alert-${type} shadow-lg alert-notif alert-dismissible fade show" role="alert">
-                    <div class="content d-flex flex-row">
-                        <span>${msg}</span>
-                        <button 
-                            type="button" 
-                            class="close" 
-                            data-dismiss="alert"
-                        >
-                            <span aria-hidden="true">&times;</span>
-                        </button>
+                    <div class="d-flex flex-row px-2 align-items-center justify-content-center">
+                        <div class="flex-grow-1 py-5">${msg}</div>
+                        <div class="ml-auto">
+                            <button 
+                                type="button" 
+                                class="close position-relative p-0 ml-2" 
+                                data-dismiss="alert"
+                            >
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
                     </div>
                     <div class="notif-progress"></div>
                 </div>

@@ -404,6 +404,6 @@ label {
 
 .bg-pink {
     background: #e91e63;
-    color: #ffffff;
     color: rgba(255,255,255,0.8);
+    &:hover { color: #ffffff; }
 }

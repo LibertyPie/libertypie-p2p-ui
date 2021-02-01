@@ -75,7 +75,9 @@
                                         <input type="radio" v-model="offerType" value='sell'  name="offer_type" id="sell_offer">
                                         <label  for="sell_offer" class="text-center">{{$t("sell_offer")}}</label>
                                     </div>
-                                    <p class='my-2 text-mute text-center text-lg-left'>{{offerTypeDesc}}</p>
+                                    <p class='my-2 text-mute text-center text-lg-left' v-if="offerType != null">
+                                        {{$t(`${offerType}_offer_desc`)}}
+                                    </p>
                                  </div>
                                  <div class="form-group">
                                     <h5 class='text-capitalize'>{{$t("_i_want_to_{offer_type}",[this.offerType])}}</h5>
@@ -435,10 +437,10 @@
                                     <h5 class="mb-5">{{$t("partner_minimum_reputation")}}</h5>
                                         
                                     <NumberInput 
-                                        :default="minimumReputation"
+                                        :default="minRequiredReputation"
                                         :min="0"
                                         :step="1"
-                                        @change="no => minimumReputation = no"
+                                        @change="no => minRequiredReputation = no"
                                     />
 
                                     <div class="text-sm pb-5 text-gray-600" style="line-height:24px;">
@@ -450,10 +452,10 @@
                                     <h5 class="mb-5">{{$t("minimum_trades")}}</h5>
 
                                     <NumberInput 
-                                        :default="minimumTrades"
+                                        :default="minRequiredTrades"
                                         :min="0"
                                         :step="1"
-                                        @change="no => minimumTrades = no"
+                                        @change="no => minRequiredTrades = no"
                                     />
 
                                     <div class="text-sm pb-5 text-gray-600" style="line-height:24px;">
@@ -498,7 +500,7 @@
                                 <button 
                                     v-else
                                     class="btn bg-pink btn-block full-width text-truncate py-5 v-center-sticky" 
-                                    @click.prevent="doConfirmAndSaveOffer"
+                                    @click.prevent="confirmOffer"
                                 >
                                     {{$t("confirm_and_save")}}
                                 </button>
@@ -509,6 +511,14 @@
                 </div>
               
             </div>
+            <modal 
+                :id="confirmOffer"
+                :showFooter="true"
+                :visible="showConfirmOfferModal"
+                :title="$t('confirm_offer')"
+            >
+
+            </modal>
         </div>
 
 
@@ -526,11 +536,12 @@ import noUiSlider from 'nouislider';
 import 'nouislider/distribute/nouislider.css';
 import offerConfig from "../../config/offer"
 import NumberInput from '../../components/partials/NumberInput.vue'
-
+import Modal from '../../components/partials/modals/Modal.vue';
+import Sia from "../../classes/Sia"
 
 export default {
     name: "new_offer",
-    components: {DashboardLayout, AssetSelect, PaymentTypesModal, CountrySelect, NumberInput},
+    components: {DashboardLayout, AssetSelect, PaymentTypesModal, CountrySelect, NumberInput, Modal},
     data(){
       
        return {
@@ -540,7 +551,7 @@ export default {
             showPrevStepBtn: true,
 
             offerType: '',
-            offerTypeDesc: '',
+          
             cryptoAssetsData: [],
             offerAssetId: null,
             offerAssetName: "",
@@ -596,17 +607,19 @@ export default {
             offerPaymentWindow: 15,
 
             minOfferPaymentWindow: offerConfig.payment_window_limit || 10,
+            
+            //final step
+            minReqyuredReputation: 0, //minimum required reputation
+            minRequiredTrades: 0, //minimum required trades
 
-            minimumReputation: 0,
+            offerTerms: '',
+            offerInstructions: '',
 
-            minimumTrades: 0,
+            showConfirmOfferModal: false
         }
     },
     watch: {
-        offerType(){
-            this.offerTypeDesc = this.$t(`${this.offerType}_offer_desc`)
-        },
-
+ 
         //if the offer asset id changes 
         // reset the price feed
         offerAssetId() {
@@ -672,16 +685,19 @@ export default {
 
     methods: {
 
-        handleStickeyBtns(){
-
-        
-        },
 
         async handleOnPaymenMethodSelect(info){
             this.offerPaymentMethodInfo = info
         },      
 
         goToStepById(id){
+
+            //remove all active tabs
+            $(".step_wizard .step")
+                .removeClass("active")
+
+            $("#"+id+"_tab").addClass("active")
+
             $("#step_wizard_contents")
                 .find('.step_content')
                 .removeClass("active")
@@ -739,7 +755,7 @@ export default {
 
                     //if validation was not success, dont continue
                     if(!isValidationSuccess){
-                        return false;
+                        //return false;
                     }
                 }
 
@@ -933,22 +949,60 @@ export default {
          */
         async validateFinalStep(){
 
+            if(this.offerTerms.trim().length == 0){
+                this.errorNotif(this.$t("offer_terms_required"))
+                return false;      
+            }
+
+            if(this.offerInstructions.trim().length == 0){
+                this.errorNotif(this.$t("offer_instructions_required"))
+                return false;  
+            }
+
+            if(parseInt(this.minRequiredTrades.toString()) < 0){
+                this.errorNotif(this.$t("min_required_trades_less_than_0"))
+                return false;  
+            }
+
+            if(parseInt(this.minRequiredTrades.toString()) < 0){
+                this.errorNotif(this.$t("min_required_trades_less_than_0"))
+                return false;  
+            }
+
+            let minRequiredReputation = parseInt(this.minRequiredTrades.toString())
+
+            if(minRequiredReputation < 0 || minRequiredReputation  > 10){
+                this.errorNotif(this.$t("inavlid_min_required_reputation"))
+                return false;  
+            }
+
+            return true;
         },
 
         /**
-         * doConfirmAndSaveOffer
+         * do confirm offer
          */
-        async doConfirmAndSaveOffer() {
+        async confirmOffer() {
 
             //lets  revalidate all the 3 steps 
-            let isBasicStepValid = this.validateBasicStep()
-
-            if(!isBasicStepValid){
-                return;
+            if(!(await this.validateBasicStep())){
+                 this.goToStepById("basic_setup")
+                return false;
             }
 
             //lets validate pricing step
-            let isPricingStepValid = this.validatePricingStep()
+            if(!(await this.validatePricingStep())){
+                this.goToStepById("pricing_setup")
+                return false;
+            }
+
+            //validate final step
+            if(!(await this.validateFinalStep())){
+               this.goToStepById("final_setup")
+                return false;
+            }
+
+            this.showConfirmOfferModal = true
         }, //end fun 
 
         /**

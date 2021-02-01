@@ -141,5 +141,12 @@ export default {
 
     "confirm_and_save": "Confirm & Save",
 
-    "failed_to_save_file_to_sia": "An error occurred while saving file to sia"
+    "failed_to_save_file_to_sia": "An error occurred while saving file to sia",
+
+    "offer_terms_required": "Offer  terms required",
+    "offer_instructions_required": "Offer instructions required",
+
+    "min_required_trades_less_than_0": "Minimum required trades cannot be less than 0",
+
+    "inavlid_min_required_reputation": "Invalid minimum required reputation number"
 } 
