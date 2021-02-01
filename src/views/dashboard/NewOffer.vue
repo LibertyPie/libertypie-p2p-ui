@@ -440,11 +440,68 @@
                                 
                                 <div class="form-group my-5 mt-6">
                                     <h5 class="mb-5">{{$t("offer_terms")}}</h5>
-
+                                    <textarea 
+                                        v-model="offerTerms" 
+                                        class="form-control form-control-alternative"
+                                        :placeholder="$t('write_your_terms_here')"
+                                        style="min-height: 160px;"
+                                    />
+                                    <div class="text-sm py-5 text-gray-600" style="line-height:24px;">
+                                        {{$t("offer_terms_desc")}}
+                                    </div>
                                 </div>
-                            </div>
 
-                        </div> <!-- end step_contents -->
+                                <div class="form-group my-5 mt-6">
+                                    <h5 class="mb-5">{{$t("trade_instructions")}}</h5>
+                                    <textarea 
+                                        v-model="offerInstructions" 
+                                        class="form-control form-control-alternative"
+                                        :placeholder="$t('write_your_instructions_here')"
+                                        style="min-height: 160px;"
+                                    />
+                                    <div class="text-sm py-5 text-gray-600" style="line-height:24px;">
+                                        {{$t("trade_instructions_desc")}}
+                                    </div>
+                                </div>
+
+                                <div class="form-group my-5 mt-6">
+                                    <h5 class="mb-5">{{$t("partner_minimum_reputation")}}</h5>
+
+                                        <div class="mb-3 form-item-button d-flex flex-row justify-content-center align-items-center">
+                                        <div>
+                                            <a  href="#" class="noborder text-gray-500 nobg px-4" @click.prevent="computeMinReputation('sub')">
+                                                <svg-img src="/assets/images/minus-solid.svg" alt="-" class="fill-gray-500" />
+                                            </a>
+                                        </div>
+
+                                        <div class="flex-grow-1">
+                                            <input 
+                                                type="numeric" 
+                                                v-model="minimumReputation" 
+                                                class="form-control text-center nobg noborder" 
+                                                placeholder="0" 
+                                                style="letter-spacing:0.1em"
+                                            />
+                                        </div>
+                                        <div class="px-4">
+                                            {{$t("stars")}}
+                                        </div>
+                                        <div>
+                                            <a href="#" 
+                                                class="noborder text-gray-500 nobg px-4" @click.prevent="computeMinReputation('add')">
+                                                <svg-img src="/assets/images/plus-solid.svg" alt="+" class="fill-gray-500" />
+                                            </a>
+                                        </div>    
+                                    </div>
+
+                                    <div class="text-sm py-5 text-gray-600" style="line-height:24px;">
+                                        {{$t("minimum_reputation_desc")}}
+                                    </div>
+                                </div>
+
+                            </div> <!-- end step_contents -->
+                    
+                        </div> <!-- step_wizard_contents -->
 
                     </div> <!--end row -->
 
@@ -557,7 +614,11 @@ export default {
 
             //payment window 
             paymentWindowError: "",
-            offerPaymentWindow: 15
+            offerPaymentWindow: 15,
+
+            minimumReputation: 0,
+
+            minimumTrade: 0,
         }
     },
     watch: {
@@ -790,7 +851,9 @@ export default {
                 return false;
             }
 
-            if(this.offerPricingMode == "market" && typeof this.profitMarginPercent !== 'number' ){
+            let profitMargin = parseFloat(this.profitMarginPercent)
+
+            if(this.offerPricingMode == "market" && profitMargin <= 0 ){
                 this.errorNotif(this.$t("profit_margin_required"))
                 return false;
             }
@@ -933,6 +996,25 @@ export default {
             
             if(mode=='add'){ this.profitMarginPercent = (pm + 0.1).toFixed(1); } 
             else { this.profitMarginPercent = (pm - 0.1).toFixed(1); }
+
+        },
+
+        // compute price margin
+        computeMinReputation(mode){
+
+            let mr = parseFloat(this.minimumReputation.toString())
+            
+            if(mode=='add'){ 
+
+                if(mr+1 > 10) return;
+
+                this.minimumReputation = (mr + 1)
+            } else { 
+
+                 if(mr-1 < 0) return;
+
+                this.minimumReputation = (mr - 1) 
+            }
 
         },
         
