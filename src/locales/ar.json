@@ -124,6 +124,6 @@ export default {
     'trade_instructions_desc': 'Carefully list all the instructions for the trade, this includes payment information and other useful information the trade partner is required to know',
     'write_your_instructions_here': 'Write your instructions here',
     'partner_minimum_reputation': 'Minimum Reputation',
-    'minimum_reputation_desc': 'The minimum reputation required before anyone can open a trade with this offer',
+    'minimum_reputation_desc': 'The minimum reputation required before anyone can open a trade to this offer',
     'stars': 'Stars'
 };
