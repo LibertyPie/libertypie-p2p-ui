@@ -5,6 +5,8 @@
  */
 
 import { SkynetClient } from "skynet-js";
+import Logger from './Logger';
+import Status from './Status';
 
 
  /**
@@ -22,6 +24,7 @@ export default class Sia {
     /**
      * save
      * @param {*} data
+     * @returns Promise<Status>
      */
     static async save(filename, data){
 
@@ -31,11 +34,20 @@ export default class Sia {
             let d = JSON.stringify({d: data})
 
             //lets create file obj
-            let f = new File([d],filename, {
+            let file = new File([d],filename, {
                 type: "text/plain",
             })
-        } catch(e){
 
+            let client = new SkynetClient();
+
+            let result = await client.uploadFile(file);
+
+            console.log(result)
+
+            return Status.successPromise("")
+        } catch(e){
+            Logger.error("Sia::save: Failed to save file data "+filename,e)
+            return Status.errorPromise(window._vue.$t("failed_to_save_file_to_sia"))
         }
     } //end fun
 }
