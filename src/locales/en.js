@@ -139,5 +139,7 @@ export default {
 
     "minimum_trade_desc": "The minimum trades required by anyone who wants to open a trade to this offer",
 
-    "confirm_and_save": "Confirm & Save"
+    "confirm_and_save": "Confirm & Save",
+
+    "failed_to_save_file_to_sia": "An error occurred while saving file to sia"
 } 
