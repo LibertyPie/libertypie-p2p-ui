@@ -141,6 +141,10 @@ export default {
             if(value == null || !value) return "";
             return this.formatMoney(value)
                        .replace(/\d(?=(\d{3})+\.)/g, '$&,'); 
+        },
+
+        isWalletConnected() { 
+            return window["isWalletConnected"] || false;
         }
     },  
 

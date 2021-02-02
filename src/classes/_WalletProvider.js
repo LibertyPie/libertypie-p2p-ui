@@ -186,6 +186,7 @@ export default class _WalletProvider  {
          
          this.isConnected = true;
 
+         window["isWalletConnected"] = true;
          window["_walletInfo"] = info;
 
         //lets broadcast wallet success

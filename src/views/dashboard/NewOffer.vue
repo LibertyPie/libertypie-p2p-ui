@@ -12,7 +12,9 @@
                     </div>
                 </div>
 
-                <div class="row">
+                <WalletConnectBtn v-show="!_isWalletConnected" />
+                
+                <div v-show="_isWalletConnected" class="row">
 
                     <div class="col-12 col-md-12 col-lg-8">
 
@@ -519,137 +521,148 @@
         <Modal 
             id="confirmOfferModal"
             :visible="showConfirmOfferModal"
-            :title="$t('confirm_offer')"
+            :title="$t((isModalLoading) ? 'loading..' : 'confirm_offer')"
             size="modal-md"
             @hide="showConfirmOfferModal=false"
             @show="showConfirmOfferModal=true"
+            :closable="!isModalLoading"
         >   
             <template v-slot:body>
-               <div  class="alert alert-info my-2">  
-                   {{$t("kindly_confirm_offer_details")}}
-               </div>
-               <div class="my-2 mt-5">
-                   <div class="row text-gray-600">
-                       <div class="col-6  pb-4 pl-4 text-sm text-left">
-                           {{$t("offer_type")}}
-                       </div>
-                        <div class="col-6 pb-4  text-sm text-left">
-                           {{$t(offerType)}}
-                        </div>
-                        
+                <div v-if="isModalLoading" class="py-10">
+                    <Loader :isLoading="isModalLoading" />
+                </div>
+                <div v-else>
+                <div  class="alert alert-info my-2">  
+                    {{$t("kindly_confirm_offer_details")}}
+                </div>
+                <div class="my-2 mt-5">
+                    <div class="row text-gray-600">
                         <div class="col-6  pb-4 pl-4 text-sm text-left">
-                           {{$t("asset")}}
+                            {{$t("offer_type")}}
                         </div>
-                        <div class="col-6  pb-4 text-capitalize text-sm text-left">
-                           {{$t(offerAssetName)}} ({{$t(offerAssetSymbol)}})
-                        </div>
+                            <div class="col-6 pb-4  text-sm text-left">
+                                {{$t(offerType)}}
+                            </div>
+                            
+                            <div class="col-6  pb-4 pl-4 text-sm text-left">
+                                {{$t("asset")}}
+                            </div>
+                            <div class="col-6  pb-4 text-capitalize text-sm text-left">
+                                {{$t(offerAssetName)}} ({{$t(offerAssetSymbol)}})
+                            </div>
 
-                        <div class="col-6  pb-4 pl-4 text-sm text-left">
-                           {{$t("target_country")}}
-                        </div>
-                        <div v-if="offerTerritoryInfo != null" class="col-6  pb-4 text-capitalize text-sm text-left">
-                           {{$t(offerTerritoryInfo.name)}} 
-                        </div>
-                        
-                        <div class="col-6  pb-4 pl-4 text-sm text-left">
-                           {{$t("payment_method")}}
-                        </div>
-                        <div v-if="offerPaymentMethodInfo != null" class="col-6  pb-4 text-capitalize text-sm text-left">
-                           {{$t(offerPaymentMethodInfo.name)}} 
-                        </div>
+                            <div class="col-6  pb-4 pl-4 text-sm text-left">
+                                {{$t("target_country")}}
+                            </div>
+                            <div v-if="offerTerritoryInfo != null" class="col-6  pb-4 text-capitalize text-sm text-left">
+                                {{$t(offerTerritoryInfo.name)}} 
+                            </div>
+                            
+                            <div class="col-6  pb-4 pl-4 text-sm text-left">
+                                {{$t("payment_method")}}
+                            </div>
+                            <div v-if="offerPaymentMethodInfo != null" class="col-6  pb-4 text-capitalize text-sm text-left">
+                                {{$t(offerPaymentMethodInfo.name)}} 
+                            </div>
 
-                        <div class="col-6  pb-4 pl-4 text-sm text-left">
-                           {{$t("pricing_mode")}}
-                        </div>
-                        <div  class="col-6  pb-4 text-capitalize text-sm text-left">
-                           {{$t(`${offerPricingMode}_rate`)}} 
-                        </div>
+                            <div class="col-6  pb-4 pl-4 text-sm text-left">
+                                {{$t("pricing_mode")}}
+                            </div>
+                            <div  class="col-6  pb-4 text-capitalize text-sm text-left">
+                                {{$t(`${offerPricingMode}_rate`)}} 
+                            </div>
 
-                        <div v-if="offerPricingMode=='market'" class="col-6  pb-4 pl-4 text-sm text-left">
-                           {{$t("profit_margin")}}
-                        </div>
-                        <div v-if="offerPricingMode=='market'"  class="col-6  pb-4 text-capitalize text-sm text-left">
-                           {{profitMarginPercent}}% 
-                        </div>
+                            <div v-if="offerPricingMode=='market'" class="col-6  pb-4 pl-4 text-sm text-left">
+                                {{$t("profit_margin")}}
+                            </div>
+                            <div v-if="offerPricingMode=='market'"  class="col-6  pb-4 text-capitalize text-sm text-left">
+                                {{profitMarginPercent}}% 
+                            </div>
 
-                        <div v-if="offerPricingMode=='fixed'" class="col-6  pb-4 pl-4 text-sm text-left">
-                           {{$t("offer_price")}}
-                        </div>
-                        <div v-if="offerPricingMode=='fixed'"  class="col-6  pb-4 text-capitalize text-sm text-left">
-                           {{formatMoneyAsText(offerFixedPriceLocal)}} {{offerCurrency}} 
-                           ({{formatMoneyAsText(offerFixedPrice)}} USD) 
-                           {{$t("per_{asset}",[offerAssetSymbol.toUpperCase()])}}
-                        </div>
+                            <div v-if="offerPricingMode=='fixed'" class="col-6  pb-4 pl-4 text-sm text-left">
+                                {{$t("offer_price")}}
+                            </div>
+                            <div v-if="offerPricingMode=='fixed'"  class="col-6  pb-4 text-capitalize text-sm text-left">
+                                {{formatMoneyAsText(offerFixedPriceLocal)}} {{offerCurrency}} 
+                                ({{formatMoneyAsText(offerFixedPrice)}} USD) 
+                                {{$t("per_{asset}",[offerAssetSymbol.toUpperCase()])}}
+                            </div>
 
-                        <div  class="col-6  pb-4 pl-4 text-sm text-left">
-                           {{$t("min_trade_amount")}}
-                        </div>
-                        <div  class="col-6  pb-4 text-capitalize text-sm text-left">
-                           {{formatMoneyAsText(minTradeLimitLocal)}} {{offerCurrency}} 
-                           ({{formatMoneyAsText(minTradeLimit)}} USD) 
-                        </div>
+                            <div  class="col-6  pb-4 pl-4 text-sm text-left">
+                                {{$t("min_trade_amount")}}
+                            </div>
+                            <div  class="col-6  pb-4 text-capitalize text-sm text-left">
+                                {{formatMoneyAsText(minTradeLimitLocal)}} {{offerCurrency}} 
+                                ({{formatMoneyAsText(minTradeLimit)}} USD) 
+                            </div>
 
 
-                        <div  class="col-6  pb-4 pl-4 text-sm text-left">
-                           {{$t("max_trade_amount")}}
-                        </div>
-                        <div  class="col-6  pb-4 text-capitalize text-sm text-left">
-                           {{formatMoneyAsText(maxTradeLimitLocal)}} {{offerCurrency}} 
-                           ({{formatMoneyAsText(maxTradeLimit)}} USD) 
-                        </div>
+                            <div  class="col-6  pb-4 pl-4 text-sm text-left">
+                                {{$t("max_trade_amount")}}
+                            </div>
+                            <div  class="col-6  pb-4 text-capitalize text-sm text-left">
+                                {{formatMoneyAsText(maxTradeLimitLocal)}} {{offerCurrency}} 
+                                ({{formatMoneyAsText(maxTradeLimit)}} USD) 
+                            </div>
 
-                        <div  class="col-6  pb-4 pl-4 text-sm text-left">
-                           {{$t("security_deposit")}}
-                        </div>
-                        <div  class="col-6  pb-4 text-capitalize text-sm text-left">
-                           {{$t((securityDeposit == '1') ? 'enabled': 'disabled')}} 
-                        </div>
+                            <div  class="col-6  pb-4 pl-4 text-sm text-left">
+                                {{$t("security_deposit")}}
+                            </div>
+                            <div  class="col-6  pb-4 text-capitalize text-sm text-left">
+                                {{$t((securityDeposit == '1') ? 'enabled': 'disabled')}} 
+                            </div>
 
-                        <div v-if="securityDeposit == '1'" class="col-6  pb-4 pl-4 text-sm text-left">
-                           {{$t("security_deposit")}}
-                        </div>
-                        <div  v-if="securityDeposit == '1'" class="col-6  pb-4 text-capitalize text-sm text-left">
-                           {{securityDepositRate}}% 
-                        </div>
+                            <div v-if="securityDeposit == '1'" class="col-6  pb-4 pl-4 text-sm text-left">
+                                {{$t("security_deposit")}}
+                            </div>
+                            <div  v-if="securityDeposit == '1'" class="col-6  pb-4 text-capitalize text-sm text-left">
+                                {{securityDepositRate}}% 
+                            </div>
 
-                        <div class="col-6  pb-4 pl-4 text-sm text-left">
-                           {{$t("payment_window")}}
-                        </div>
-                        <div  class="col-6  pb-4 text-capitalize text-sm text-left">
-                           {{$t("{x_time}_minutes",[offerPaymentWindow])}}
-                        </div>
+                            <div class="col-6  pb-4 pl-4 text-sm text-left">
+                                {{$t("payment_window")}}
+                            </div>
+                            <div  class="col-6  pb-4 text-capitalize text-sm text-left">
+                                {{$t("{x_time}_minutes",[offerPaymentWindow])}}
+                            </div>
 
-                        <div class="col-6  pb-4 pl-4 text-sm text-left">
-                           {{$t("min_reputation_required")}}
-                        </div>
-                        <div  class="col-6  pb-4 text-capitalize text-sm text-left">
-                           {{minRequiredReputation}}
-                        </div>
+                            <div class="col-6  pb-4 pl-4 text-sm text-left">
+                                {{$t("min_reputation_required")}}
+                            </div>
+                            <div  class="col-6  pb-4 text-capitalize text-sm text-left">
+                                {{minRequiredReputation}}
+                            </div>
 
-                        <div class="col-6  pb-4 pl-4 text-sm text-left">
-                           {{$t("min_trades_required")}}
-                        </div>
-                        <div  class="col-6  pb-4 text-capitalize text-sm text-left">
-                           {{minRequiredTrades}}
-                        </div>
+                            <div class="col-6  pb-4 pl-4 text-sm text-left">
+                                {{$t("min_trades_required")}}
+                            </div>
+                            <div  class="col-6  pb-4 text-capitalize text-sm text-left">
+                                {{minRequiredTrades}}
+                            </div>
 
-                        <div class="col-12 font-weight-bold  pb-2 pl-4 text-sm text-left">
-                           {{$t("offer_terms")}}
-                        </div>
-                        <div  class="col-12 text-gray-500  pb-4 text-sm text-left">
-                           {{offerTerms}}
-                        </div>
+                            <div class="col-12 font-weight-bold  pb-2 pl-4 text-sm text-left">
+                                {{$t("offer_terms")}}
+                            </div>
+                            <div  class="col-12 text-gray-500  pb-4 text-sm text-left">
+                                {{offerTerms}}
+                            </div>
 
-                         <div class="col-12 font-weight-bold pb-2 pl-4 text-sm text-left">
-                           {{$t("trade_instructions")}}
-                        </div>
-                        <div  class="col-12 text-gray-500 pb-4 text-sm text-left">
-                           {{offerInstructions}}
+                            <div class="col-12 font-weight-bold pb-2 pl-4 text-sm text-left">
+                                {{$t("trade_instructions")}}
+                            </div>
+                            <div  class="col-12 text-gray-500 pb-4 text-sm text-left">
+                                {{offerInstructions}}
+                            </div>
                         </div>
                     </div>
                 </div>
             </template>
-             <template v-slot:foot>
+            <template v-slot:footer v-if="!isModalLoading">
+                 <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">{{$t("close")}}</button>
+                    <button type="button" @click.prevent="processFinalSave" class="btn btn-primary">{{$t("save")}}</button>
+                 </div>
+            </template>     
         </Modal>
      </DashboardLayout>
 </template>
@@ -667,14 +680,18 @@ import offerConfig from "../../config/offer"
 import NumberInput from '../../components/partials/NumberInput.vue'
 import Modal from '../../components/partials/modals/Modal.vue';
 import Sia from "../../classes/Sia"
+import Loader from '../../components/partials/Loader.vue';
+import Logger from '../../classes/Logger';
 
 export default {
     name: "new_offer",
-    components: {DashboardLayout, AssetSelect, PaymentTypesModal, CountrySelect, NumberInput, Modal},
+    components: {DashboardLayout, AssetSelect, PaymentTypesModal, CountrySelect, NumberInput, Modal,  Loader},
     data(){
       
        return {
-            breadcrumbData: [],
+            breadcrumbData: [], 
+
+            _isWalletConnected: false,
 
             showNextStepBtn: true,
             showPrevStepBtn: true,
@@ -745,7 +762,11 @@ export default {
             offerTerms: '',
             offerInstructions: '',
 
-            showConfirmOfferModal: false
+            showConfirmOfferModal: false,
+
+            isModalLoading: false,
+            
+            modalErrorMsg: ""
         }
     },
     watch: {
@@ -768,6 +789,11 @@ export default {
     },
 
     async beforeMount(){
+
+        this._isWalletConnected = this.isWalletConnected();
+
+        console.log( this.isWalletConnected )
+
         this.breadcrumbData = [
             {
                 title: this.$t("offers"),
@@ -946,7 +972,7 @@ export default {
 
             let dataAttr = currentStepContentDom.data() || {}
 
-            console.log(("nextStep" in dataAttr))
+            //console.log(("nextStep" in dataAttr))
 
             //lets check if the current has next and prev btn
             if(!("nextStep" in dataAttr)){
@@ -1155,6 +1181,29 @@ export default {
 
             this.showConfirmOfferModal = true
         }, //end fun 
+
+
+        /**
+         * process save 
+         */
+        async processFinalSave(){
+            try {
+                
+                this.isModalLoading = true;
+                
+                let metaData = {
+                    terms:        this.offerTerms,
+                    instructions: this.offerInstructions,
+                    date:         Date.now(),
+                    owner:        ""  
+                }
+
+            } catch (e){
+                this.isModalLoading = false;
+                Logger.error("NewOffer::processFinalSave",e)
+                this.modalErrorMsg = this.$t("processing_error",[e])
+            }
+        },
 
         /**
          * fetch selected asset price feed

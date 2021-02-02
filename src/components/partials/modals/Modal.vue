@@ -3,6 +3,8 @@
         tabindex="-1" role="dialog"
         :aria-labelledby="id+'Label'" 
         aria-hidden="true"
+        :data-keyboard="closable"
+        :data-backdrop="(closable) ? '' : 'static'"
     >
         <div :class="['modal-dialog', size]" role="document">
             <div class="modal-content">
@@ -11,7 +13,7 @@
                         <h5 class="modal-title" :id="id+'Label'">
                             {{title}}
                         </h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <button v-if="closable" type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
                     </slot>
@@ -50,6 +52,11 @@ export default {
         visible: {
             type: Boolean,
             default: false
+        },
+
+        closable: {
+            type: Boolean,
+            default: true
         }
     },
     data(){

@@ -174,5 +174,13 @@ export default {
 
     "min_reputation_required": "Minimum reputation required by user",
 
-    "min_trades_required": "Minimum trades required by user"
+    "min_trades_required": "Minimum trades required by user",
+
+    "save": "Save",
+
+    "close": "Close",
+
+    "loading..": "Loading..",
+
+    "processing_error": "Processing Error: {0}"
 } 
