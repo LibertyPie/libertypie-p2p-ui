@@ -2,12 +2,11 @@
     border-radius: 10px;
     width: 280px;
 
-    margin: 0px;
-    
+    margin-bottom: 25px;
    // margin-right: 280px !important;
     
     max-width: 95% !important;
-    max-height: 90% !important;
+   
     
     transition: all 0.1s linear;
     padding-top: 20px;
@@ -95,7 +94,6 @@
         display: flex;
         margin: 0 auto;
         border-radius: 10px;
-        margin-bottom: 25px;
         margin-top: 20px;
 
         &:hover{

@@ -152,8 +152,8 @@ export default {
          * handle payment type item click
          */
         handleOnPTItemClick(itemObj){
-           this.$emit("on-select",itemObj)
-           this.$emit("on-hide")
+           this.$emit("select",itemObj)
+           this.$emit("hide")
         },
 
         /**

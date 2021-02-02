@@ -18,7 +18,7 @@
                         <div v-show="!isAssetLoading" class="input-group pr-2">
                             <div class="input-group-prepend">
                                 <span class="input-group-text">
-                                    <img src="/assets/images/rec.svg" alt='' width="18" />
+                                    <svg-img src="/assets/images/rec.svg" alt='' width="18" />
                                 </span>
                             </div>
                             <AssetSelect
@@ -64,9 +64,9 @@
             
             <PaymentTypesModal 
                 :visible="isPTModalVisible"
-                @on-hide="isPTModalVisible=false"
-                @on-show="isPTModalVisible=true"
-                @on-select="handleOnPaymenMethodSelect"
+                @hide="isPTModalVisible=false"
+                @show="isPTModalVisible=true"
+                @select="handleOnPaymenMethodSelect"
             />
           
         </div>
@@ -80,9 +80,10 @@ import PaymentTypesModal from "../modals/PaymentTypes"
 import Geo from '../../../classes/Geo'
 import { mapState } from 'vuex'
 import AssetSelect from '../AssetSelect.vue'
+import SvgImg from '../../../../../vue-svg-img/src/SvgImg.vue'
 
 export default {
-    components: {CountrySelect,PaymentTypesModal, AssetSelect},
+    components: {CountrySelect,PaymentTypesModal, AssetSelect, SvgImg},
     data(){
       
           return {

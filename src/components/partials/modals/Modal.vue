@@ -54,19 +54,19 @@ export default {
     },
     data(){
         return {
-            _modal: null,
+            _modalEl: null,
             _libertyPie: null,
             modalSize: `modal-${this.size}`       
         }
     },
     watch: {
         visible(){   
-            this._modal.modal((this.visible == true) ? 'show' : 'hide') 
+            console.log(this._modalEl)
+            this._modalEl.modal((this.visible == true) ? 'show' : 'hide') 
         }
     },
 
-    beforeMount(){
-        
+    mounted(){
         this.init();
     },
 
@@ -74,17 +74,19 @@ export default {
         init(){
             let _this = this;
             $(function(){
-                _this._modal = $('#paymentTypesModal');
-                _this._modal.modal({
+            
+                _this._modalEl = $(_this.$el);
+                
+                _this._modalEl.modal({
                     show: false
                 })
 
-                _this._modal.on('hidden.bs.modal', function (e) {
-                   _this.$emit("on-hide",{modal: _this._modal})
+                _this._modalEl.on('hidden.bs.modal', function (e) {
+                   _this.$emit("hide",{modal: _this._modalEl})
                 })
 
-                _this._modal.on('shown.bs.modal', function (e) {
-                   _this.$emit("on-show",{modal: _this._modal})
+                _this._modalEl.on('shown.bs.modal', function (e) {
+                   _this.$emit("show",{modal: _this._modalEl})
                 })
                 	
             })

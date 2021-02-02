@@ -148,5 +148,17 @@ export default {
 
     "min_required_trades_less_than_0": "Minimum required trades cannot be less than 0",
 
-    "inavlid_min_required_reputation": "Invalid minimum required reputation number"
+    "inavlid_min_required_reputation": "Invalid minimum required reputation number",
+
+    "confirm_offer": "Confirm Offer",
+
+    "kindly_confirm_offer_details": "Carefully check & confirm the accuracy of the offer details",
+
+    "target_country": "Target Country",
+
+    "market_rate": "Market rate",
+
+    "fixed_rate": "Fixed rate",
+
+    "per_{asset}": "Per {0}"
 } 

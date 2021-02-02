@@ -126,9 +126,9 @@
                                         </a>
                                         <PaymentTypesModal 
                                             :visible="isPTModalVisible"
-                                            @on-hide="isPTModalVisible=false"
-                                            @on-show="isPTModalVisible=true"
-                                            @on-select="handleOnPaymenMethodSelect"
+                                            @hide="isPTModalVisible=false"
+                                            @show="isPTModalVisible=true"
+                                            @select="handleOnPaymenMethodSelect"
                                         />
                                     </div>
                                 </div>
@@ -228,6 +228,7 @@
                                                     placeholder="0" 
                                                     style="letter-spacing:0.1em"
                                                     @keyup="updateOfferFixedPriceLocal"
+                                                    @change="updateOfferFixedPriceLocal"
                                                 />
                                                 <span class="text-uppercase d-flex align-items-center px-4">
                                                     USD
@@ -246,7 +247,7 @@
                                                 {{$t("{asset_name}_current_price",[offerAssetName])}}: {{ formatMoneyAsText(offerAssetPriceLocal) }} {{offerCurrency}}
                                             </div>
                                             <div v-if="offerAssetId != null" class="text-capitalize py-1 text-sm font-weight-bold">
-                                                {{$t("final_offer_price_per_{asset}", [offerAssetName])}}: {{ formatMoneyAsText(staticOfferPrice) }} {{offerCurrency}}
+                                                {{$t("final_offer_price_per_{asset}", [offerAssetName])}}: {{ formatMoneyAsText(offerFixedPrice) }} {{offerCurrency}}
                                             </div>
                                     </div>
                                     <!-- end fixed pricing -->
@@ -501,6 +502,7 @@
                                     v-else
                                     class="btn bg-pink btn-block full-width text-truncate py-5 v-center-sticky" 
                                     @click.prevent="confirmOffer"
+                                    type="button"
                                 >
                                     {{$t("confirm_and_save")}}
                                 </button>
@@ -511,17 +513,79 @@
                 </div>
               
             </div>
-            <modal 
-                :id="confirmOffer"
-                :showFooter="true"
-                :visible="showConfirmOfferModal"
-                :title="$t('confirm_offer')"
-            >
-
-            </modal>
+            
         </div>
 
+        <Modal 
+            id="confirmOfferModal"
+            :visible="showConfirmOfferModal"
+            :title="$t('confirm_offer')"
+            size="modal-md"
+            @hide="showConfirmOfferModal=false"
+            @show="showConfirmOfferModal=true"
+        >   
+            <template v-slot:body>
+               <div  class="alert alert-info my-2">  
+                   {{$t("kindly_confirm_offer_details")}}
+               </div>
+               <div class="my-2 mt-5">
+                   <div class="row text-gray-600">
+                       <div class="col-6  pb-4 pl-4 text-sm text-left">
+                           {{$t("offer_type")}}
+                       </div>
+                        <div class="col-6 pb-4  text-sm text-left">
+                           {{$t(offerType)}}
+                        </div>
+                        
+                        <div class="col-6  pb-4 pl-4 text-sm text-left">
+                           {{$t("asset")}}
+                        </div>
+                        <div class="col-6  pb-4 text-capitalize text-sm text-left">
+                           {{$t(offerAssetName)}} ({{$t(offerAssetSymbol)}})
+                        </div>
 
+                        <div class="col-6  pb-4 pl-4 text-sm text-left">
+                           {{$t("target_country")}}
+                        </div>
+                        <div v-if="offerTerritoryInfo != null" class="col-6  pb-4 text-capitalize text-sm text-left">
+                           {{$t(offerTerritoryInfo.name)}} 
+                        </div>
+                        
+                        <div class="col-6  pb-4 pl-4 text-sm text-left">
+                           {{$t("payment_method")}}
+                        </div>
+                        <div v-if="offerPaymentMethodInfo != null" class="col-6  pb-4 text-capitalize text-sm text-left">
+                           {{$t(offerPaymentMethodInfo.name)}} 
+                        </div>
+
+                        <div class="col-6  pb-4 pl-4 text-sm text-left">
+                           {{$t("pricing_mode")}}
+                        </div>
+                        <div  class="col-6  pb-4 text-capitalize text-sm text-left">
+                           {{$t(`${offerPricingMode}_rate`)}} 
+                        </div>
+
+                        <div v-if="offerPricingMode=='market'" class="col-6  pb-4 pl-4 text-sm text-left">
+                           {{$t("profit_margin")}}
+                        </div>
+                        <div v-if="offerPricingMode=='market'"  class="col-6  pb-4 text-capitalize text-sm text-left">
+                           {{profitMarginPercent}}% 
+                        </div>
+
+                        <div v-if="offerPricingMode=='fixed'" class="col-6  pb-4 pl-4 text-sm text-left">
+                           {{$t("offer_price")}}
+                        </div>
+                        <div v-if="offerPricingMode=='fixed'"  class="col-6  pb-4 text-capitalize text-sm text-left">
+                           {{formatMoneyAsText(offerFixedPriceLocal)}} {{offerCurrency}} 
+                           ({{formatMoneyAsText(offerFixedPrice)}} USD) 
+                           {{$t("per_{asset}",[offerAssetSymbol.toUpperCase()])}}
+                        </div>
+
+                    </div>
+                </div>
+            </template>
+
+        </Modal>
      </DashboardLayout>
 </template>
 
@@ -555,6 +619,7 @@ export default {
             cryptoAssetsData: [],
             offerAssetId: null,
             offerAssetName: "",
+            offerAssetSymbol: "",
 
             paymentTypesData: [],
             offerPaymentMethodInfo: null,
@@ -609,7 +674,7 @@ export default {
             minOfferPaymentWindow: offerConfig.payment_window_limit || 10,
             
             //final step
-            minReqyuredReputation: 0, //minimum required reputation
+            minRequiredReputation: 0, //minimum required reputation
             minRequiredTrades: 0, //minimum required trades
 
             offerTerms: '',
@@ -624,6 +689,7 @@ export default {
         // reset the price feed
         offerAssetId() {
             this.offerAssetName = this.cryptoAssetsData[this.offerAssetId].originalName;
+            this.offerAssetSymbol = this.cryptoAssetsData[this.offerAssetId].originalSymbol;
             this.offerAssetPriceFeed = null;
             this.fetchAssetPrice()
         },
@@ -692,25 +758,41 @@ export default {
 
         goToStepById(id){
 
+            this.showNextStepBtn = true;
+            this.showPrevStepBtn = true;
+
             //remove all active tabs
             $(".step_wizard .step")
                 .removeClass("active")
+                .removeClass("completed")
 
             $("#"+id+"_tab").addClass("active")
 
             $("#step_wizard_contents")
                 .find('.step_content')
                 .removeClass("active")
-            $("#"+id).addClass("active")
 
             this.currentStepId = id;
+
+            let currentStepContentDom = $("#"+this.currentStepId)
+
+            currentStepContentDom.addClass("active")
+
+            let dataAttr = currentStepContentDom.data() || {}
+            
+            //lets check if the current has next and prev btn
+              //lets check if the current has next and prev btn
+            if(!("nextStep" in dataAttr)){
+                this.showNextStepBtn = false;
+            }
+
+            if(!("prevStep" in dataAttr)){
+                this.showPrevStepBtn = false;
+            }
         },
 
         //go to next step
         async goToPrevOrNextStep(type){
-
-            this.isNextSetupDisabled = false;
-            this.isPrevSetupDisabled = false;
 
             this.showNextStepBtn = true;
             this.showPrevStepBtn = true;
@@ -755,7 +837,7 @@ export default {
 
                     //if validation was not success, dont continue
                     if(!isValidationSuccess){
-                        //return false;
+                        return false;
                     }
                 }
 
@@ -793,16 +875,20 @@ export default {
             
             this.currentStepId = prevOrNextStepId
             
-             let currentStepContentDom = $("#"+this.currentStepId)
+            let currentStepContentDom = $("#"+this.currentStepId)
 
             currentStepContentDom.addClass("active")
 
+            let dataAttr = currentStepContentDom.data() || {}
+
+            console.log(("nextStep" in dataAttr))
+
             //lets check if the current has next and prev btn
-            if(!currentStepContentDom.data("nextStep")){
+            if(!("nextStep" in dataAttr)){
                 this.showNextStepBtn = false;
             }
 
-            if(!currentStepContentDom.data("prevStep")){
+            if(!("prevStep" in dataAttr)){
                 this.showPrevStepBtn = false;
             }
         },//end 
@@ -878,7 +964,7 @@ export default {
 
             if(this.offerPricingMode == "fixed"){
 
-                if(typeof this.offerFixedPrice !== 'number'){
+                if(this.offerFixedPrice == null || this.offerFixedPrice.toString().trim() == ''){
                     this.errorNotif(this.$t("offer_fixed_price_required"))
                     return false;
                 }
