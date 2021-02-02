@@ -143,8 +143,9 @@ export default {
                        .replace(/\d(?=(\d{3})+\.)/g, '$&,'); 
         },
 
+
         isWalletConnected() { 
-            return window["isWalletConnected"] || false;
+            return (window["isWalletConnected"] || false);
         }
     },  
 

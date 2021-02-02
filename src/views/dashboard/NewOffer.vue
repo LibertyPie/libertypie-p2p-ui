@@ -12,8 +12,11 @@
                     </div>
                 </div>
 
-                <WalletConnectBtn v-show="!_isWalletConnected" />
-                
+                <WalletConnectBtn 
+                    v-if="!_isWalletConnected" 
+                    @connected="_isWalletConnected=true"
+                />
+            
                 <div v-show="_isWalletConnected" class="row">
 
                     <div class="col-12 col-md-12 col-lg-8">
@@ -682,10 +685,11 @@ import Modal from '../../components/partials/modals/Modal.vue';
 import Sia from "../../classes/Sia"
 import Loader from '../../components/partials/Loader.vue';
 import Logger from '../../classes/Logger';
+import WalletConnectBtn from '../../components/WalletConnectBtn.vue';
 
 export default {
     name: "new_offer",
-    components: {DashboardLayout, AssetSelect, PaymentTypesModal, CountrySelect, NumberInput, Modal,  Loader},
+    components: {DashboardLayout, AssetSelect, PaymentTypesModal, CountrySelect, NumberInput, Modal,  Loader, WalletConnectBtn},
     data(){
       
        return {
@@ -792,7 +796,7 @@ export default {
 
         this._isWalletConnected = this.isWalletConnected();
 
-        console.log( this.isWalletConnected )
+        //console.log( this._isWalletConnected )
 
         this.breadcrumbData = [
             {

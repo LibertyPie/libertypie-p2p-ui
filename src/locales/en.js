@@ -182,5 +182,7 @@ export default {
 
     "loading..": "Loading..",
 
-    "processing_error": "Processing Error: {0}"
+    "processing_error": "Processing Error: {0}",
+
+    "connect_wallet_to_continue": "Kindly connect your wallet to continue"
 } 
