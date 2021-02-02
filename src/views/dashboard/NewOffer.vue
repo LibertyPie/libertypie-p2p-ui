@@ -504,7 +504,7 @@
                                     @click.prevent="confirmOffer"
                                     type="button"
                                 >
-                                    {{$t("confirm_and_save")}}
+                                    {{$t("save")}}
                                 </button>
                             </div>
 
@@ -581,10 +581,75 @@
                            {{$t("per_{asset}",[offerAssetSymbol.toUpperCase()])}}
                         </div>
 
+                        <div  class="col-6  pb-4 pl-4 text-sm text-left">
+                           {{$t("min_trade_amount")}}
+                        </div>
+                        <div  class="col-6  pb-4 text-capitalize text-sm text-left">
+                           {{formatMoneyAsText(minTradeLimitLocal)}} {{offerCurrency}} 
+                           ({{formatMoneyAsText(minTradeLimit)}} USD) 
+                        </div>
+
+
+                        <div  class="col-6  pb-4 pl-4 text-sm text-left">
+                           {{$t("max_trade_amount")}}
+                        </div>
+                        <div  class="col-6  pb-4 text-capitalize text-sm text-left">
+                           {{formatMoneyAsText(maxTradeLimitLocal)}} {{offerCurrency}} 
+                           ({{formatMoneyAsText(maxTradeLimit)}} USD) 
+                        </div>
+
+                        <div  class="col-6  pb-4 pl-4 text-sm text-left">
+                           {{$t("security_deposit")}}
+                        </div>
+                        <div  class="col-6  pb-4 text-capitalize text-sm text-left">
+                           {{$t((securityDeposit == '1') ? 'enabled': 'disabled')}} 
+                        </div>
+
+                        <div v-if="securityDeposit == '1'" class="col-6  pb-4 pl-4 text-sm text-left">
+                           {{$t("security_deposit")}}
+                        </div>
+                        <div  v-if="securityDeposit == '1'" class="col-6  pb-4 text-capitalize text-sm text-left">
+                           {{securityDepositRate}}% 
+                        </div>
+
+                        <div class="col-6  pb-4 pl-4 text-sm text-left">
+                           {{$t("payment_window")}}
+                        </div>
+                        <div  class="col-6  pb-4 text-capitalize text-sm text-left">
+                           {{$t("{x_time}_minutes",[offerPaymentWindow])}}
+                        </div>
+
+                        <div class="col-6  pb-4 pl-4 text-sm text-left">
+                           {{$t("min_reputation_required")}}
+                        </div>
+                        <div  class="col-6  pb-4 text-capitalize text-sm text-left">
+                           {{minRequiredReputation}}
+                        </div>
+
+                        <div class="col-6  pb-4 pl-4 text-sm text-left">
+                           {{$t("min_trades_required")}}
+                        </div>
+                        <div  class="col-6  pb-4 text-capitalize text-sm text-left">
+                           {{minRequiredTrades}}
+                        </div>
+
+                        <div class="col-12 font-weight-bold  pb-2 pl-4 text-sm text-left">
+                           {{$t("offer_terms")}}
+                        </div>
+                        <div  class="col-12 text-gray-500  pb-4 text-sm text-left">
+                           {{offerTerms}}
+                        </div>
+
+                         <div class="col-12 font-weight-bold pb-2 pl-4 text-sm text-left">
+                           {{$t("trade_instructions")}}
+                        </div>
+                        <div  class="col-12 text-gray-500 pb-4 text-sm text-left">
+                           {{offerInstructions}}
+                        </div>
                     </div>
                 </div>
             </template>
-
+             <template v-slot:foot>
         </Modal>
      </DashboardLayout>
 </template>

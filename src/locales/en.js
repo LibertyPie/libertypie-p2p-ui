@@ -160,5 +160,19 @@ export default {
 
     "fixed_rate": "Fixed rate",
 
-    "per_{asset}": "Per {0}"
+    "per_{asset}": "Per {0}",
+
+    "min_trade_amount": "Minimum Trade Amount",
+
+    "max_trade_amount": "Maximum Trade Amount",
+
+    "enabled": "Enabled",
+
+    "disabled": "Disabled",
+
+    "{x_time}_minutes": "{0} minutes",
+
+    "min_reputation_required": "Minimum reputation required by user",
+
+    "min_trades_required": "Minimum trades required by user"
 } 
