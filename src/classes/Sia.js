@@ -7,6 +7,8 @@
 import { SkynetClient } from "skynet-js";
 import Logger from './Logger';
 import Status from './Status';
+import Http from './Http';
+import sia from "../config/sia";
 
 
  /**
@@ -38,13 +40,17 @@ export default class Sia {
                 type: "text/plain",
             })
 
-            let client = new SkynetClient();
+            let resultStatus = await Http.post(sia.getUploadUrl(),{
+                file
+            })
 
-            const { skylink } = await client.uploadFile(file);
+            if(resultStatus.isError()) return resultStatus;
 
-            console.log(skylink)
+            let httpResponse = resultStatus.getData()
 
-            return Status.successPromise("",skylink)
+            let result = await httpResponse.json()
+            
+            return Status.successPromise("", result.skylink)
         } catch(e){
             Logger.error("Sia::save: Failed to save file data "+filename,e)
             return Status.errorPromise(window._vue.$t("failed_to_save_file_to_sia"))

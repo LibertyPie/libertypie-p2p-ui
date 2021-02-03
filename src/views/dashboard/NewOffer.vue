@@ -1194,14 +1194,26 @@ export default {
             try {
                 
                 this.isModalLoading = true;
+
+                let walletInfo = window["_walletInfo"] || {};
+
+                if(Object.keys(walletInfo).length == 0){
+                    this.showConfirmOfferModal = false;
+                    this._isWalletConnected = false;
+                    return false;
+                }
                 
                 let metaData = {
                     terms:        this.offerTerms,
                     instructions: this.offerInstructions,
                     date:         Date.now(),
-                    owner:        ""  
+                    owner:        walletInfo["account"]  
                 }
 
+                let resultStatus = await Sia.save("offer_metadata.txt",metaData)
+
+                this.isModalLoading = false;
+                console.log(resultStatus)
             } catch (e){
                 this.isModalLoading = false;
                 Logger.error("NewOffer::processFinalSave",e)

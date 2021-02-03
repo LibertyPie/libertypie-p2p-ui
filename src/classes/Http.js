@@ -76,6 +76,7 @@
         for(let key in data){ formData.append(key,data[key])}
 
         return this.request(url,{
+            method: "POST",
             body: formData,
             headers
         })
@@ -99,7 +100,7 @@
 
         let rparams = {
             ...{
-                "credentials": "omit",
+                //"credentials": "omit",
                 "redirect": "follow"
             },
             ...params
