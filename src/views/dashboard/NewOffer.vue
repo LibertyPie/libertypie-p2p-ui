@@ -531,8 +531,11 @@
             :closable="!isModalLoading"
         >   
             <template v-slot:body>
-                <div v-if="isModalLoading" class="py-10">
+                <div v-if="isModalLoading" class="py-10 d-flex flex-column align-items-center justify-content-center">
                     <Loader :isLoading="isModalLoading" />
+                    <div class="my-2 text-center font-italic text-sm text-muted">
+                        {{modalProgressText}}
+                    </div>
                 </div>
                 <div v-else>
                 <div  class="alert alert-info my-2">  
@@ -770,7 +773,9 @@ export default {
 
             isModalLoading: false,
             
-            modalErrorMsg: ""
+            modalErrorMsg: "",
+
+            modalProgressText: ""
         }
     },
     watch: {
@@ -842,10 +847,7 @@ export default {
         
     },
 
-    
-
     methods: {
-
 
         async handleOnPaymenMethodSelect(info){
             this.offerPaymentMethodInfo = info
@@ -1212,8 +1214,15 @@ export default {
 
                 let resultStatus = await Sia.save("offer_metadata.txt",metaData)
 
-                this.isModalLoading = false;
-                console.log(resultStatus)
+                if(resultStatus.isError()){
+                    this.isModalLoading = false;
+                    this.modalErrorMsg = resultStatus.getMessage()
+                    return false;
+                }
+
+                let metaDataSiaId = resultStatus.getData()
+
+                //lets now upload to the chain
             } catch (e){
                 this.isModalLoading = false;
                 Logger.error("NewOffer::processFinalSave",e)

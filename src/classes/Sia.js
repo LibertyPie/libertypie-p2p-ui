@@ -3,8 +3,6 @@
  * @author LibertyPie <hello@libertypie.com>
  * @license MIT
  */
-
-import { SkynetClient } from "skynet-js";
 import Logger from './Logger';
 import Status from './Status';
 import Http from './Http';
@@ -51,6 +49,7 @@ export default class Sia {
             let result = await httpResponse.json()
             
             return Status.successPromise("", result.skylink)
+
         } catch(e){
             Logger.error("Sia::save: Failed to save file data "+filename,e)
             return Status.errorPromise(window._vue.$t("failed_to_save_file_to_sia"))
