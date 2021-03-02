@@ -184,5 +184,9 @@ export default {
 
     "processing_error": "Processing Error: {0}",
 
-    "connect_wallet_to_continue": "Kindly connect your wallet to continue"
+    "connect_wallet_to_continue": "Kindly connect your wallet to continue",
+
+    "saving_meta_data_on_sia": "Saving meta data on Sia-skynet",
+
+    "saving_on_chain": "Saving data on chain"
 } 

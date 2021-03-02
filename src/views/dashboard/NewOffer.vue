@@ -1117,7 +1117,7 @@ export default {
             }
 
             //finally
-            let paymentWindowLimit = offerConfig.payment_window_limit || 10;
+            let paymentWindowLimit = offerConfig.payment_window_limit || 15;
 
             if(this.offerPaymentWindow < paymentWindowLimit){
                 this.errorNotif(this.$t("payment_window_too_low",[paymentWindowLimit]))
@@ -1211,6 +1211,8 @@ export default {
                     date:         Date.now(),
                     owner:        walletInfo["account"]  
                 }
+
+                this.modalProgressText = $t("saving_meta_data_on_sia")
 
                 let resultStatus = await Sia.save("offer_metadata.txt",metaData)
 
